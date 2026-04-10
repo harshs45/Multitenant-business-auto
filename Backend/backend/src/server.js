@@ -1,19 +1,24 @@
 const app = require('./app');
 const db = require('./models');
 
-const PORT = process.env.PORT || 4000;
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION:', err);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err);
+});
 
 async function startServer() {
   try {
     await db.sequelize.authenticate();
     console.log('✅ DB Connected');
 
-    const PORT = process.env.PORT || 5000;
+    const PORT = process.env.PORT || 10000;
 
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
-
   } catch (err) {
     console.error('❌ FULL ERROR:', err);
     console.error('❌ MESSAGE:', err.message);
