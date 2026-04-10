@@ -9,11 +9,21 @@ const env = process.env.NODE_ENV || 'development';
 const config = dbConfig[env];
 const db = {};
 
+console.log('NODE_ENV:', env);
+
+console.log('DB CONFIG CHECK:', {
+  database: config.database,
+  username: config.username,
+  host: config.host,
+  port: config.port,
+  dialect: config.dialect,
+});
+
 const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config,
+  config
 );
 
 // Auto-load every model file except index.js
