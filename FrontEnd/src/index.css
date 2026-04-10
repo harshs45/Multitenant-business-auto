@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+  }
+  
+  .dark {
+    --bg-primary: #0f172a; /* Slate 900 */
+    --bg-secondary: #1e293b; /* Slate 800 */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+  }
+}
+
+body {
+  @apply bg-background text-foreground font-sans antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full hover:bg-muted transition-colors;
+}
+
+/* Bot Theme Base Styles (Scoped to preview wrapper) */
+.bot-theme-midnight {
+  --bot-header: #1a1a2e;
+  --bot-bg: #16213e;
+  --bot-text: #e2e8f0;
+  --user-bg: #7F77DD;
+  --user-text: #ffffff;
+  --chat-bg: #0f0f23;
+}
+
+.bot-theme-emerald {
+  --bot-header: #065f46;
+  --bot-bg: #d1fae5;
+  --bot-text: #065f46;
+  --user-bg: #059669;
+  --user-text: #ffffff;
+  --chat-bg: #f0fdf4;
+}
+
+.bot-theme-sakura {
+  --bot-header: #9d174d;
+  --bot-bg: #fce7f3;
+  --bot-text: #831843;
+  --user-bg: #db2777;
+  --user-text: #ffffff;
+  --chat-bg: #fff1f8;
+}
+
+.bot-theme-ocean {
+  --bot-header: #1e40af;
+  --bot-bg: #dbeafe;
+  --bot-text: #1e3a8a;
+  --user-bg: #2563eb;
+  --user-text: #ffffff;
+  --chat-bg: #eff6ff;
+}
+
+.bot-theme-slate {
+  --bot-header: #1e293b;
+  --bot-bg: #f1f5f9;
+  --bot-text: #334155;
+  --user-bg: #475569;
+  --user-text: #ffffff;
+  --chat-bg: #f8fafc;
+}
+
+.bot-theme-amber {
+  --bot-header: #92400e;
+  --bot-bg: #fef3c7;
+  --bot-text: #78350f;
+  --user-bg: #d97706;
+  --user-text: #ffffff;
+  --chat-bg: #fffbeb;
+}
