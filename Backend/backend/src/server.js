@@ -3,22 +3,24 @@ const db = require('./models');
 
 const PORT = process.env.PORT || 4000;
 
-const start = async () => {
+async function startServer() {
   try {
-    // Test database connection
     await db.sequelize.authenticate();
-    console.log('✅  Database connected successfully');
+    console.log('✅ DB Connected');
 
-    // Start HTTP server
+    const PORT = process.env.PORT || 5000;
+
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀  BotForge API running on http://localhost:${PORT}`);
-      console.log(`📋  Health check: http://localhost:${PORT}/api/v1/health`);
-      console.log(`🌍  Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
+
   } catch (err) {
-    console.error('❌  Failed to start server:', err.message);
+    console.error('❌ FULL ERROR:', err);
+    console.error('❌ MESSAGE:', err.message);
+    console.error('❌ CODE:', err.code);
+    console.error('❌ STACK:', err.stack);
     process.exit(1);
   }
-};
+}
 
-start();
+startServer();
