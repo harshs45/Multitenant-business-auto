@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const dbConfig = require('../config/db');
 
 const env = process.env.NODE_ENV || 'development';
@@ -26,16 +26,15 @@ const sequelize = new Sequelize(
   config
 );
 
-// Auto-load every model file except index.js
 const modelsDir = __dirname;
+
 fs.readdirSync(modelsDir)
   .filter((file) => file !== 'index.js' && file.endsWith('.js'))
   .forEach((file) => {
-    const model = require(path.join(modelsDir, file))(sequelize);
+    const model = require(path.join(modelsDir, file))(sequelize, DataTypes);
     db[model.name] = model;
   });
 
-// Run associations
 Object.values(db).forEach((model) => {
   if (typeof model.associate === 'function') {
     model.associate(db);
