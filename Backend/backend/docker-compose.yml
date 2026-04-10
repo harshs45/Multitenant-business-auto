@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -18,18 +16,18 @@ services:
         condition: service_started
     networks:
       - botforge_net
-    # Optional: wait-for-it pattern can be applied in CMD if node can't handle transient network errors well.
-    # We rely on Sequelize retry logic + depend_on condition here.
 
   mysql:
     image: mysql:8.0
     container_name: botforge-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -38,7 +36,7 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   redis:
     image: redis:7-alpine

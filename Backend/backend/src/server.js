@@ -10,7 +10,7 @@ const start = async () => {
     console.log('✅  Database connected successfully');
 
     // Start HTTP server
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀  BotForge API running on http://localhost:${PORT}`);
       console.log(`📋  Health check: http://localhost:${PORT}/api/v1/health`);
       console.log(`🌍  Environment: ${process.env.NODE_ENV || 'development'}`);
