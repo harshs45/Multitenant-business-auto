@@ -1,21 +1,41 @@
 (function() {
-  // Find our script tag
-  const scripts = document.getElementsByTagName('script');
-  let currentScript = null;
-  for (let i = 0; i < scripts.length; i++) {
-    if (scripts[i].getAttribute('data-botforge-key')) {
-      currentScript = scripts[i];
-      break;
+  let publicKey = null;
+  let apiBase = 'http://localhost:4000/api/v1';
+  let currentScript = document.currentScript;
+
+  // 1. Check currentScript if it's us
+  if (currentScript && currentScript.getAttribute('data-botforge-key')) {
+    publicKey = currentScript.getAttribute('data-botforge-key');
+    apiBase = currentScript.getAttribute('data-botforge-api') || apiBase;
+  }
+
+  // 2. Selective fallback: Search for the most likely script tag
+  if (!publicKey) {
+    const scripts = document.getElementsByTagName('script');
+    for (let i = 0; i < scripts.length; i++) {
+      const s = scripts[i];
+      const src = s.getAttribute('src') || '';
+      const key = s.getAttribute('data-botforge-key');
+      
+      // Selectively identify by key OR by filename if it has the key attribute
+      if (key && (src.includes('loader.js') || src.includes('botforge'))) {
+        publicKey = key;
+        apiBase = s.getAttribute('data-botforge-api') || apiBase;
+        break;
+      }
     }
   }
 
-  if (!currentScript) {
-    console.error('BotForge: Missing data-botforge-key on script tag');
-    return;
+  // 3. Global config fallback (window.BotForgeConfig)
+  if (!publicKey && window.BotForgeConfig) {
+    publicKey = window.BotForgeConfig.publicKey || window.BotForgeConfig.botId;
+    apiBase = window.BotForgeConfig.apiBase || apiBase;
   }
 
-  const publicKey = currentScript.getAttribute('data-botforge-key');
-  const apiBase = currentScript.getAttribute('data-botforge-api') || 'http://localhost:4000/api/v1';
+  if (!publicKey) {
+    console.error('BotForge: Missing data-botforge-key. Ensure the script tag has data-botforge-key attribute or window.BotForgeConfig is set.');
+    return;
+  }
   // Note: Assuming frontend is hosted at localhost:5173 for development
   // In production, you would swap this string for the production UI endpoint.
   const frontendUrl = 'http://localhost:5173'; 

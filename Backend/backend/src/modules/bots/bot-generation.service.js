@@ -1,7 +1,8 @@
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../../models');
 const {
-  Bot, Business, Subscription, BotAudienceConfig, BotFeature, BotTheme, AuditLog,
+  Bot, Business, Subscription, BotAudienceConfig, BotFeature, BotTheme, AuditLog, EmbedToken
 } = require('../../models');
 const { buildSystemPrompt } = require('./prompt.service');
 const logger = require('../../common/utils/logger');
@@ -153,13 +154,22 @@ const generateBotTx = async (userId, payload) => {
     bot.publishedAt = new Date();
     await bot.save({ transaction: t });
 
-    // ─── 8. Audit Log
+    // ─── 8. Create Embed Token (Public Key)
+    const publicKey = crypto.randomBytes(32).toString('hex');
+    const token = await EmbedToken.create({
+      id: uuidv4(),
+      botId: bot.id,
+      publicKey,
+      isActive: true,
+    }, { transaction: t });
+
+    // ─── 9. Audit Log
     await AuditLog.create({
       userId,
       action: 'BOT_GENERATED',
       entityType: 'bot',
       entityId: bot.id,
-      metadata: payload // Log full settings payload map for audit
+      metadata: { ...payload, publicKey } // Log full settings payload map for audit
     }, { transaction: t });
 
     logger.info(`Bot generation succeeded: ${bot.id}`);
@@ -167,6 +177,7 @@ const generateBotTx = async (userId, payload) => {
     return {
       botId: bot.id,
       botName: bot.botName,
+      publicKey: token.publicKey,
       businessId: business.id,
       businessName: business.name,
       themeKey,
