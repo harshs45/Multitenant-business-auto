@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MessageSquare, Moon, Sun, LogOut, User } from "lucide-react";
 import { useTheme } from "../theme-provider";
 import { useAuthStore } from "../../store/authStore";
+import { HashLink } from "react-router-hash-link";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -17,7 +18,7 @@ export function Navbar() {
     <nav className="fixed top-0 inset-x-0 h-16 bg-background/80 backdrop-blur-md border-b border-border z-50">
       <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-primary-foreground group-hover:scale-105 transition-transform">
             <MessageSquare size={18} />
           </div>
           <span className="font-semibold text-lg tracking-tight">BotForge</span>
@@ -25,9 +26,9 @@ export function Navbar() {
         
         <div className="flex items-center gap-6">
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground hover:[&>a]:text-foreground transition-colors">
-            <a href="/features">Features</a>
-            <a href="/#themes">Themes</a>
-            <a href="/pricing">Pricing</a>
+            <HashLink smooth to="/#features">Features</HashLink>
+            <HashLink smooth to="/#themes">Themes</HashLink>
+            <HashLink smooth to="/#pricing">Pricing</HashLink>
           </div>
 
           <div className="flex items-center gap-3 border-l border-border pl-4">
@@ -49,7 +50,7 @@ export function Navbar() {
                 </div>
                 <Link
                   to="/build"
-                  className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:bg-primary-hover transition-colors"
+                  className="bg-blue-950 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-950-hover transition-colors"
                 >
                   Dashboard
                 </Link>
@@ -71,7 +72,7 @@ export function Navbar() {
                 </Link>
                 <Link
                   to="/signup"
-                  className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:bg-primary-hover transition-colors"
+                  className="bg-blue-950 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-950-hover transition-colors"
                 >
                   Get Started
                 </Link>
