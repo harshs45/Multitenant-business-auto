@@ -8,7 +8,9 @@ function cn(...inputs: any[]) {
   return twMerge(clsx(inputs));
 }
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+import { API_BASE_URL } from "../config/api";
+
+const API_URL = API_BASE_URL;
 
 interface Message {
   role: "assistant" | "user";

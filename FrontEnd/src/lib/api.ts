@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:4000/api/v1';
+import { API_BASE_URL } from '../config/api';
+
+const API_BASE = API_BASE_URL;
 
 /* ─── Token helpers ─────────────────────────────────────── */
 
