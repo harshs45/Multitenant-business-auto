@@ -53,3 +53,47 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(generalLimiter);
+
+/* ─── Static Files ───────────────────────────────────── */
+app.use('/widget', express.static(path.join(__dirname, 'public/widget')));
+
+/* ─── Health Check ───────────────────────────────────── */
+app.get('/api/v1/health', (_req, res) => {
+  res.json({
+    success: true,
+    data: {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      env: process.env.NODE_ENV || 'development',
+    },
+  });
+});
+
+/* ─── API Routes ─────────────────────────────────────── */
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/businesses', businessRoutes);
+app.use('/api/v1/form-schema', formSchemaRoutes);
+app.use('/api/v1/bots', botRoutes);
+app.use('/api/v1/features', featureRoutes);
+app.use('/api/v1/themes', themeRoutes);
+app.use('/api/v1', embedRoutes);
+app.use('/api/v1/chat', chatRoutes);
+app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/billing', billingRoutes);
+app.use('/api/v1/knowledge-base', knowledgeBase);
+app.use('/api/v1/admin', platformAdmin);
+
+/* ─── 404 Handler ────────────────────────────────────── */
+app.use((_req, res) => {
+  res.status(404).json({
+    success: false,
+    error: { message: 'Route not found' },
+  });
+});
+
+/* ─── Centralized Error Handler ──────────────────────── */
+app.use(errorHandler);
+
+module.exports = app;
