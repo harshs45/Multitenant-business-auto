@@ -13,6 +13,8 @@ async function startServer() {
   try {
     await db.sequelize.authenticate();
     console.log('✅ DB Connected');
+    await db.sequelize.sync();
+console.log('✅ Tables synced');
 
     const PORT = process.env.PORT || 10000;
 
