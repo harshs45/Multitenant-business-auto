@@ -25,9 +25,9 @@ export function Navbar() {
         
         <div className="flex items-center gap-6">
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground hover:[&>a]:text-foreground transition-colors">
-            <a href="/#features">Features</a>
+            <a href="/features">Features</a>
             <a href="/#themes">Themes</a>
-            <a href="/#pricing">Pricing</a>
+            <a href="/pricing">Pricing</a>
           </div>
 
           <div className="flex items-center gap-3 border-l border-border pl-4">
