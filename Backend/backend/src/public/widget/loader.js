@@ -38,7 +38,7 @@
   }
   // Note: Assuming frontend is hosted at localhost:5173 for development
   // In production, you would swap this string for the production UI endpoint.
-  const frontendUrl = 'http://localhost:5173'; 
+  const frontendUrl = 'https://multitenant-business-auto.vercel.app'; 
 
   // Inject a container, a toggle button, and an iframe
   const container = document.createElement('div');
