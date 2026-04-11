@@ -1,6 +1,6 @@
 (function() {
   let publicKey = null;
-  let apiBase = 'http://localhost:4000/api/v1';
+  let apiBase = 'https://botforge-api-m6d4.onrender.com/api/v1';
   let currentScript = document.currentScript;
 
   // 1. Check currentScript if it's us
