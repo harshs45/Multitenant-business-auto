@@ -79,6 +79,7 @@ const generateBotTx = async (userId, payload) => {
 
   return await sequelize.transaction(async (t) => {
     // ─── 1. Create Business
+    logger.info('Step 1/8: Creating business entry');
     const businessType = BUSINESS_TYPE_MAP[payload.businessType] || payload.businessType?.toLowerCase() || 'saas';
     const businessId = uuidv4();
     const business = await Business.create({
@@ -91,6 +92,7 @@ const generateBotTx = async (userId, payload) => {
     }, { transaction: t });
 
     // ─── 2. Default Subscription
+    logger.info('Step 2/8: Initializing default subscription');
     await Subscription.create({
       id: uuidv4(),
       businessId: business.id,
@@ -101,6 +103,7 @@ const generateBotTx = async (userId, payload) => {
     }, { transaction: t });
 
     // ─── 3. Create Bot (Mark generating)
+    logger.info('Step 3/8: Creating bot record and generating API key');
     const botId = uuidv4();
     const tone = TONE_MAP[payload.toneOfVoice] || payload.toneOfVoice?.toLowerCase() || 'professional';
     const responseLanguage = LANGUAGE_MAP[payload.responseLanguage] || payload.responseLanguage?.toLowerCase() || 'en';
@@ -127,6 +130,7 @@ const generateBotTx = async (userId, payload) => {
     }, { transaction: t });
 
     // ─── 4. Audience Config
+    logger.info('Step 4/8: Configuring bot audience settings');
     const audienceConfig = await BotAudienceConfig.create({
       id: uuidv4(),
       botId: bot.id,
@@ -136,6 +140,7 @@ const generateBotTx = async (userId, payload) => {
     }, { transaction: t });
 
     // ─── 5. Features
+    logger.info('Step 5/8: Enabling bot features');
     const featureEntries = payload.features || {};
     const enabledKeys = Object.entries(featureEntries)
       .filter(([, enabled]) => enabled)
@@ -154,6 +159,7 @@ const generateBotTx = async (userId, payload) => {
     }
 
     // ─── 6. Theme
+    logger.info('Step 6/8: Applying UI theme configuration');
     const themeKey = THEME_KEY_MAP[payload.themeId] || payload.themeId || 'midnight_pro';
     const widgetPosition = payload.widgetPosition || 'bottom-right';
 
@@ -166,6 +172,7 @@ const generateBotTx = async (userId, payload) => {
     }, { transaction: t });
 
     // ─── 7. Finalize & Publish
+    logger.info('Step 7/8: Building system prompt and publishing bot');
     bot.systemPrompt = buildSystemPrompt(bot, business, audienceConfig, features);
     bot.isPublished = true;
     bot.status = 'published';
@@ -173,6 +180,7 @@ const generateBotTx = async (userId, payload) => {
     await bot.save({ transaction: t });
 
     // ─── 8. Audit Log
+    logger.info('Step 8/8: Creating audit log entry');
     await AuditLog.create({
       userId,
       action: 'BOT_GENERATED',
@@ -201,7 +209,15 @@ const generateBotTx = async (userId, payload) => {
       status: bot.status
     };
   }).catch((error) => {
-    logger.error(`Bot generation failed for user ${userId}`, error);
+    logger.error(`Bot generation failed for user ${userId}`, {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      errors: error.errors,
+      sql: error.sql,
+      parent: error.parent,
+      original: error.original,
+    });
     // Even though transaction rolls back correctly, we rethrow for the API controller to catch.
     throw new AppError('Failed to generate bot configuration', 500);
   });

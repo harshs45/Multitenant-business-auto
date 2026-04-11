@@ -32,8 +32,7 @@ const getDbConfig = (env) => {
           idle: 10000,
         },
 
-    // Enable this only if Railway/MySQL deployment requires SSL
-    dialectOptions: isProduction
+    dialectOptions: process.env.DB_SSL === 'true'
       ? {
           ssl: {
             require: true,
