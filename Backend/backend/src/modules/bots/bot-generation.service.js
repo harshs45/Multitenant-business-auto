@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../../models');
 const {
-  Bot, Business, Subscription, BotAudienceConfig, BotFeature, BotTheme, AuditLog, EmbedToken
+  Bot, Business, Subscription, BotAudienceConfig, BotFeature, BotTheme, AuditLog,
 } = require('../../models');
 const { buildSystemPrompt } = require('./prompt.service');
 const logger = require('../../common/utils/logger');
@@ -57,6 +57,20 @@ const LANGUAGE_MAP = {
 };
 
 /**
+ * Generates a unique API key with 'bf_' prefix.
+ */
+const generateUniqueApiKey = async () => {
+  let isUnique = false;
+  let key;
+  while (!isUnique) {
+    key = `bf_${crypto.randomBytes(16).toString('hex')}`;
+    const existing = await Bot.findOne({ where: { apiKey: key } });
+    if (!existing) isUnique = true;
+  }
+  return key;
+};
+
+/**
  * Orchestrates the Bot generation flow inside a single database transaction.
  * Rolls back atomically if any failure occurs.
  */
@@ -91,6 +105,8 @@ const generateBotTx = async (userId, payload) => {
     const tone = TONE_MAP[payload.toneOfVoice] || payload.toneOfVoice?.toLowerCase() || 'professional';
     const responseLanguage = LANGUAGE_MAP[payload.responseLanguage] || payload.responseLanguage?.toLowerCase() || 'en';
 
+    const apiKey = await generateUniqueApiKey();
+
     const bot = await Bot.create({
       id: botId,
       businessId: business.id,
@@ -106,6 +122,8 @@ const generateBotTx = async (userId, payload) => {
       setupComplete: true,
       status: 'generating', // Initial status
       isPublished: false,
+      apiKey,
+      widgetActive: true,
     }, { transaction: t });
 
     // ─── 4. Audience Config
@@ -154,30 +172,25 @@ const generateBotTx = async (userId, payload) => {
     bot.publishedAt = new Date();
     await bot.save({ transaction: t });
 
-    // ─── 8. Create Embed Token (Public Key)
-    const publicKey = crypto.randomBytes(32).toString('hex');
-    const token = await EmbedToken.create({
-      id: uuidv4(),
-      botId: bot.id,
-      publicKey,
-      isActive: true,
-    }, { transaction: t });
-
-    // ─── 9. Audit Log
+    // ─── 8. Audit Log
     await AuditLog.create({
       userId,
       action: 'BOT_GENERATED',
       entityType: 'bot',
       entityId: bot.id,
-      metadata: { ...payload, publicKey } // Log full settings payload map for audit
+      metadata: { ...payload, apiKey: bot.apiKey } // Log full settings payload map for audit
     }, { transaction: t });
 
     logger.info(`Bot generation succeeded: ${bot.id}`);
 
+    const apiBase = 'https://botforge-api-m6d4.onrender.com';
+    const embedScript = `<script src="${apiBase}/widget/loader.js" data-botforge-key="${bot.apiKey}" data-botforge-api="${apiBase}/api/v1"></script>`;
+
     return {
       botId: bot.id,
       botName: bot.botName,
-      publicKey: token.publicKey,
+      apiKey: bot.apiKey,
+      embedScript,
       businessId: business.id,
       businessName: business.name,
       themeKey,

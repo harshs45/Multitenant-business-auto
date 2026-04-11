@@ -28,7 +28,7 @@
 
   // 3. Global config fallback (window.BotForgeConfig)
   if (!publicKey && window.BotForgeConfig) {
-    publicKey = window.BotForgeConfig.publicKey || window.BotForgeConfig.botId;
+    publicKey = window.BotForgeConfig.publicKey;
     apiBase = window.BotForgeConfig.apiBase || apiBase;
   }
 

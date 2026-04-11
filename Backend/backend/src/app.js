@@ -36,9 +36,23 @@ app.use(helmet({
 
 app.use(cors({
   origin: function (origin, callback) {
+    // 1. Allow internal/server-to-server or tools without origin (like Postman)
     if (!origin) return callback(null, true);
 
+    // 2. Exact whitelist match
     if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // 3. Special case: Always allow any origin for the widget config retrieval
+    // Note: origin check happens before routing, so we can't easily check req.path here
+    // but the user's specific request for the widget config being open is better 
+    // handled by allowing it globally or by overriding in the route (which we did).
+    // To avoid the error below, we allow it here if we want to be safe, 
+    // but the best way is to only throw Error if it's NOT a public-safe route.
+    
+    // For now, let's keep it restricted but allow if CORS_ORIGIN is set to *
+    if (process.env.CORS_ORIGIN === '*') {
       return callback(null, true);
     }
 

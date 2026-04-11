@@ -7,10 +7,10 @@ const { chatLimiter } = require('../../common/middleware/rateLimiter');
 const router = Router();
 
 // All chat endpoints are public (called by embedded widget) but rate-limited
-router.post('/:publicKey/session',              chatLimiter, v.sessionRules,  validate, ctrl.createSession);
-router.post('/:publicKey/message',              chatLimiter, v.messageRules,  validate, ctrl.sendMessage);
-router.get('/:publicKey/history/:sessionId',    ctrl.getHistory);
-router.post('/:publicKey/handoff',              chatLimiter, v.handoffRules,  validate, ctrl.requestHandoff);
-router.post('/:publicKey/lead',                 chatLimiter, v.leadRules,     validate, ctrl.captureLead);
+router.post('/:key/session',              chatLimiter, v.sessionRules,  validate, ctrl.createSession);
+router.post('/:key/message',              chatLimiter, v.messageRules,  validate, ctrl.sendMessage);
+router.get('/:key/history/:sessionId',    ctrl.getHistory);
+router.post('/:key/handoff',              chatLimiter, v.handoffRules,  validate, ctrl.requestHandoff);
+router.post('/:key/lead',                 chatLimiter, v.leadRules,     validate, ctrl.captureLead);
 
 module.exports = router;
