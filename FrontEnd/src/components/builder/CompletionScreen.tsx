@@ -4,6 +4,7 @@ import { ChatPreview } from "./ChatPreview";
 import { Check, Copy, ArrowLeft, LayoutDashboard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { WIDGET_LOADER_URL } from "../../config/api";
 
 export function CompletionScreen() {
   const store = useWizardStore();
@@ -25,7 +26,7 @@ export function CompletionScreen() {
   };
   (function(d,s){
     var j=d.createElement(s);
-    j.src="https://cdn.botforge.ai/widget.js";
+    j.src="${WIDGET_LOADER_URL}";
     j.async=true;
     d.head.appendChild(j);
   })(document,'script');
