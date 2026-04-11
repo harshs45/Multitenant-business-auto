@@ -140,6 +140,7 @@ export interface GenerateBotResponse {
   data: {
     botId: string;
     botName: string;
+    publicKey: string;
     businessId: string;
     businessName: string;
     themeKey: string;
