@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-
 module.exports = (sequelize) => {
   const BotFeature = sequelize.define('BotFeature', {
     id: {
@@ -10,10 +9,12 @@ module.exports = (sequelize) => {
     botId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: 'bot_id',        // ✅ explicit mapping
     },
     featureKey: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      field: 'feature_key',   // ✅ explicit mapping
     },
     enabled: {
       type: DataTypes.BOOLEAN,
@@ -22,19 +23,16 @@ module.exports = (sequelize) => {
     config: {
       type: DataTypes.JSON,
       allowNull: true,
-      comment: 'Feature-specific configuration overrides',
     },
   }, {
     tableName: 'bot_features',
-    underscored: true,
+    timestamps: true,         // ✅ removed underscored: true
     indexes: [
       { unique: true, fields: ['bot_id', 'feature_key'] },
     ],
   });
-
   BotFeature.associate = (models) => {
     BotFeature.belongsTo(models.Bot, { foreignKey: 'botId', as: 'bot' });
   };
-
   return BotFeature;
 };

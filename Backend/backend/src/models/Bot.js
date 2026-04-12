@@ -104,8 +104,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: 'bots',     // ✅ lowercase — matches actual DB table
-      timestamps: true,      // ✅ removed underscored: true
+      tableName: 'bots',
+      timestamps: true,
+      underscored: true,  // ✅ restored — consistent with all other models
     }
   );
 
