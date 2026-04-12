@@ -50,22 +50,23 @@ const getSnippet = async (botId, userId) => {
  * Called by the embedded JS widget to get safe, frontend-only config.
  */
 const getWidgetConfig = async (key) => {
+  // ✅ Step 1: Find bot WITHOUT any JOIN to avoid column name conflict
   const bot = await Bot.findOne({
     where: { apiKey: key, widgetActive: true },
-    include: [
-      { model: BotTheme },   // ← removed as: 'theme'
-      { model: BotFeature }, // ← removed as: 'features'
-    ],
   });
 
   if (!bot) throw AppError.notFound('Invalid or inactive widget key');
   if (!bot.isPublished) throw AppError.forbidden('Bot is not currently published');
 
-  const themeConfig = bot.BotTheme  // ← was bot.theme
+  // ✅ Step 2: Fetch associations separately — no JOIN, no conflict
+  const theme = await BotTheme.findOne({ where: { botId: bot.id } });
+  const features = await BotFeature.findAll({ where: { botId: bot.id } });
+
+  const themeConfig = theme
     ? {
-        ...THEMES[bot.BotTheme.themeKey],
-        customPrimaryColor: bot.BotTheme.customPrimaryColor,
-        widgetPosition: bot.BotTheme.widgetPosition,
+        ...THEMES[theme.themeKey],
+        customPrimaryColor: theme.customPrimaryColor,
+        widgetPosition: theme.widgetPosition,
       }
     : {};
 
@@ -77,7 +78,7 @@ const getWidgetConfig = async (key) => {
     tone: bot.tone,
     language: bot.responseLanguage,
     theme: themeConfig,
-    features: (bot.BotFeatures || []).filter((f) => f.enabled).map((f) => f.featureKey), // ← was bot.features
+    features: features.filter((f) => f.enabled).map((f) => f.featureKey),
   };
 };
 
