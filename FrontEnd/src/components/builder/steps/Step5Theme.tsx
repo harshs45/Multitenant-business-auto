@@ -59,7 +59,7 @@ export function Step5Theme() {
         fontStyle: store.fontStyle,
       });
 
-      setBotId(res.data.botId, res.data.publicKey);
+     setBotId(res.data.botId, res.data.apiKey);
       setStep(6); // Move to completion screen
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to generate bot. Please try again.';

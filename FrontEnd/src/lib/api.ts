@@ -140,7 +140,8 @@ export interface GenerateBotResponse {
   data: {
     botId: string;
     botName: string;
-    publicKey: string;
+    apiKey: string;        // ← was publicKey
+    embedScript: string;   // ← add this too
     businessId: string;
     businessName: string;
     themeKey: string;
@@ -148,9 +149,9 @@ export interface GenerateBotResponse {
     accentColor: string | null;
     isPublished: boolean;
     publishedAt: string;
+    status: string;        // ← add this too
   };
 }
-
 export async function generateBot(
   payload: GenerateBotPayload,
 ): Promise<GenerateBotResponse> {
