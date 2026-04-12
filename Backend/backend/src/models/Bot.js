@@ -4,109 +4,34 @@ module.exports = (sequelize, DataTypes) => {
   const Bot = sequelize.define(
     'Bot',
     {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        allowNull: false,
-      },
-      businessId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'business_id',
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      botName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'bot_name',
-      },
-      businessDescription: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-        field: 'business_description',
-      },
-      avatarStyle: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'avatar_style',
-      },
-      avatarUrl: {
-        type: DataTypes.STRING(500),
-        allowNull: true,
-        field: 'avatar_url',
-      },
-      welcomeMessage: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-        field: 'welcome_message',
-      },
-      tone: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      responseLanguage: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'response_language',
-      },
-      fallbackEmail: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: 'fallback_email',
-      },
-      systemPrompt: {
-        type: DataTypes.TEXT('long'),
-        allowNull: true,
-        field: 'system_prompt',
-      },
-      setupStep: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 1,
-        field: 'setup_step',
-      },
-      setupComplete: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-        field: 'setup_complete',
-      },
+      id: { type: DataTypes.UUID, primaryKey: true, allowNull: false },
+      businessId: { type: DataTypes.UUID, allowNull: false },
+      name: { type: DataTypes.STRING, allowNull: false },
+      botName: { type: DataTypes.STRING, allowNull: true },
+      businessDescription: { type: DataTypes.TEXT, allowNull: true },
+      avatarStyle: { type: DataTypes.STRING, allowNull: true },
+      avatarUrl: { type: DataTypes.STRING(500), allowNull: true },
+      welcomeMessage: { type: DataTypes.TEXT, allowNull: true },
+      tone: { type: DataTypes.STRING, allowNull: true },
+      responseLanguage: { type: DataTypes.STRING, allowNull: true },
+      fallbackEmail: { type: DataTypes.STRING, allowNull: true },
+      systemPrompt: { type: DataTypes.TEXT('long'), allowNull: true },
+      setupStep: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
+      setupComplete: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       status: {
         type: DataTypes.ENUM('draft', 'generating', 'published', 'failed'),
         allowNull: false,
         defaultValue: 'draft',
       },
-      isPublished: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-        field: 'is_published',
-      },
-      publishedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        field: 'published_at',
-      },
-      apiKey: {
-        type: DataTypes.STRING(64),
-        allowNull: true,
-        unique: true,
-        field: 'api_key',
-      },
-      widgetActive: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-        field: 'widget_active',
-      },
+      isPublished: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+      publishedAt: { type: DataTypes.DATE, allowNull: true },
+      apiKey: { type: DataTypes.STRING(64), allowNull: true, unique: true },
+      widgetActive: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     },
     {
       tableName: 'bots',
       timestamps: true,
-      underscored: true,  // ✅ restored — consistent with all other models
+      underscored: true, // ✅ this alone handles all snake_case mapping — no field: needed
     }
   );
 
