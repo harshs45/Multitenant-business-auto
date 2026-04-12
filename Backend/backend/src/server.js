@@ -13,16 +13,9 @@ async function startServer() {
   try {
     await db.sequelize.authenticate();
     console.log('✅ DB Connected');
-
-    if (process.env.NODE_ENV !== 'production') {
-      await db.sequelize.sync({ alter: false });
-      console.log('✅ Tables synced');
-    } else {
-      console.log('✅ Skipping sync in production');
-    }
+    // ✅ Removed sync entirely — tables already exist in production
 
     const PORT = process.env.PORT || 10000;
-
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
