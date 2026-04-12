@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       botName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         field: 'bot_name',
       },
       businessDescription: {
@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
         field: 'avatar_style',
+      },
+      avatarUrl: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+        field: 'avatar_url',
       },
       welcomeMessage: {
         type: DataTypes.TEXT,
@@ -69,13 +74,11 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         field: 'setup_complete',
       },
-      // ─── ADD THIS ──────────────────────────────────────
       status: {
-        type: DataTypes.ENUM('generating', 'published', 'failed'),
+        type: DataTypes.ENUM('draft', 'generating', 'published', 'failed'),
         allowNull: false,
-        defaultValue: 'generating',
+        defaultValue: 'draft',
       },
-      // ───────────────────────────────────────────────────
       isPublished: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -89,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       apiKey: {
         type: DataTypes.STRING(64),
-        allowNull: false,
+        allowNull: true,
         unique: true,
         field: 'api_key',
       },
@@ -101,9 +104,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: 'bots',
-      underscored: true,
-      timestamps: true,
+      tableName: 'bots',     // ✅ lowercase — matches actual DB table
+      timestamps: true,      // ✅ removed underscored: true
     }
   );
 
