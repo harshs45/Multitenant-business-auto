@@ -5,6 +5,7 @@ import { ArrowRight, Bot, Layout, Paintbrush, ShieldCheck, Sparkles, Zap } from 
 import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 
+
 export default function Landing() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
@@ -35,7 +36,7 @@ function HeroSection() {
       
       <div className="max-w-7xl mx-auto px-6 relative z-10 hidden md:block">
          {/* Decorative elements */}
-         <div className="absolute top-20 right-[15%] w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-blob" />
+         <div className="absolute top-20 right-[15%] w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-blob" />
          <div className="absolute top-40 right-[5%] w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-blob animation-delay-2000" />
       </div>
 
@@ -46,7 +47,7 @@ function HeroSection() {
           transition={{ duration: 0.5 }}
           className="max-w-2xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-primary text-sm font-medium mb-6">
             <Sparkles size={16} />
             <span>BotForge 2.0 is now live</span>
           </div>
@@ -57,7 +58,7 @@ function HeroSection() {
             No code. No complexity. Just describe your business and BotForge generates a fully configured, branded AI chatbot — ready to deploy.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/build" className="inline-flex justify-center items-center gap-2 bg-primary text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-primary-hover transition-all hover:scale-105">
+            <Link to="/build" className="inline-flex justify-center items-center gap-2 bg-blue-500 text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-blue-500-hover transition-all hover:scale-105">
               Start for free <ArrowRight size={18} />
             </Link>
             <a href="#how-it-works" className="inline-flex justify-center items-center gap-2 h-12 px-8 rounded-full font-medium border border-border hover:bg-muted transition-colors">
@@ -75,7 +76,7 @@ function HeroSection() {
         >
           <div className="w-full max-w-sm bg-background border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col relative z-20 h-[500px]">
             <div className="h-16 bg-muted/50 border-b border-border flex items-center px-4 gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-primary-foreground">
                 <Bot size={20} />
               </div>
               <div>
@@ -87,14 +88,14 @@ function HeroSection() {
             </div>
             <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-auto bg-muted/10">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="flex gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-primary-foreground"><Bot size={14}/></div>
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center text-primary-foreground"><Bot size={14}/></div>
                 <div className="bg-muted px-4 py-2 rounded-2xl rounded-tl-none text-sm w-4/5">Hi! I'm ready to help your customers 24/7. What business are we building for?</div>
               </motion.div>
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.5 }} className="flex gap-2 justify-end">
-                <div className="bg-primary text-primary-foreground px-4 py-2 rounded-2xl rounded-tr-none text-sm w-[70%]">We run an online coffee roast subscription.</div>
+                <div className="bg-blue-500 text-primary-foreground px-4 py-2 rounded-2xl rounded-tr-none text-sm w-[70%]">We run an online coffee roast subscription.</div>
               </motion.div>
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 4 }} className="flex gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-primary-foreground"><Bot size={14}/></div>
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center text-primary-foreground"><Bot size={14}/></div>
                 <div className="bg-muted px-4 py-2 rounded-2xl rounded-tl-none text-sm w-4/5">Perfect. I've configured your e-commerce flows, added cart recovery, and set a warm, energetic tone!</div>
               </motion.div>
             </div>
@@ -177,7 +178,7 @@ function BusinessShowcase() {
                 whileHover={{ scale: 1.02 }}
                 className="group relative h-32 bg-background border border-border rounded-xl p-4 flex flex-col justify-end overflow-hidden cursor-pointer"
               >
-                 <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors" />
+                 <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
                  <span className="font-medium z-10">{type}</span>
               </motion.div>
             ))}
@@ -189,7 +190,7 @@ function BusinessShowcase() {
 
 function ThemeGallery() {
   return (
-    <section className="py-24 max-w-7xl mx-auto px-6">
+    <section id="themes" className="py-24 max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">Your brand. Your chatbot.</h2>
         <p className="text-muted-foreground text-lg">Choose from 6 stunning curated themes, or inject your exact custom brand colors.</p>
@@ -222,7 +223,7 @@ function FeaturesGrid() {
         <div className="grid md:grid-cols-3 gap-6">
           {features.map((f, i) => (
             <div key={i} className="bg-background border border-border rounded-xl p-6">
-               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+               <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-primary mb-4">
                   <ShieldCheck size={20} />
                </div>
                <h3 className="font-semibold mb-2">{f.title}</h3>
@@ -244,7 +245,7 @@ function Pricing() {
       </div>
       <div className="grid md:grid-cols-4 gap-6">
         {[{ name: "Free", price: "0", limit: "100" }, { name: "Starter", price: "999", limit: "1,000" }, { name: "Growth", price: "2,999", limit: "10,000", pop: true }, { name: "Enterprise", price: "Custom", limit: "Unlimited" }].map((tier, i) => (
-          <div key={i} className={cn("p-6 rounded-2xl border flex flex-col", tier.pop ? "border-primary shadow-lg bg-primary/5" : "border-border bg-background")}>
+          <div key={i} className={cn("p-6 rounded-2xl border flex flex-col", tier.pop ? "border-primary shadow-lg bg-blue-500/5" : "border-border bg-background")}>
             {tier.pop && <div className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Most Popular</div>}
             <h3 className="text-xl font-bold mb-2">{tier.name}</h3>
             <div className="mb-4"><span className="text-3xl font-bold">₹{tier.price}</span><span className="text-muted-foreground">/mo</span></div>
@@ -252,7 +253,7 @@ function Pricing() {
               <li>{tier.limit} conversations</li>
               <li>{tier.name === "Free" ? "1 bot" : "Multiple bots"}</li>
             </ul>
-            <button className={cn("w-full py-2 rounded-full font-medium transition-colors", tier.pop ? "bg-primary text-primary-foreground hover:bg-primary-hover" : "bg-muted text-foreground hover:bg-border")}>
+            <button className={cn("w-full py-2 rounded-full font-medium transition-colors", tier.pop ? "bg-blue-500 text-primary-foreground hover:bg-blue-500-hover" : "bg-muted text-foreground hover:bg-border")}>
               Choose {tier.name}
             </button>
           </div>
@@ -274,7 +275,7 @@ function Testimonials() {
              <motion.div key={i} whileHover={{ y: -5 }} className="bg-background border border-border p-6 rounded-2xl">
                <p className="text-muted-foreground mb-6">"{t.q}"</p>
                <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold">
+                 <div className="w-10 h-10 rounded-full bg-blue-500/20 text-primary flex items-center justify-center font-bold">
                    {t.n.charAt(0)}
                  </div>
                  <div>
@@ -318,7 +319,7 @@ function FAQ() {
 
 function CTABanner() {
   return (
-    <section className="py-24 bg-primary text-primary-foreground text-center">
+    <section className="py-24 bg-blue-500 text-primary-foreground text-center">
       <div className="max-w-3xl mx-auto px-6">
         <h2 className="text-4xl font-bold mb-6">Ready to build your chatbot?</h2>
         <p className="text-primary-foreground/80 mb-8 text-lg">Join 5,000+ businesses delivering better customer experiences.</p>
