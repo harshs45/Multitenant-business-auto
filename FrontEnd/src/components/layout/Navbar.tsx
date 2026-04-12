@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { MessageSquare, Moon, Sun, LogOut, User } from "lucide-react";
 import { useTheme } from "../theme-provider";
 import { useAuthStore } from "../../store/authStore";
-import { HashLink } from "react-router-hash-link";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -12,6 +11,16 @@ export function Navbar() {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleHashLink = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    e.preventDefault();
+    const el = document.querySelector(hash);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate(`/${hash}`);
+    }
   };
 
   return (
@@ -26,9 +35,9 @@ export function Navbar() {
         
         <div className="flex items-center gap-6">
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground hover:[&>a]:text-foreground transition-colors">
-            <HashLink smooth to="/#features">Features</HashLink>
-            <HashLink smooth to="/#themes">Themes</HashLink>
-            <HashLink smooth to="/#pricing">Pricing</HashLink>
+            <a href="/#features" onClick={(e) => handleHashLink(e, "#features")}>Features</a>
+            <a href="/#themes" onClick={(e) => handleHashLink(e, "#themes")}>Themes</a>
+            <a href="/#pricing" onClick={(e) => handleHashLink(e, "#pricing")}>Pricing</a>
           </div>
 
           <div className="flex items-center gap-3 border-l border-border pl-4">
