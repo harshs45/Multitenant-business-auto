@@ -27,9 +27,10 @@ app.set('trust proxy', 1); // ✅ ADD THIS
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',  // ✅ your local test server
   'https://multitenant-business-auto.vercel.app',
 ];
-
 /* ─── Global Middleware ──────────────────────────────── */
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
