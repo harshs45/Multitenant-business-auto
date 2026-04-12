@@ -23,6 +23,7 @@ const knowledgeBase    = require('./modules/knowledge-base/knowledgeBase.routes'
 const platformAdmin    = require('./modules/platform-admin/platformAdmin.routes');
 
 const app = express();
+app.set('trust proxy', 1); // ✅ ADD THIS
 
 const allowedOrigins = [
   'http://localhost:5173',
