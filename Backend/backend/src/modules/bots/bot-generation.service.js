@@ -78,12 +78,15 @@ const generateBotTx = async (userId, payload) => {
   logger.info(`Starting bot generation for user ${userId}`);
 
   return await sequelize.transaction(async (t) => {
-    // ─── 1. Create Business
+
+    // ─── 1. Create Business ───────────────────────────────
     logger.info('Step 1/8: Creating business entry');
-    const businessType = BUSINESS_TYPE_MAP[payload.businessType] || payload.businessType?.toLowerCase() || 'saas';
-    const businessId = uuidv4();
+    const businessType = BUSINESS_TYPE_MAP[payload.businessType]
+      || payload.businessType?.toLowerCase()
+      || 'saas';
+
     const business = await Business.create({
-      id: businessId,
+      id: uuidv4(),
       userId,
       name: payload.businessName || 'My Business',
       description: payload.businessDescription || null,
@@ -91,7 +94,7 @@ const generateBotTx = async (userId, payload) => {
       website: payload.websiteUrl || null,
     }, { transaction: t });
 
-    // ─── 2. Default Subscription
+    // ─── 2. Default Subscription ──────────────────────────
     logger.info('Step 2/8: Initializing default subscription');
     await Subscription.create({
       id: uuidv4(),
@@ -102,16 +105,20 @@ const generateBotTx = async (userId, payload) => {
       currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
     }, { transaction: t });
 
-    // ─── 3. Create Bot (Mark generating)
+    // ─── 3. Create Bot ────────────────────────────────────
     logger.info('Step 3/8: Creating bot record and generating API key');
-    const botId = uuidv4();
-    const tone = TONE_MAP[payload.toneOfVoice] || payload.toneOfVoice?.toLowerCase() || 'professional';
-    const responseLanguage = LANGUAGE_MAP[payload.responseLanguage] || payload.responseLanguage?.toLowerCase() || 'en';
+    const tone = TONE_MAP[payload.toneOfVoice]
+      || payload.toneOfVoice?.toLowerCase()
+      || 'professional';
+
+    const responseLanguage = LANGUAGE_MAP[payload.responseLanguage]
+      || payload.responseLanguage?.toLowerCase()
+      || 'en';
 
     const apiKey = await generateUniqueApiKey();
 
     const bot = await Bot.create({
-      id: botId,
+      id: uuidv4(),
       businessId: business.id,
       name: payload.botName || payload.businessName || 'My Bot',
       businessDescription: payload.businessDescription || null,
@@ -123,13 +130,13 @@ const generateBotTx = async (userId, payload) => {
       fallbackEmail: payload.fallbackEmail || null,
       setupStep: 5,
       setupComplete: true,
-      status: 'generating', // Initial status
+      status: 'generating',
       isPublished: false,
       apiKey,
       widgetActive: true,
     }, { transaction: t });
 
-    // ─── 4. Audience Config
+    // ─── 4. Audience Config ───────────────────────────────
     logger.info('Step 4/8: Configuring bot audience settings');
     const audienceConfig = await BotAudienceConfig.create({
       id: uuidv4(),
@@ -139,7 +146,7 @@ const generateBotTx = async (userId, payload) => {
       typeSpecificConfig: payload.adaptiveFields || null,
     }, { transaction: t });
 
-    // ─── 5. Features
+    // ─── 5. Features ──────────────────────────────────────
     logger.info('Step 5/8: Enabling bot features');
     const featureEntries = payload.features || {};
     const enabledKeys = Object.entries(featureEntries)
@@ -152,13 +159,13 @@ const generateBotTx = async (userId, payload) => {
       featureKey: key,
       enabled: true,
     }));
-    
+
     let features = [];
     if (featureRecords.length > 0) {
       features = await BotFeature.bulkCreate(featureRecords, { transaction: t });
     }
 
-    // ─── 6. Theme
+    // ─── 6. Theme ─────────────────────────────────────────
     logger.info('Step 6/8: Applying UI theme configuration');
     const themeKey = THEME_KEY_MAP[payload.themeId] || payload.themeId || 'midnight_pro';
     const widgetPosition = payload.widgetPosition || 'bottom-right';
@@ -171,7 +178,7 @@ const generateBotTx = async (userId, payload) => {
       widgetPosition,
     }, { transaction: t });
 
-    // ─── 7. Finalize & Publish
+    // ─── 7. Build System Prompt & Publish ─────────────────
     logger.info('Step 7/8: Building system prompt and publishing bot');
     bot.systemPrompt = buildSystemPrompt(bot, business, audienceConfig, features);
     bot.isPublished = true;
@@ -179,19 +186,20 @@ const generateBotTx = async (userId, payload) => {
     bot.publishedAt = new Date();
     await bot.save({ transaction: t });
 
-    // ─── 8. Audit Log
+    // ─── 8. Audit Log ─────────────────────────────────────
     logger.info('Step 8/8: Creating audit log entry');
     await AuditLog.create({
+      id: uuidv4(),
       userId,
       action: 'BOT_GENERATED',
       entityType: 'bot',
       entityId: bot.id,
-      metadata: { ...payload, apiKey: bot.apiKey } // Log full settings payload map for audit
+      metadata: { ...payload, apiKey: bot.apiKey },
     }, { transaction: t });
 
     logger.info(`Bot generation succeeded: ${bot.id}`);
 
-    const apiBase = 'https://botforge-api-m6d4.onrender.com';
+    const apiBase = process.env.API_BASE_URL || 'https://botforge-api-m6d4.onrender.com';
     const embedScript = `<script src="${apiBase}/widget/loader.js" data-botforge-key="${bot.apiKey}" data-botforge-api="${apiBase}/api/v1"></script>`;
 
     return {
@@ -206,19 +214,27 @@ const generateBotTx = async (userId, payload) => {
       accentColor: payload.accentColor || null,
       isPublished: true,
       publishedAt: bot.publishedAt,
-      status: bot.status
+      status: bot.status,
     };
+
   }).catch((error) => {
+    // ─── Log the full real error ──────────────────────────
     logger.error(`Bot generation failed for user ${userId}`, {
       message: error.message,
       name: error.name,
       stack: error.stack,
       errors: error.errors,
       sql: error.sql,
-      parent: error.parent,
-      original: error.original,
+      parent: error.parent?.message,
+      original: error.original?.message,
     });
-    // Even though transaction rolls back correctly, we rethrow for the API controller to catch.
+
+    // In development, surface the real error message
+    if (process.env.NODE_ENV === 'development') {
+      throw new AppError(`Bot generation failed: ${error.message}`, 500);
+    }
+
+    // In production, return generic message
     throw new AppError('Failed to generate bot configuration', 500);
   });
 };

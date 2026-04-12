@@ -1,6 +1,5 @@
-// src/models/bot.js
+// src/models/Bot.js
 'use strict';
-
 module.exports = (sequelize, DataTypes) => {
   const Bot = sequelize.define(
     'Bot',
@@ -70,6 +69,13 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         field: 'setup_complete',
       },
+      // ─── ADD THIS ──────────────────────────────────────
+      status: {
+        type: DataTypes.ENUM('generating', 'published', 'failed'),
+        allowNull: false,
+        defaultValue: 'generating',
+      },
+      // ───────────────────────────────────────────────────
       isPublished: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -81,16 +87,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'published_at',
       },
-
-      // NEW: public widget key
       apiKey: {
         type: DataTypes.STRING(64),
         allowNull: false,
         unique: true,
         field: 'api_key',
       },
-
-      // Optional extra safety flag
       widgetActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

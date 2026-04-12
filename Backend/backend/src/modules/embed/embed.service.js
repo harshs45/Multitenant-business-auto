@@ -53,18 +53,19 @@ const getWidgetConfig = async (key) => {
   const bot = await Bot.findOne({
     where: { apiKey: key, widgetActive: true },
     include: [
-      { model: BotTheme, as: 'theme' },
-      { model: BotFeature, as: 'features' },
+      { model: BotTheme },   // ← removed as: 'theme'
+      { model: BotFeature }, // ← removed as: 'features'
     ],
   });
 
   if (!bot) throw AppError.notFound('Invalid or inactive widget key');
   if (!bot.isPublished) throw AppError.forbidden('Bot is not currently published');
-  const themeConfig = bot.theme
+
+  const themeConfig = bot.BotTheme  // ← was bot.theme
     ? {
-        ...THEMES[bot.theme.themeKey],
-        customPrimaryColor: bot.theme.customPrimaryColor,
-        widgetPosition: bot.theme.widgetPosition,
+        ...THEMES[bot.BotTheme.themeKey],
+        customPrimaryColor: bot.BotTheme.customPrimaryColor,
+        widgetPosition: bot.BotTheme.widgetPosition,
       }
     : {};
 
@@ -76,8 +77,7 @@ const getWidgetConfig = async (key) => {
     tone: bot.tone,
     language: bot.responseLanguage,
     theme: themeConfig,
-    features: (bot.features || []).filter((f) => f.enabled).map((f) => f.featureKey),
-    // DO NOT expose: systemPrompt, fallbackEmail, businessId, internalIds
+    features: (bot.BotFeatures || []).filter((f) => f.enabled).map((f) => f.featureKey), // ← was bot.features
   };
 };
 
