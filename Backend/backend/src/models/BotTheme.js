@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-
 module.exports = (sequelize) => {
   const BotTheme = sequelize.define('BotTheme', {
     id: {
@@ -11,34 +10,34 @@ module.exports = (sequelize) => {
       type: DataTypes.UUID,
       allowNull: false,
       unique: true,
+      field: 'bot_id',        // ✅ explicit mapping
     },
     themeKey: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      comment: 'Predefined theme key or "custom"',
+      field: 'theme_key',     // ✅ explicit mapping
     },
     customPrimaryColor: {
       type: DataTypes.STRING(10),
       allowNull: true,
-      comment: 'Brand hex override e.g. #FF5733',
+      field: 'custom_primary_color', // ✅ explicit mapping
     },
     widgetPosition: {
       type: DataTypes.ENUM('bottom-right', 'bottom-left', 'center'),
       defaultValue: 'bottom-right',
+      field: 'widget_position', // ✅ explicit mapping
     },
     customCss: {
       type: DataTypes.TEXT,
       allowNull: true,
-      comment: 'Optional advanced CSS overrides',
+      field: 'custom_css',    // ✅ explicit mapping
     },
   }, {
     tableName: 'bot_themes',
-    underscored: true,
+    timestamps: true,         // ✅ removed underscored: true
   });
-
   BotTheme.associate = (models) => {
     BotTheme.belongsTo(models.Bot, { foreignKey: 'botId', as: 'bot' });
   };
-
   return BotTheme;
 };

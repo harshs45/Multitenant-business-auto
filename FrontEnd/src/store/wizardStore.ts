@@ -38,6 +38,7 @@ interface BuilderState {
   
   // API result
   botId: string | null;
+  publicKey: string | null;
   generationError: string | null;
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,7 +49,7 @@ interface BuilderState {
   nextStep: () => void;
   prevStep: () => void;
   setStep: (step: number) => void;
-  setBotId: (id: string) => void;
+  setBotId: (id: string, publicKey: string) => void;
   setGenerationError: (error: string | null) => void;
 }
 
@@ -86,6 +87,7 @@ export const useWizardStore = create<BuilderState>((set) => ({
   fontStyle: 'system',
 
   botId: null,
+  publicKey: null,
   generationError: null,
 
   setField: (field, value) => set((state) => ({ ...state, [field]: value })),
@@ -117,6 +119,6 @@ export const useWizardStore = create<BuilderState>((set) => ({
   }),
   
   setStep: (step) => set({ activeStep: step }),
-  setBotId: (id) => set({ botId: id }),
+  setBotId: (id, publicKey) => set({ botId: id, publicKey }),
   setGenerationError: (error) => set({ generationError: error }),
 }));

@@ -7,18 +7,15 @@ const llm = require('./llm.service');
 
 /* ─── Helpers ───────────────────────────────────────────── */
 
-const resolveBot = async (publicKey) => {
-  const token = await EmbedToken.findOne({
-    where: { publicKey, isActive: true },
-    include: [{
-      model: Bot,
-      as: 'bot',
-      include: [{ model: Business, as: 'business' }],
-    }],
+const resolveBot = async (apiKey) => {
+  const bot = await Bot.findOne({
+    where: { apiKey, widgetActive: true },
+    include: [{ model: Business, as: 'business' }],
   });
-  if (!token) throw AppError.notFound('Invalid widget key');
-  if (!token.bot.isPublished) throw AppError.forbidden('Bot is not published');
-  return token.bot;
+  
+  if (!bot) throw AppError.notFound('Invalid or inactive widget key');
+  if (!bot.isPublished) throw AppError.forbidden('Bot is not published');
+  return bot;
 };
 
 const checkConversationLimit = async (businessId) => {

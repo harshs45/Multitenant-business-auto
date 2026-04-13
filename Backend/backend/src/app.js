@@ -23,22 +23,37 @@ const knowledgeBase    = require('./modules/knowledge-base/knowledgeBase.routes'
 const platformAdmin    = require('./modules/platform-admin/platformAdmin.routes');
 
 const app = express();
+app.set('trust proxy', 1); // ✅ ADD THIS
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',  // ✅ your local test server
   'https://multitenant-business-auto.vercel.app',
 ];
-
 /* ─── Global Middleware ──────────────────────────────── */
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
+// ✅ Public widget routes — open to any origin (must be before global CORS)
+app.use('/widget', cors({ origin: '*' }));
+app.use('/api/v1/widget', cors({ origin: '*' }));
+app.use('/api/v1/chat', cors({ origin: '*' }));
+
+// 🔒 All other routes — restricted to known origins
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow internal/server-to-server or tools without origin (like Postman)
     if (!origin) return callback(null, true);
 
+    // Exact whitelist match
     if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Allow all if CORS_ORIGIN env is set to *
+    if (process.env.CORS_ORIGIN === '*') {
       return callback(null, true);
     }
 

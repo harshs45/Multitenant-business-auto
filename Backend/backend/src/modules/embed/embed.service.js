@@ -39,44 +39,34 @@ const getSnippet = async (botId, userId) => {
   if (!bot) throw AppError.notFound('Bot not found');
   if (bot.business.userId !== userId) throw AppError.forbidden('Access denied');
 
-  const token = await EmbedToken.findOne({
-    where: { botId: bot.id, isActive: true },
-    order: [['createdAt', 'DESC']],
-  });
-  if (!token) throw AppError.notFound('No active embed token found. Generate one first.');
+  const baseUrl = process.env.BASE_URL || `https://botforge-api-m6d4.onrender.com`;
+  const snippet = generateEmbedSnippet(bot.apiKey, baseUrl);
 
-  const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
-  const snippet = generateEmbedSnippet(token.publicKey, baseUrl);
-
-  return { publicKey: token.publicKey, snippet };
+  return { apiKey: bot.apiKey, snippet };
 };
 
 /**
  * Public widget configuration endpoint.
  * Called by the embedded JS widget to get safe, frontend-only config.
  */
-const getWidgetConfig = async (publicKey) => {
-  const token = await EmbedToken.findOne({
-    where: { publicKey, isActive: true },
-    include: [{
-      model: Bot,
-      as: 'bot',
-      include: [
-        { model: BotTheme, as: 'theme' },
-        { model: BotFeature, as: 'features' },
-      ],
-    }],
+const getWidgetConfig = async (key) => {
+  // ✅ Step 1: Find bot WITHOUT any JOIN to avoid column name conflict
+  const bot = await Bot.findOne({
+    where: { apiKey: key, widgetActive: true },
   });
 
-  if (!token) throw AppError.notFound('Invalid or inactive widget key');
-  if (!token.bot.isPublished) throw AppError.forbidden('Bot is not currently published');
+  if (!bot) throw AppError.notFound('Invalid or inactive widget key');
+  if (!bot.isPublished) throw AppError.forbidden('Bot is not currently published');
 
-  const bot = token.bot;
-  const themeConfig = bot.theme
+  // ✅ Step 2: Fetch associations separately — no JOIN, no conflict
+  const theme = await BotTheme.findOne({ where: { botId: bot.id } });
+  const features = await BotFeature.findAll({ where: { botId: bot.id } });
+
+  const themeConfig = theme
     ? {
-        ...THEMES[bot.theme.themeKey],
-        customPrimaryColor: bot.theme.customPrimaryColor,
-        widgetPosition: bot.theme.widgetPosition,
+        ...THEMES[theme.themeKey],
+        customPrimaryColor: theme.customPrimaryColor,
+        widgetPosition: theme.widgetPosition,
       }
     : {};
 
@@ -88,8 +78,7 @@ const getWidgetConfig = async (publicKey) => {
     tone: bot.tone,
     language: bot.responseLanguage,
     theme: themeConfig,
-    features: (bot.features || []).filter((f) => f.enabled).map((f) => f.featureKey),
-    // DO NOT expose: systemPrompt, fallbackEmail, businessId, internalIds
+    features: features.filter((f) => f.enabled).map((f) => f.featureKey),
   };
 };
 

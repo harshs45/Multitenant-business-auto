@@ -4,6 +4,7 @@ import { ChatPreview } from "./ChatPreview";
 import { Check, Copy, ArrowLeft, LayoutDashboard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { WIDGET_LOADER_URL, API_BASE_URL } from "../../config/api";
 
 export function CompletionScreen() {
   const store = useWizardStore();
@@ -18,17 +19,18 @@ export function CompletionScreen() {
   const embedCode = `<!-- BotForge Widget -->
 <script>
   window.BotForgeConfig = {
+    publicKey: "${store.publicKey}",
     botId: "${botId}",
-    theme: "${store.themeId}",
-    position: "${store.widgetPosition}",
-    accentColor: "${store.accentColor}"
+    apiBase: "${API_BASE_URL}"
   };
-  (function(d,s){
+  (function(d,s,k,a){
     var j=d.createElement(s);
-    j.src="https://cdn.botforge.ai/widget.js";
+    j.src="${WIDGET_LOADER_URL}";
     j.async=true;
+    j.setAttribute('data-botforge-key', k);
+    j.setAttribute('data-botforge-api', a);
     d.head.appendChild(j);
-  })(document,'script');
+  })(document,'script','${store.publicKey}','${API_BASE_URL}');
 </script>`;
 
   const handleCopy = () => {

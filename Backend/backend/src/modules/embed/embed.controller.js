@@ -16,7 +16,7 @@ const getSnippet = async (req, res, next) => {
 
 const getWidgetConfig = async (req, res, next) => {
   try {
-    const config = await service.getWidgetConfig(req.params.publicKey);
+    const config = await service.getWidgetConfig(req.params.key);
     res.json({ success: true, data: config });
   } catch (err) { next(err); }
 };
