@@ -31,15 +31,15 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'bots',
       timestamps: true,
-      underscored: true, // ✅ this alone handles all snake_case mapping — no field: needed
+      underscored: true,
     }
   );
 
   Bot.associate = (models) => {
-    Bot.belongsTo(models.Business, { foreignKey: 'businessId' });
-    Bot.hasOne(models.BotAudienceConfig, { foreignKey: 'botId' });
-    Bot.hasMany(models.BotFeature, { foreignKey: 'botId' });
-    Bot.hasOne(models.BotTheme, { foreignKey: 'botId' });
+    Bot.belongsTo(models.Business, { foreignKey: 'businessId', as: 'business' }); // ✅ fixed
+    Bot.hasOne(models.BotAudienceConfig, { foreignKey: 'botId', as: 'audienceConfig' });
+    Bot.hasMany(models.BotFeature, { foreignKey: 'botId', as: 'features' });
+    Bot.hasOne(models.BotTheme, { foreignKey: 'botId', as: 'theme' });
   };
 
   return Bot;
