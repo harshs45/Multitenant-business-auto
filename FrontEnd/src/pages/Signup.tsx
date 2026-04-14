@@ -31,7 +31,7 @@ export default function Signup() {
 
     try {
       await register(name, email, password);
-      navigate('/build');
+      navigate('/dashboard');
     } catch {
       // error already set in store
     }

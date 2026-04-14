@@ -23,7 +23,7 @@ export function setRefreshToken(token: string): void {
 
 /* ─── Generic fetch wrapper ─────────────────────────────── */
 
-async function request<T>(
+export async function request<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
@@ -110,6 +110,15 @@ export async function getMe(): Promise<MeResponse> {
   return request<MeResponse>('/auth/me');
 }
 
+/* ─── User Profile API ────────────────────────────────────── */
+
+export async function updateProfile(data: { name: string }): Promise<MeResponse> {
+  return request<MeResponse>('/users/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
 /* ─── Bot Generate API ──────────────────────────────────── */
 
 export interface GenerateBotPayload {
@@ -152,6 +161,7 @@ export interface GenerateBotResponse {
     status: string;        // ← add this too
   };
 }
+
 export async function generateBot(
   payload: GenerateBotPayload,
 ): Promise<GenerateBotResponse> {
@@ -159,4 +169,33 @@ export async function generateBot(
     method: 'POST',
     body: JSON.stringify(payload),
   });
+}
+
+/* ─── Analytics API ─────────────────────────────────────── */
+
+export interface DailyUsage {
+  eventType: string;
+  eventDate: string;
+  total: number;
+}
+
+export interface AnalyticsOverview {
+  botId: string;
+  botName: string;
+  totalConversations: number;
+  totalMessages: number;
+  totalLeads: number;
+  totalHandoffs: number;
+  dailyUsage: DailyUsage[];
+}
+
+export interface AnalyticsOverviewResponse {
+  success: boolean;
+  data: AnalyticsOverview;
+}
+
+export async function getAnalyticsOverview(
+  botId: string,
+): Promise<AnalyticsOverviewResponse> {
+  return request<AnalyticsOverviewResponse>(`/analytics/bots/${botId}/overview`);
 }

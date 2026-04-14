@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/build');
+      navigate('/dashboard');
     } catch {
       // error already set in store
     }

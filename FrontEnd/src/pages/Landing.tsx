@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Bot, Layout, Paintbrush, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
+import { useAuthStore } from "../store/authStore";
 
 
 export default function Landing() {
-  
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Navbar />
@@ -343,6 +343,7 @@ const themes =[{
     )
   }]
 function HeroSection() {
+  const { isAuthenticated } = useAuthStore();
   return (
     <section className="relative overflow-hidden pt-20 pb-32 lg:pt-32 lg:pb-48">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background -z-10" />
@@ -365,14 +366,17 @@ function HeroSection() {
             <span>BotForge 2.0 is now live</span>
           </div>
           <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-            Build your business chatbot in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">minutes</span>
+            Build and manage your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">AI fleet</span> in minutes
           </h1>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
-            No code. No complexity. Just describe your business and BotForge generates a fully configured, branded AI chatbot — ready to deploy.
+            No code. No complexity. Generate fully configured, branded AI assistants and manage them all from a single hub.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/build" className="inline-flex justify-center items-center gap-2 bg-blue-500 text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-blue-500-hover transition-all hover:scale-105">
-              Start for free <ArrowRight size={18} />
+            <Link 
+              to={isAuthenticated ? "/dashboard" : "/build"} 
+              className="inline-flex justify-center items-center gap-2 bg-primary text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-primary/90 transition-all hover:scale-105"
+            >
+              {isAuthenticated ? "Go to Dashboard" : "Start for free"} <ArrowRight size={18} />
             </Link>
             <a href="#how-it-works" className="inline-flex justify-center items-center gap-2 h-12 px-8 rounded-full font-medium border border-border hover:bg-muted transition-colors">
               See how it works
@@ -634,13 +638,17 @@ function FAQ() {
 }
 
 function CTABanner() {
+  const { isAuthenticated } = useAuthStore();
   return (
     <section className="py-24 bg-blue-500 text-primary-foreground text-center">
       <div className="max-w-3xl mx-auto px-6">
-        <h2 className="text-4xl font-bold mb-6">Ready to build your chatbot?</h2>
+        <h2 className="text-4xl font-bold mb-6 text-white">Ready to build your fleet?</h2>
         <p className="text-primary-foreground/80 mb-8 text-lg">Join 5,000+ businesses delivering better customer experiences.</p>
-        <Link to="/build" className="inline-flex justify-center items-center gap-2 bg-background text-foreground h-14 px-8 rounded-full font-bold hover:scale-105 transition-transform">
-          Start building for free <ArrowRight size={18} />
+        <Link 
+          to={isAuthenticated ? "/dashboard" : "/build"} 
+          className="inline-flex justify-center items-center gap-2 bg-background text-foreground h-14 px-8 rounded-full font-bold hover:scale-105 transition-transform"
+        >
+          {isAuthenticated ? "Go to My Bots" : "Start building for free"} <ArrowRight size={18} />
         </Link>
       </div>
     </section>
