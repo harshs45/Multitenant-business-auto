@@ -292,53 +292,112 @@ const themes =[{
   },{
     name:"",
     svg:(
-      <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
-  <title>Warm Amber Theme</title>
-  <desc>BotForge chatbot theme preview – Warm Amber</desc>
+     <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Azure Mist Theme</title>
+  <desc>BotForge chatbot theme preview – Azure Mist</desc>
+
   <defs>
-    <radialGradient id="wa-glow1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.26"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    <radialGradient id="am-glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#93c5fd" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="wa-glow2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#fcd34d" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#fcd34d" stop-opacity="0"/>
+    <radialGradient id="am-glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#bfdbfe" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#bfdbfe" stop-opacity="0"/>
     </radialGradient>
-    <clipPath id="wa-clip">
+    <clipPath id="am-clip">
       <rect width="280" height="360" rx="16"/>
     </clipPath>
   </defs>
 
-  <rect width="280" height="360" rx="16" fill="#140e05"/>
-  <rect width="280" height="360" rx="16" fill="none" stroke="rgba(251,191,36,0.1)" stroke-width="0.5"/>
+  <rect width="280" height="360" rx="16" fill="#f4f8fd"/>
+  <rect width="280" height="360" rx="16" fill="none" stroke="#cfe0f5" stroke-width="0.5"/>
 
-  <ellipse cx="240" cy="40" rx="90" ry="90" fill="url(#wa-glow1)" clip-path="url(#wa-clip)"/>
-  <ellipse cx="50" cy="320" rx="60" ry="60" fill="url(#wa-glow2)" clip-path="url(#wa-clip)"/>
+  <ellipse cx="240" cy="40" rx="90" ry="90" fill="url(#am-glow1)" clip-path="url(#am-clip)"/>
+  <ellipse cx="50" cy="320" rx="60" ry="60" fill="url(#am-glow2)" clip-path="url(#am-clip)"/>
 
-  <circle cx="24" cy="28" r="4" fill="#d97706" opacity="0.8"/>
-  <circle cx="36" cy="28" r="4" fill="#fbbf24" opacity="0.8"/>
-  <circle cx="48" cy="28" r="4" fill="#fde68a" opacity="0.8"/>
+  <circle cx="24" cy="28" r="4" fill="#3b82f6" opacity="0.8"/>
+  <circle cx="36" cy="28" r="4" fill="#93c5fd" opacity="0.8"/>
+  <circle cx="48" cy="28" r="4" fill="#dbeafe" opacity="0.9"/>
 
-  <text x="24" y="60" font-family="system-ui, sans-serif" font-size="10" font-weight="500" fill="#fffbeb" opacity="0.4" letter-spacing="1.2">THEME</text>
+  <text x="24" y="60" font-family="system-ui, sans-serif" font-size="10" font-weight="500" fill="#1e3a5f" opacity="0.4" letter-spacing="1.2">THEME</text>
 
-  <text x="24" y="88" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#fffbeb">Warm Amber</text>
+  <text x="24" y="88" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#0f2d4a">Azure Mist</text>
 
-  <text x="24" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#fef3c7" opacity="0.45">Golden. Cozy. Inviting.</text>
+  <text x="24" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#3b82f6" opacity="0.5">Open. Airy. Crystal clear.</text>
 
-  <rect x="24" y="140" width="180" height="28" rx="8" fill="#1c1206" stroke="rgba(251,191,36,0.1)" stroke-width="0.5"/>
-  <text x="34" y="158" font-family="system-ui, sans-serif" font-size="10" fill="#fcd34d">How can I assist you today?</text>
+  <rect x="24" y="140" width="180" height="28" rx="8" fill="#ffffff" stroke="#cfe0f5" stroke-width="0.5"/>
+  <text x="34" y="158" font-family="system-ui, sans-serif" font-size="10" fill="#2563eb">How can I assist you today?</text>
 
-  <rect x="110" y="180" width="150" height="28" rx="8" fill="#78350f" stroke="rgba(251,191,36,0.25)" stroke-width="0.5"/>
-  <text x="120" y="198" font-family="system-ui, sans-serif" font-size="10" fill="#fde68a">Tell me about the API.</text>
+  <rect x="110" y="180" width="150" height="28" rx="8" fill="#2563eb"/>
+  <text x="120" y="198" font-family="system-ui, sans-serif" font-size="10" fill="#dbeafe">Tell me about the API.</text>
 
-  <rect x="24" y="240" width="180" height="30" rx="8" fill="rgba(251,191,36,0.05)" stroke="rgba(251,191,36,0.12)" stroke-width="0.5"/>
-  <text x="34" y="260" font-family="system-ui, sans-serif" font-size="10" fill="#b45309" opacity="0.8">Type a message…</text>
+  <rect x="24" y="240" width="180" height="30" rx="8" fill="#ffffff" stroke="#cfe0f5" stroke-width="0.5"/>
+  <text x="34" y="260" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">Type a message…</text>
 
-  <circle cx="240" cy="255" r="14" fill="#d97706"/>
+  <circle cx="240" cy="255" r="14" fill="#2563eb"/>
   <path d="M234 261 L240 255 L234 249 L234 252.5 L238 255 L234 257.5 Z" fill="#ffffff"/>
 
-  <rect x="24" y="310" width="110" height="16" rx="8" fill="rgba(251,191,36,0.12)" stroke="rgba(253,211,77,0.3)" stroke-width="0.5"/>
-  <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#fcd34d">⬡ Warm Amber</text>
+  <rect x="24" y="310" width="110" height="16" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.5"/>
+  <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#1d4ed8">⬡ Azure Mist</text>
+</svg>
+    )
+  },{
+    name:"",
+    svg:(
+      <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Pearl Linen Theme</title>
+  <desc>BotForge chatbot theme preview – Pearl Linen</desc>
+
+  <defs>
+    <radialGradient id="pl-glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pl-glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e9d5ff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#e9d5ff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="pl-clip">
+      <rect width="280" height="360" rx="16"/>
+    </clipPath>
+  </defs>
+
+  <rect width="280" height="360" rx="16" fill="#faf8f4"/>
+  <rect width="280" height="360" rx="16" fill="none" stroke="#e8e0d6" stroke-width="0.5"/>
+
+  <ellipse cx="240" cy="40" rx="90" ry="90" fill="url(#pl-glow1)" clip-path="url(#pl-clip)"/>
+  <ellipse cx="50" cy="320" rx="60" ry="60" fill="url(#pl-glow2)" clip-path="url(#pl-clip)"/>
+
+  <line x1="200" y1="0" x2="280" y2="80" stroke="#d8cfe8" stroke-width="0.4" opacity="0.5"/>
+  <line x1="220" y1="0" x2="280" y2="60" stroke="#d8cfe8" stroke-width="0.4" opacity="0.4"/>
+  <line x1="240" y1="0" x2="280" y2="40" stroke="#d8cfe8" stroke-width="0.4" opacity="0.3"/>
+  <line x1="180" y1="0" x2="280" y2="100" stroke="#d8cfe8" stroke-width="0.4" opacity="0.3"/>
+
+  <circle cx="24" cy="28" r="4" fill="#a78bfa" opacity="0.9"/>
+  <circle cx="36" cy="28" r="4" fill="#c4b5fd" opacity="0.9"/>
+  <circle cx="48" cy="28" r="4" fill="#ede9fe" opacity="0.9"/>
+
+  <text x="24" y="60" font-family="system-ui, sans-serif" font-size="10" font-weight="500" fill="#6b5c80" opacity="0.4" letter-spacing="1.2">THEME</text>
+
+  <text x="24" y="88" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#2d2440">Pearl Linen</text>
+
+  <text x="24" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#8b7ca6" opacity="0.5">Light. Refined. Effortless.</text>
+
+  <rect x="24" y="140" width="180" height="28" rx="8" fill="#ffffff" stroke="#e2d9ef" stroke-width="0.5"/>
+  <text x="34" y="158" font-family="system-ui, sans-serif" font-size="10" fill="#5b4e72">How can I assist you today?</text>
+
+  <rect x="110" y="180" width="150" height="28" rx="8" fill="#7c3aed"/>
+  <text x="120" y="198" font-family="system-ui, sans-serif" font-size="10" fill="#ede9fe">Tell me about the API.</text>
+
+  <rect x="24" y="240" width="180" height="30" rx="8" fill="#ffffff" stroke="#ddd5ed" stroke-width="0.5"/>
+  <text x="34" y="260" font-family="system-ui, sans-serif" font-size="10" fill="#c4b5fd">Type a message…</text>
+
+  <circle cx="240" cy="255" r="14" fill="#7c3aed"/>
+  <path d="M234 261 L240 255 L234 249 L234 252.5 L238 255 L234 257.5 Z" fill="#ffffff"/>
+
+  <rect x="24" y="310" width="110" height="16" rx="8" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.5"/>
+  <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#6d28d9">⬡ Pearl Linen</text>
 </svg>
     )
   }]
