@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const { Bot, Business, BotAudienceConfig, BotFeature, BotTheme, Subscription, AuditLog } = require('../../models');
+const { Bot, Business, BotAudienceConfig, BotFeature, BotTheme, Subscription, AuditLog, EmbedToken } = require('../../models');
 const AppError = require('../../common/errors/AppError');
 const { validateFeatures } = require('../../common/constants/features');
 const { THEME_KEYS, WIDGET_POSITIONS } = require('../../common/constants/themes');
@@ -17,6 +17,7 @@ const loadFullBot = async (botId) => {
       { model: BotAudienceConfig, as: 'audienceConfig' },
       { model: BotFeature, as: 'features' },
       { model: BotTheme, as: 'theme' },
+      { model: EmbedToken, as: 'embedTokens', where: { isActive: true }, required: false },
     ],
   });
 };

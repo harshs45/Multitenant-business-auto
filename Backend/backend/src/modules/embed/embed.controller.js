@@ -14,11 +14,4 @@ const getSnippet = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-const getWidgetConfig = async (req, res, next) => {
-  try {
-    const config = await service.getWidgetConfig(req.params.key);
-    res.json({ success: true, data: config });
-  } catch (err) { next(err); }
-};
-
-module.exports = { createToken, getSnippet, getWidgetConfig };
+module.exports = { createToken, getSnippet };

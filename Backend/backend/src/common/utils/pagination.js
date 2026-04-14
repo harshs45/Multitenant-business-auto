@@ -10,14 +10,18 @@ const paginate = (query) => {
   return { page, limit, offset };
 };
 
-const paginatedResponse = (rows, count, { page, limit }) => ({
-  data: rows,
-  meta: {
-    total: count,
-    page,
-    limit,
-    totalPages: Math.ceil(count / limit),
-  },
-});
+const paginatedResponse = (rows, count, { page, limit }) => {
+  const payload = {
+    data: rows,
+    meta: {
+      total: count,
+      page,
+      limit,
+      totalPages: Math.ceil(count / limit),
+    },
+  };
+  console.log('DEBUG: paginatedResponse payload:', JSON.stringify(payload, null, 2));
+  return payload;
+};
 
 module.exports = { paginate, paginatedResponse };

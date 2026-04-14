@@ -9,7 +9,6 @@ const router = Router();
 router.post('/bots/:id/embed-token',  authenticate, ctrl.createToken);
 router.get('/bots/:id/embed-snippet', authenticate, ctrl.getSnippet);
 
-// Public route (called by embedded widget)
-router.get('/widget/config/:key', cors({ origin: '*' }), ctrl.getWidgetConfig);
+// Public route — removed and moved to widget module
 
 module.exports = router;

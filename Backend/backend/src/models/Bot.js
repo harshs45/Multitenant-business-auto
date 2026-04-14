@@ -40,6 +40,9 @@ module.exports = (sequelize, DataTypes) => {
     Bot.hasOne(models.BotAudienceConfig, { foreignKey: 'botId', as: 'audienceConfig' });
     Bot.hasMany(models.BotFeature, { foreignKey: 'botId', as: 'features' });
     Bot.hasOne(models.BotTheme, { foreignKey: 'botId', as: 'theme' });
+    Bot.hasMany(models.KnowledgeBaseFAQ, { foreignKey: 'botId', as: 'faqs' });
+    Bot.hasMany(models.KnowledgeBaseDocument, { foreignKey: 'botId', as: 'documents' });
+    Bot.hasMany(models.EmbedToken, { foreignKey: 'botId', as: 'embedTokens' });
   };
 
   return Bot;

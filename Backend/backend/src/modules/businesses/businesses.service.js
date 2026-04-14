@@ -64,6 +64,7 @@ const listBots = async (businessId, userId, query) => {
 };
 
 const listForUser = async (userId, query) => {
+  console.log('DEBUG: listForUser called for userId:', userId);
   const { page, limit, offset } = paginate(query);
   const { count, rows } = await Business.findAndCountAll({
     where: { userId },
@@ -72,6 +73,8 @@ const listForUser = async (userId, query) => {
     offset,
     order: [['createdAt', 'DESC']],
   });
+  console.log(`DEBUG: listForUser found ${count} businesses for userId: ${userId}`);
+  console.log('DEBUG: First row preview (if any):', rows[0]?.id);
   return paginatedResponse(rows, count, { page, limit });
 };
 

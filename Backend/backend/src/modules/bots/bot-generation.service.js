@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../../models');
 const {
-  Bot, Business, Subscription, BotAudienceConfig, BotFeature, BotTheme, AuditLog,
+  Bot, Business, Subscription, BotAudienceConfig, BotFeature, BotTheme, AuditLog, EmbedToken,
 } = require('../../models');
 const { buildSystemPrompt } = require('./prompt.service');
 const logger = require('../../common/utils/logger');
@@ -57,7 +57,7 @@ const LANGUAGE_MAP = {
 };
 
 /**
- * Generates a unique API key with 'bf_' prefix.
+ * Generates a unique internal API key with 'bf_' prefix.
  */
 const generateUniqueApiKey = async () => {
   let isUnique = false;
@@ -65,6 +65,20 @@ const generateUniqueApiKey = async () => {
   while (!isUnique) {
     key = `bf_${crypto.randomBytes(16).toString('hex')}`;
     const existing = await Bot.findOne({ where: { apiKey: key } });
+    if (!existing) isUnique = true;
+  }
+  return key;
+};
+
+/**
+ * Generates a unique public widget key with 'bf_pub_' prefix.
+ */
+const generateUniquePublicWidgetKey = async () => {
+  let isUnique = false;
+  let key;
+  while (!isUnique) {
+    key = `bf_pub_${crypto.randomBytes(16).toString('hex')}`;
+    const existing = await EmbedToken.findOne({ where: { publicKey: key } });
     if (!existing) isUnique = true;
   }
   return key;
@@ -136,8 +150,18 @@ const generateBotTx = async (userId, payload) => {
       widgetActive: true,
     }, { transaction: t });
 
-    // ─── 4. Audience Config ───────────────────────────────
-    logger.info('Step 4/8: Configuring bot audience settings');
+    // ─── 4. Public Embed Token ────────────────────────────
+    logger.info('Step 4/9: Generating public embed token');
+    const publicWidgetKey = await generateUniquePublicWidgetKey();
+    await EmbedToken.create({
+      id: uuidv4(),
+      botId: bot.id,
+      publicKey: publicWidgetKey,
+      isActive: true,
+    }, { transaction: t });
+
+    // ─── 5. Audience Config ───────────────────────────────
+    logger.info('Step 5/9: Configuring bot audience settings');
     const audienceConfig = await BotAudienceConfig.create({
       id: uuidv4(),
       botId: bot.id,
@@ -146,8 +170,8 @@ const generateBotTx = async (userId, payload) => {
       typeSpecificConfig: payload.adaptiveFields || null,
     }, { transaction: t });
 
-    // ─── 5. Features ──────────────────────────────────────
-    logger.info('Step 5/8: Enabling bot features');
+    // ─── 6. Features ──────────────────────────────────────
+    logger.info('Step 6/9: Enabling bot features');
     const featureEntries = payload.features || {};
     const enabledKeys = Object.entries(featureEntries)
       .filter(([, enabled]) => enabled)
@@ -165,8 +189,8 @@ const generateBotTx = async (userId, payload) => {
       features = await BotFeature.bulkCreate(featureRecords, { transaction: t });
     }
 
-    // ─── 6. Theme ─────────────────────────────────────────
-    logger.info('Step 6/8: Applying UI theme configuration');
+    // ─── 7. Theme ─────────────────────────────────────────
+    logger.info('Step 7/9: Applying UI theme configuration');
     const themeKey = THEME_KEY_MAP[payload.themeId] || payload.themeId || 'midnight_pro';
     const widgetPosition = payload.widgetPosition || 'bottom-right';
 
@@ -178,16 +202,16 @@ const generateBotTx = async (userId, payload) => {
       widgetPosition,
     }, { transaction: t });
 
-    // ─── 7. Build System Prompt & Publish ─────────────────
-    logger.info('Step 7/8: Building system prompt and publishing bot');
+    // ─── 8. Build System Prompt & Publish ─────────────────
+    logger.info('Step 8/9: Building system prompt and publishing bot');
     bot.systemPrompt = buildSystemPrompt(bot, business, audienceConfig, features);
     bot.isPublished = true;
     bot.status = 'published';
     bot.publishedAt = new Date();
     await bot.save({ transaction: t });
 
-    // ─── 8. Audit Log ─────────────────────────────────────
-    logger.info('Step 8/8: Creating audit log entry');
+    // ─── 9. Audit Log ─────────────────────────────────────
+    logger.info('Step 9/9: Creating audit log entry');
     await AuditLog.create({
       id: uuidv4(),
       userId,
@@ -200,12 +224,13 @@ const generateBotTx = async (userId, payload) => {
     logger.info(`Bot generation succeeded: ${bot.id}`);
 
     const apiBase = process.env.API_BASE_URL || 'https://botforge-api-m6d4.onrender.com';
-    const embedScript = `<script src="${apiBase}/widget/loader.js" data-botforge-key="${bot.apiKey}" data-botforge-api="${apiBase}/api/v1"></script>`;
+    const embedScript = `<script src="${apiBase}/widget/loader.js" data-botforge-key="${publicWidgetKey}" data-botforge-api="${apiBase}/api/v1"></script>`;
 
     return {
       botId: bot.id,
       botName: bot.botName,
       apiKey: bot.apiKey,
+      publicWidgetKey,
       embedScript,
       businessId: business.id,
       businessName: business.name,

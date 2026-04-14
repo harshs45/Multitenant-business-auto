@@ -1,26 +1,58 @@
 const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize');
-const { EmbedToken, Bot, Business, Conversation, Message, Lead, HandoffRequest, UsageLog, Subscription } = require('../../models');
+const {
+  EmbedToken,
+  Bot,
+  Business,
+  Conversation,
+  Message,
+  Lead,
+  HandoffRequest,
+  UsageLog,
+  Subscription,
+} = require('../../models');
 const AppError = require('../../common/errors/AppError');
 const { PLANS } = require('../../common/constants/plans');
 const llm = require('./llm.service');
 
 /* ─── Helpers ───────────────────────────────────────────── */
 
-const resolveBot = async (apiKey) => {
-  const bot = await Bot.findOne({
-    where: { apiKey, widgetActive: true },
-    include: [{ model: Business, as: 'business' }],
+const resolveBot = async (publicKey) => {
+  const embedToken = await EmbedToken.findOne({
+    where: {
+      publicKey,
+      isActive: true,
+    },
+    include: [
+      {
+        model: Bot,
+        as: 'bot',
+        required: true,
+        where: {
+          widgetActive: true,
+          isPublished: true,
+        },
+        include: [
+          {
+            model: Business,
+            as: 'business',
+          },
+        ],
+      },
+    ],
   });
-  
-  if (!bot) throw AppError.notFound('Invalid or inactive widget key');
-  if (!bot.isPublished) throw AppError.forbidden('Bot is not published');
-  return bot;
+
+  if (!embedToken || !embedToken.bot) {
+    throw AppError.notFound('Invalid or inactive widget key');
+  }
+
+  return embedToken.bot;
 };
 
 const checkConversationLimit = async (businessId) => {
   const sub = await Subscription.findOne({ where: { businessId } });
   if (!sub) return;
+
   const plan = PLANS[sub.planKey];
   if (!plan || plan.maxConversationsPerMonth === -1) return;
 
@@ -43,10 +75,19 @@ const checkConversationLimit = async (businessId) => {
 
 const logUsage = async (businessId, botId, eventType) => {
   const today = new Date().toISOString().split('T')[0];
+
   const [log] = await UsageLog.findOrCreate({
     where: { businessId, botId, eventType, eventDate: today },
-    defaults: { id: uuidv4(), businessId, botId, eventType, eventDate: today, count: 0 },
+    defaults: {
+      id: uuidv4(),
+      businessId,
+      botId,
+      eventType,
+      eventDate: today,
+      count: 0,
+    },
   });
+
   log.count += 1;
   await log.save();
 };
@@ -59,7 +100,6 @@ const createSession = async (publicKey, data) => {
 
   const sessionId = data.sessionId || uuidv4();
 
-  // Resume existing session
   const existing = await Conversation.findOne({ where: { sessionId } });
   if (existing) return existing;
 
@@ -78,13 +118,16 @@ const createSession = async (publicKey, data) => {
 
 const sendMessage = async (publicKey, data) => {
   const bot = await resolveBot(publicKey);
+
   const conversation = await Conversation.findOne({
     where: { sessionId: data.sessionId, botId: bot.id },
   });
-  if (!conversation) throw AppError.notFound('Chat session not found');
-  if (conversation.status !== 'active') throw AppError.badRequest('This conversation has ended');
 
-  // Save user message
+  if (!conversation) throw AppError.notFound('Chat session not found');
+  if (conversation.status !== 'active') {
+    throw AppError.badRequest('This conversation has ended');
+  }
+
   await Message.create({
     id: uuidv4(),
     conversationId: conversation.id,
@@ -92,20 +135,17 @@ const sendMessage = async (publicKey, data) => {
     content: data.message,
   });
 
-  // Load conversation history for context
   const history = await Message.findAll({
     where: { conversationId: conversation.id },
     order: [['createdAt', 'ASC']],
-    limit: 20, // last 20 messages for context window
+    limit: 20,
   });
 
-  // Call LLM
   const llmResponse = await llm.complete(
     bot.systemPrompt || 'You are a helpful assistant.',
-    history.map((m) => ({ role: m.role, content: m.content })),
+    history.map((m) => ({ role: m.role, content: m.content }))
   );
 
-  // Save assistant message
   const assistantMsg = await Message.create({
     id: uuidv4(),
     conversationId: conversation.id,
@@ -114,7 +154,6 @@ const sendMessage = async (publicKey, data) => {
     metadata: llmResponse.metadata,
   });
 
-  // Update message count
   conversation.messageCount = (conversation.messageCount || 0) + 2;
   await conversation.save();
 
@@ -129,23 +168,29 @@ const sendMessage = async (publicKey, data) => {
 
 const getHistory = async (publicKey, sessionId) => {
   const bot = await resolveBot(publicKey);
+
   const conversation = await Conversation.findOne({
     where: { sessionId, botId: bot.id },
-    include: [{
-      model: Message,
-      as: 'messages',
-      order: [['createdAt', 'ASC']],
-    }],
+    include: [
+      {
+        model: Message,
+        as: 'messages',
+      },
+    ],
   });
+
   if (!conversation) throw AppError.notFound('Chat session not found');
+
   return conversation;
 };
 
 const requestHandoff = async (publicKey, data) => {
   const bot = await resolveBot(publicKey);
+
   const conversation = await Conversation.findOne({
     where: { sessionId: data.sessionId, botId: bot.id },
   });
+
   if (!conversation) throw AppError.notFound('Chat session not found');
 
   const handoff = await HandoffRequest.create({
@@ -165,9 +210,11 @@ const requestHandoff = async (publicKey, data) => {
 
 const captureLead = async (publicKey, data) => {
   const bot = await resolveBot(publicKey);
+
   const conversation = await Conversation.findOne({
     where: { sessionId: data.sessionId, botId: bot.id },
   });
+
   if (!conversation) throw AppError.notFound('Chat session not found');
 
   const lead = await Lead.create({
@@ -187,4 +234,10 @@ const captureLead = async (publicKey, data) => {
   return lead;
 };
 
-module.exports = { createSession, sendMessage, getHistory, requestHandoff, captureLead };
+module.exports = {
+  createSession,
+  sendMessage,
+  getHistory,
+  requestHandoff,
+  captureLead,
+};
