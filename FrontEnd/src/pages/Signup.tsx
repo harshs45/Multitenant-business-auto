@@ -17,7 +17,11 @@ export default function SignupPage() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+<<<<<<< HEAD
   const { register } = useAuthStore();
+=======
+  const { register, isLoading, error, clearError } = useAuthStore();
+>>>>>>> e1e61ee16fc9410fbb92066dc71a1e266b73d4e5
 
   const { theme, setTheme } = useTheme();
 
