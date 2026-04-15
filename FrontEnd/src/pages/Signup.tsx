@@ -1,6 +1,6 @@
 import { useState,useRef } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff,MessageSquare} from "lucide-react";
+import { Eye, EyeOff,MessageSquare,Moon, Sun} from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../components/theme-provider";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +66,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
     if (nextRef) {
       nextRef.current?.focus();
     } else {
-      e.currentTarget.form?.requestSubmit(); // ✅ correct way
+      e.currentTarget.form?.requestSubmit(); 
     }
   }
 };
@@ -83,7 +83,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="absolute top-6 right-6 px-4 py-2 rounded-lg text-sm font-medium border bg-white dark:bg-white/5 text-gray-700 dark:text-white border-gray-300 dark:border-white/10 shadow dark:shadow-none transition"
       >
-        {theme === "dark" ? "☀️ " : "🌙 "}
+        {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
       </button>
 
       {/* Background */}
