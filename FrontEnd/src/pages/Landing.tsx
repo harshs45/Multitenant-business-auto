@@ -23,7 +23,6 @@ export default function Landing() {
         <ThemeGallery />
         <FeaturesGrid />
         <Pricing />
-        <Testimonials />
         <FAQ />
         <CTABanner />
       </main>
@@ -1125,33 +1124,7 @@ function Pricing() {
   );
 }
 
-function Testimonials() {
-  return (
-    <section className="py-24 bg-muted/30 border-y border-border">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">Loved by founders</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-           {[{n: "Sarah Jenkins", r: "CEO, Blendy", q: "BotForge took our customer support from chaos to structured in exactly 4 minutes. Not an exaggeration."},
-             {n: "Rahul M.", r: "Founder, Proptech", q: "We avoided hiring an external agency to build our chatbot. The real estate templates were spot on."},
-             {n: "Elena K.", r: "Marketing Lead", q: "The branding customization is unmatched. Our chatbot looks like we spent $10k developing it from scratch."}].map((t, i) => (
-             <motion.div key={i} whileHover={{ y: -5 }} className="bg-background border border-border p-6 rounded-2xl">
-               <p className="text-muted-foreground mb-6">"{t.q}"</p>
-               <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 rounded-full bg-blue-500/20 text-primary flex items-center justify-center font-bold">
-                   {t.n.charAt(0)}
-                 </div>
-                 <div>
-                   <h4 className="font-semibold text-sm">{t.n}</h4>
-                   <p className="text-xs text-muted-foreground">{t.r}</p>
-                 </div>
-               </div>
-             </motion.div>
-           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+
 
 function FAQ() {
   const faqs = [
