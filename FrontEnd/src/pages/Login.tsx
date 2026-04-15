@@ -1,12 +1,15 @@
 import { useState,useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate  } from "react-router-dom";
 import { Eye, EyeOff, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../components/theme-provider";
+import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
+  const { login, isLoading, error, clearError } = useAuthStore();
+  const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
-const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -19,10 +22,15 @@ const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: any) => {
+ 
+  const handleSubmit =async (e: any) => {
     e.preventDefault();
+    try {
+      await login(formData.email, formData.password);
+      navigate('/dashboard');
+    } catch {
+      // error already set in store
+    }
 
     if (!formData.email || !formData.password) {
       alert("Please fill all fields");
@@ -154,4 +162,5 @@ const handleKeyDown = (e: any, nextRef?: any) => {
       </motion.div>
     </div>
   );
+  }
 }

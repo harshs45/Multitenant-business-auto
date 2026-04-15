@@ -3,18 +3,21 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff,MessageSquare} from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../components/theme-provider";
-
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from '../store/authStore';
 
 
 
 export default function SignupPage() {
   const nameRef = useRef<HTMLInputElement>(null);
-const emailRef = useRef<HTMLInputElement>(null);
-const passwordRef = useRef<HTMLInputElement>(null);
-const confirmRef = useRef<HTMLInputElement>(null);  
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmRef = useRef<HTMLInputElement>(null);  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { register, isLoading, error, clearError } = useAuthStore();
 
   const { theme, setTheme } = useTheme();
 
@@ -27,11 +30,17 @@ const confirmRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    
   };
 
-  const handleSubmit = (e: any) => {
+   const handleSubmit = async(e: any) => {
     e.preventDefault();
-
+    try {
+      await register(formData.name, formData.email, formData.password);
+      navigate('/dashboard');
+    } catch {
+      // error already set in store
+    }
     if (formData.password.length < 8) {
       alert("Password must be at least 8 characters");
       return;

@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 import { useState ,useEffect } from "react";
 import PremiumBackground from "../components/glowEffect/glow"; 
+import { useAuthStore } from "../store/authStore";
 
 
 export default function Landing() {
- 
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Navbar />
@@ -419,6 +419,7 @@ function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
+  const { isAuthenticated } = useAuthStore();
   return (
     <section className="relative overflow-hidden pb-20  lg:pb-32">
       <div className="max-w-7xl mx-auto px-6 relative z-10 hidden md:block">
@@ -429,31 +430,46 @@ function HeroSection() {
 
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-2xl"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-primary text-sm font-medium mb-6">
-            <Sparkles size={16} />
-            <span>BotForge 2.0 is now live</span>
-            </div>
-              <h1 className="text-5xl font-bold">
-                {displayed}
-                <span className="animate-pulse">|</span>
-              </h1>
-          <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
-            No code. No complexity. Just describe your business and BotForge generates a fully configured, branded AI chatbot — ready to deploy.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/build" className="inline-flex justify-center items-center gap-2 bg-blue-500 text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-blue-500-hover transition-all hover:scale-105">
-              Start for free <ArrowRight size={18} />
-            </Link>
-            <a href="#how-it-works" className="inline-flex justify-center items-center gap-2 h-12 px-8 rounded-full font-medium border border-border hover:bg-muted transition-colors">
-              See how it works
-            </a>
-          </div>
-        </motion.div>
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+  className="max-w-2xl"
+>
+  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-primary text-sm font-medium mb-6">
+    <Sparkles size={16} />
+    <span>BotForge 2.0 is now live</span>
+  </div>
+
+  <h1 className="text-5xl font-bold">
+    {displayed}
+    <span className="animate-pulse">|</span>
+  </h1>
+
+  <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
+    Build and manage your 
+    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">
+      AI fleet
+    </span> 
+    in minutes
+  </h1>
+
+  <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
+    No code. No complexity. Generate fully configured, branded AI assistants and manage them all from a single hub.
+  </p>
+
+  <div className="flex flex-col sm:flex-row gap-4">
+    <Link 
+      to={isAuthenticated ? "/dashboard" : "/build"} 
+      className="inline-flex justify-center items-center gap-2 bg-primary text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-primary/90 transition-all hover:scale-105"
+    >
+      {isAuthenticated ? "Go to Dashboard" : "Start for free"} <ArrowRight size={18} />
+    </Link>
+
+    <a href="#how-it-works" className="inline-flex justify-center items-center gap-2 h-12 px-8 rounded-full font-medium border border-border hover:bg-muted transition-colors">
+      See how it works
+    </a>
+  </div>
+</motion.div>
 
         {/* Animated mockup */}
         <motion.div 
@@ -1164,6 +1180,7 @@ function FAQ() {
 }
 
 function CTABanner() {
+  const { isAuthenticated } = useAuthStore();
   return (
     <section
       className="py-28 text-center relative overflow-hidden"
@@ -1219,10 +1236,10 @@ function CTABanner() {
         </p>
 
         <Link
-          to="/build"
+           to={isAuthenticated ? "/dashboard" : "/build"} 
           className="inline-flex justify-center items-center gap-2 bg-white text-[#1a2a5e] h-14 px-8 rounded-full font-bold hover:scale-105 hover:bg-white/90 transition-all shadow-xl"
         >
-          Start building for free <ArrowRight size={18} />
+          {isAuthenticated ? "Go to My Bots" : "Start building for free"} <ArrowRight size={18} />
         </Link>
 
       </div>

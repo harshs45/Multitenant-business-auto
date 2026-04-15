@@ -34,52 +34,30 @@ const createToken = async (botId, userId, data) => {
  */
 const getSnippet = async (botId, userId) => {
   const bot = await Bot.findByPk(botId, {
-    include: [{ model: Business, as: 'business' }],
+    include: [
+      { model: Business, as: 'business' },
+      { model: EmbedToken, as: 'embedTokens', where: { isActive: true }, limit: 1 }
+    ],
   });
   if (!bot) throw AppError.notFound('Bot not found');
   if (bot.business.userId !== userId) throw AppError.forbidden('Access denied');
 
-  const baseUrl = process.env.BASE_URL || `https://botforge-api-m6d4.onrender.com`;
-  const snippet = generateEmbedSnippet(bot.apiKey, baseUrl);
+  // If no token exists, create one (backfill for old bots)
+  let token = bot.embedTokens?.[0];
+  if (!token) {
+    const publicKey = `bf_pub_${crypto.randomBytes(16).toString('hex')}`;
+    token = await EmbedToken.create({
+      id: uuidv4(),
+      botId: bot.id,
+      publicKey,
+      isActive: true,
+    });
+  }
 
-  return { apiKey: bot.apiKey, snippet };
+  const baseUrl = process.env.API_BASE_URL || `https://botforge-api-m6d4.onrender.com`;
+  const snippet = generateEmbedSnippet(token.publicKey, baseUrl);
+
+  return { publicKey: token.publicKey, snippet };
 };
 
-/**
- * Public widget configuration endpoint.
- * Called by the embedded JS widget to get safe, frontend-only config.
- */
-const getWidgetConfig = async (key) => {
-  // ✅ Step 1: Find bot WITHOUT any JOIN to avoid column name conflict
-  const bot = await Bot.findOne({
-    where: { apiKey: key, widgetActive: true },
-  });
-
-  if (!bot) throw AppError.notFound('Invalid or inactive widget key');
-  if (!bot.isPublished) throw AppError.forbidden('Bot is not currently published');
-
-  // ✅ Step 2: Fetch associations separately — no JOIN, no conflict
-  const theme = await BotTheme.findOne({ where: { botId: bot.id } });
-  const features = await BotFeature.findAll({ where: { botId: bot.id } });
-
-  const themeConfig = theme
-    ? {
-        ...THEMES[theme.themeKey],
-        customPrimaryColor: theme.customPrimaryColor,
-        widgetPosition: theme.widgetPosition,
-      }
-    : {};
-
-  return {
-    botName: bot.botName,
-    avatarStyle: bot.avatarStyle,
-    avatarUrl: bot.avatarUrl,
-    welcomeMessage: bot.welcomeMessage,
-    tone: bot.tone,
-    language: bot.responseLanguage,
-    theme: themeConfig,
-    features: features.filter((f) => f.enabled).map((f) => f.featureKey),
-  };
-};
-
-module.exports = { createToken, getSnippet, getWidgetConfig };
+module.exports = { createToken, getSnippet };

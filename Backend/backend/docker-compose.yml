@@ -7,8 +7,10 @@ services:
     restart: unless-stopped
     ports:
       - "5000:5000"
+    environment:
+      - RUN_ENV=docker
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       mysql:
         condition: service_healthy
