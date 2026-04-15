@@ -1,7 +1,18 @@
 import { MessageSquare } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 export function Footer() {
+  const navigate = useNavigate();
+  const handleHashLink = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    e.preventDefault();
+    const el = document.querySelector(hash);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate(`/${hash}`);
+    }
+  };
+
   return (
     <footer className="bg-background border-t border-border pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6">
@@ -26,10 +37,10 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-sm">Product</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Features</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Themes</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Pricing</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Integrations</a></li>
+              <li><a href="#features"onClick={(e) => handleHashLink(e, "#features")} className="hover:text-foreground transition-colors">Features</a></li>
+              <li><a href="#themes" onClick={(e) => handleHashLink(e, "#themes")} className="hover:text-foreground transition-colors">Themes</a></li>
+              <li><a href="#pricing" onClick={(e) => handleHashLink(e, "#pricing")} className="hover:text-foreground transition-colors">Pricing</a></li>
+              <li><a href="#" onClick={(e) => handleHashLink(e, "#")}  className="hover:text-foreground transition-colors">Integrations</a></li>
             </ul>
           </div>
           
