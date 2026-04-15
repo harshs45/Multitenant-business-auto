@@ -1,173 +1,188 @@
-import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
-import { MessageSquare, Loader2, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useState,useRef } from "react";
+import { Link } from "react-router-dom";
+import { Eye, EyeOff,MessageSquare} from "lucide-react";
+import { motion } from "framer-motion";
+import { useTheme } from "../components/theme-provider";
 
-export default function Signup() {
-  const { register, isLoading, error, clearError } = useAuthStore();
-  const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPw, setConfirmPw] = useState('');
-  const [showPw, setShowPw] = useState(false);
-  const [localError, setLocalError] = useState('');
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLocalError('');
 
-    if (password !== confirmPw) {
-      setLocalError('Passwords do not match');
-      return;
-    }
+export default function SignupPage() {
+  const nameRef = useRef<HTMLInputElement>(null);
+const emailRef = useRef<HTMLInputElement>(null);
+const passwordRef = useRef<HTMLInputElement>(null);
+const confirmRef = useRef<HTMLInputElement>(null);  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    if (password.length < 8) {
-      setLocalError('Password must be at least 8 characters');
-      return;
-    }
+  const { theme, setTheme } = useTheme();
 
-    try {
-      await register(name, email, password);
-      navigate('/build');
-    } catch {
-      // error already set in store
-    }
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const displayError = localError || error;
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
 
+    if (formData.password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+
+    setTimeout(() => {
+      console.log("User Data:", formData);
+      setLoading(false);
+      alert("Account created (demo)");
+    }, 1500);
+  };
+const handleKeyDown = (e: any, nextRef?: any) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+
+    if (nextRef) {
+      nextRef.current?.focus();
+    } else {
+      e.currentTarget.form?.requestSubmit(); // ✅ correct way
+    }
+  }
+};
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/20 px-4">
+    <div className="min-h-screen bg-white dark:bg-[#0d1117] flex items-center justify-center px-4 py-12 overflow-y-auto transition-colors">
+     <Link to="/" className="flex items-center gap-2 group absolute top-5 left-5 ">
+          <div className=" w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-primary-foreground group-hover:scale-105 transition-transform ">
+            <MessageSquare size={18} />
+          </div>
+          <span className="font-semibold text-lg tracking-tight">BotForge</span>
+        </Link>
+      {/* Theme Toggle */}
+      <button
+        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        className="absolute top-6 right-6 px-4 py-2 rounded-lg text-sm font-medium border bg-white dark:bg-white/5 text-gray-700 dark:text-white border-gray-300 dark:border-white/10 shadow dark:shadow-none transition"
+      >
+        {theme === "dark" ? "☀️ " : "🌙 "}
+      </button>
+
+      {/* Background */}
+      <div className="fixed -top-40 -left-40 w-[500px] h-[500px] rounded-full border border-gray-300/40 dark:border-white/[0.06]" />
+      <div className="fixed top-1/3 -right-32 w-[700px] h-[700px] rounded-full border border-gray-300/40 dark:border-white/[0.06]" />
+      <div className="fixed bottom-[-200px] left-1/4 w-[600px] h-[600px] rounded-full border border-gray-300/40 dark:border-white/[0.06]" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-md bg-background border border-border rounded-2xl shadow-lg p-8"
+        className="relative w-full max-w-md"
       >
-        {/* Logo */}
-        <div className="flex items-center gap-2 justify-center mb-8">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
-            <MessageSquare size={22} />
+
+        <div className="bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-white hover:border-violet-500/30 transition rounded-2xl px-8 py-10 shadow-2xl">
+
+          {/* Header */}
+          <div className="flex flex-col items-center mb-8">
+            <h1 className="text-2xl font-semibold">Create your account</h1>
+            <p className="text-sm text-gray-500 dark:text-white/40 mt-1.5">Start building AI chatbots</p>
           </div>
-          <span className="text-2xl font-bold tracking-tight">BotForge</span>
-        </div>
 
-        <h1 className="text-2xl font-bold text-center mb-2">Create your account</h1>
-        <p className="text-sm text-muted-foreground text-center mb-8">
-          Start building AI chatbots in minutes
-        </p>
+          <form onSubmit={handleSubmit} className="space-y-3">
 
-        {displayError && (
-          <div
-            className="mb-6 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm"
-            role="alert"
-          >
-            {displayError}
-            <button
-              onClick={() => { setLocalError(''); clearError(); }}
-              className="ml-2 text-xs underline hover:no-underline"
-            >
-              dismiss
-            </button>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="signup-name" className="block text-sm font-medium mb-1.5">
-              Full name
-            </label>
             <input
-              id="signup-name"
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
-              className="w-full h-11 px-4 rounded-lg bg-muted/30 border border-border outline-none focus:border-primary transition-all placeholder:text-muted-foreground/50"
+              ref={nameRef}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              onKeyDown={(e) => handleKeyDown(e, emailRef)}
+              placeholder="Full Name"
+              className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 focus:ring-2 focus:ring-violet-500/40"
             />
-          </div>
 
-          <div>
-            <label htmlFor="signup-email" className="block text-sm font-medium mb-1.5">
-              Email address
-            </label>
             <input
-              id="signup-email"
+              ref={emailRef}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              onKeyDown={(e) => handleKeyDown(e, passwordRef)}
               type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full h-11 px-4 rounded-lg bg-muted/30 border border-border outline-none focus:border-primary transition-all placeholder:text-muted-foreground/50"
+              placeholder="Email"
+              className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 focus:ring-2 focus:ring-violet-500/40"
             />
-          </div>
 
-          <div>
-            <label htmlFor="signup-password" className="block text-sm font-medium mb-1.5">
-              Password
-            </label>
+            {/* Password */}
             <div className="relative">
               <input
-                id="signup-password"
-                type={showPw ? 'text' : 'password'}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min 8 chars, include a number"
-                className="w-full h-11 px-4 pr-11 rounded-lg bg-muted/30 border border-border outline-none focus:border-primary transition-all placeholder:text-muted-foreground/50"
+                ref={passwordRef}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e, confirmRef)}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 pr-10 focus:ring-2 focus:ring-violet-500/40"
               />
               <button
                 type="button"
-                onClick={() => setShowPw(!showPw)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                tabIndex={-1}
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-gray-400 dark:text-white/40"
               >
-                {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="signup-confirm" className="block text-sm font-medium mb-1.5">
-              Confirm password
-            </label>
-            <input
-              id="signup-confirm"
-              type="password"
-              required
-              value={confirmPw}
-              onChange={(e) => setConfirmPw(e.target.value)}
-              placeholder="••••••••"
-              className="w-full h-11 px-4 rounded-lg bg-muted/30 border border-border outline-none focus:border-primary transition-all placeholder:text-muted-foreground/50"
-            />
-          </div>
+            {/* Confirm */}
+            <div className="relative">
+              <input
+                ref={confirmRef}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                onKeyDown={(e) => handleKeyDown(e)}
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 pr-10 focus:ring-2 focus:ring-violet-500/40"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-3 top-3 text-gray-400 dark:text-white/40"
+              >
+                {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-12 rounded-full bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary-hover transition-all outline-none focus:ring-4 focus:ring-primary/30 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-[0_4px_14px_0_rgba(139,92,246,0.39)]"
-          >
-            {isLoading ? (
-              <><Loader2 size={18} className="animate-spin" /> Creating account...</>
-            ) : (
-              'Create account'
-            )}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40"
+            >
+              {loading ? "Creating..." : "Create account"}
+            </button>
 
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Link
-            to="/login"
-            className="text-primary hover:underline font-medium"
-          >
-            Sign in
-          </Link>
-        </p>
+            <div className="text-center text-sm text-gray-400 dark:text-white/30">or</div>
+
+            <button
+              type="button"
+              className="w-full h-11 bg-gray-100 border border-gray-300 text-gray-700 dark:bg-white/[0.05] dark:border-white/[0.08] dark:text-white/70 rounded-xl"
+            >
+              Continue with Google
+            </button>
+          </form>
+
+          <p className="text-center text-xs text-gray-500 dark:text-white/30 mt-6">
+            Already have an account? <Link to="/login" className="text-violet-500">Login</Link>
+          </p>
+        </div>
       </motion.div>
     </div>
   );

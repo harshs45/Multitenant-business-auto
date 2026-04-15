@@ -4,15 +4,18 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Bot, Layout, Paintbrush, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
+import { useState ,useEffect } from "react";
+import PremiumBackground from "../components/glowEffect/glow"; 
 
 
 export default function Landing() {
-  
+ 
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Navbar />
       
       <main className="flex-1 pt-16">
+        <PremiumBackground/>
         <HeroSection />
         <SocialProof />
         <HowItWorks />
@@ -401,11 +404,23 @@ const themes =[{
 </svg>
     )
   }]
+  
 function HeroSection() {
+  const text = "Build your business chatbot in minutes";
+  const [displayed, setDisplayed] = useState("");
+ useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, i + 1));
+      i++;
+      if (i === text.length) clearInterval(interval);
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative overflow-hidden pt-20 pb-32 lg:pt-32 lg:pb-48">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background -z-10" />
-      
+    <section className="relative overflow-hidden pb-20  lg:pb-32">
       <div className="max-w-7xl mx-auto px-6 relative z-10 hidden md:block">
          {/* Decorative elements */}
          <div className="absolute top-20 right-[15%] w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-blob" />
@@ -422,10 +437,11 @@ function HeroSection() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-primary text-sm font-medium mb-6">
             <Sparkles size={16} />
             <span>BotForge 2.0 is now live</span>
-          </div>
-          <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-            Build your business chatbot in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">minutes</span>
-          </h1>
+            </div>
+              <h1 className="text-5xl font-bold">
+                {displayed}
+                <span className="animate-pulse">|</span>
+              </h1>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
             No code. No complexity. Just describe your business and BotForge generates a fully configured, branded AI chatbot — ready to deploy.
           </p>
@@ -483,6 +499,7 @@ function HeroSection() {
 
 function SocialProof() {
   const logos = ["Shopify", "Clinikk", "Notion", "Razorpay", "Zomato", "upGrad"];
+  
   return (
     <section className="py-12 border-y border-border bg-muted/30">
       <div className="max-w-7xl mx-auto px-6 text-center">
@@ -506,7 +523,7 @@ function HowItWorks() {
     { icon: <Zap className="text-amber-500"/>, title: "Deploy in one click", desc: "Copy the embed snippet and paste it on your site." },
   ];
   return (
-    <section id="how-it-works" className="py-24 max-w-7xl mx-auto px-6">
+    <section id="how-it-works" className="py-24 max-w-7xl mx-auto px-6">  
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">From zero to deployed in 3 steps</h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Skip the complex flow builders. Our AI constructs the perfect conversational logic based strictly on your exact business type.</p>
@@ -535,26 +552,484 @@ function HowItWorks() {
 }
 
 function BusinessShowcase() {
-  const types = ["E-commerce", "SaaS", "Healthcare", "Restaurant", "Real Estate", "Education", "Finance", "Agency"];
+  //const types = ["E-commerce", "SaaS", "Healthcare", "Restaurant", "Real Estate", "Education", "Finance", "Agency"];
+  const types = [{
+    name:"E-commerce",
+    svg:(
+      <svg width="340" height="160" viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>E-commerce</title>
+  <desc>Illustration representing e-commerce with shopping cart, product cards and order flow</desc>
+
+  <rect x="30" y="52" width="52" height="58" rx="6" fill="none" stroke="#4a5568" stroke-width="1"/>
+  <path d="M42 52 C42 38 70 38 70 52" fill="none" stroke="#4a5568" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="47" cy="72" r="3" fill="#6366f1"/>
+  <circle cx="65" cy="72" r="3" fill="#6366f1"/>
+  <line x1="47" y1="84" x2="65" y2="84" stroke="#4a5568" stroke-width="1" stroke-linecap="round"/>
+  <line x1="47" y1="91" x2="58" y2="91" stroke="#4a5568" stroke-width="1" stroke-linecap="round"/>
+
+  <rect x="108" y="30" width="64" height="80" rx="6" fill="#1e2535" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="116" y="38" width="48" height="36" rx="4" fill="#2d3a52"/>
+  <path d="M132 50 L136 44 L140 50 L148 44 L152 50 L148 54 L148 66 L132 66 L132 54 Z" fill="none" stroke="#6366f1" stroke-width="1.2" stroke-linejoin="round"/>
+  <line x1="116" y1="84" x2="164" y2="84" stroke="#374151" stroke-width="0.5"/>
+  <rect x="116" y="90" width="28" height="5" rx="2" fill="#374151"/>
+  <rect x="148" y="90" width="16" height="5" rx="2" fill="#6366f1" opacity="0.7"/>
+
+  <rect x="184" y="30" width="64" height="80" rx="6" fill="#1e2535" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="192" y="38" width="48" height="36" rx="4" fill="#2d3a52"/>
+  <path d="M200 62 Q206 54 216 56 L228 54 L232 60 L228 64 L200 64 Z" fill="none" stroke="#10b981" stroke-width="1.2" stroke-linejoin="round"/>
+  <line x1="192" y1="84" x2="240" y2="84" stroke="#374151" stroke-width="0.5"/>
+  <rect x="192" y="90" width="28" height="5" rx="2" fill="#374151"/>
+  <rect x="224" y="90" width="16" height="5" rx="2" fill="#10b981" opacity="0.7"/>
+
+  <circle cx="296" cy="44" r="18" fill="#1e2535" stroke="#2d3748" stroke-width="0.75"/>
+  <path d="M285 40 L287 37 L307 37 L305 48 L289 48 Z" fill="none" stroke="#6366f1" stroke-width="1.2" stroke-linejoin="round"/>
+  <circle cx="292" cy="52" r="2" fill="#6366f1"/>
+  <circle cx="302" cy="52" r="2" fill="#6366f1"/>
+  <circle cx="306" cy="35" r="5" fill="#6366f1"/>
+  <text x="306" y="38" font-family="system-ui" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+
+  <text x="116" y="128" font-family="system-ui" font-size="9" fill="#f59e0b">★★★★</text>
+  <text x="152" y="128" font-family="system-ui" font-size="9" fill="#374151">★</text>
+  <text x="192" y="128" font-family="system-ui" font-size="9" fill="#f59e0b">★★★★★</text>
+
+  <path d="M260 100 Q280 100 295 116" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="3,3" stroke-linecap="round"/>
+  <path d="M291 119 L295 116 L292 112" fill="none" stroke="#4a5568" stroke-width="1" stroke-linecap="round"/>
+
+  <rect x="272" y="118" width="34" height="28" rx="4" fill="#1e2535" stroke="#2d3748" stroke-width="0.75"/>
+  <line x1="289" y1="118" x2="289" y2="146" stroke="#2d3748" stroke-width="0.75"/>
+  <path d="M272 126 L289 130 L306 126" fill="none" stroke="#2d3748" stroke-width="0.75"/>
+  <circle cx="289" cy="136" r="4" fill="#6366f1" opacity="0.6"/>
+</svg>
+    )
+  },{
+    name:"SaaS",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160" 
+  className="w-full h-full object-cover" 
+  preserveAspectRatio="xMidYMid slice"
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>SaaS</title>
+  <desc>Illustration representing SaaS with dashboard, metrics and cloud infrastructure</desc>
+
+  <rect x="20" y="20" width="200" height="128" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="20" y="20" width="200" height="22" rx="7" fill="#222d42"/>
+  <rect x="20" y="34" width="200" height="8" fill="#222d42"/>
+  <circle cx="34" cy="31" r="3.5" fill="#374151"/>
+  <circle cx="46" cy="31" r="3.5" fill="#374151"/>
+  <circle cx="58" cy="31" r="3.5" fill="#374151"/>
+  <rect x="70" y="26" width="100" height="10" rx="5" fill="#1a2235" stroke="#374151" stroke-width="0.5"/>
+
+  <rect x="30" y="50" width="50" height="28" rx="4" fill="#1e2d45" stroke="#2d3a52" stroke-width="0.5"/>
+  <text x="36" y="61" font-family="system-ui" font-size="7" fill="#6b7280">Users</text>
+  <text x="36" y="72" font-family="system-ui" font-size="9" font-weight="600" fill="#a78bfa">12.4k</text>
+
+  <rect x="90" y="50" width="50" height="28" rx="4" fill="#1e2d45" stroke="#2d3a52" stroke-width="0.5"/>
+  <text x="96" y="61" font-family="system-ui" font-size="7" fill="#6b7280">MRR</text>
+  <text x="96" y="72" font-family="system-ui" font-size="9" font-weight="600" fill="#34d399">$8.2k</text>
+
+  <rect x="150" y="50" width="58" height="28" rx="4" fill="#1e2d45" stroke="#2d3a52" stroke-width="0.5"/>
+  <text x="156" y="61" font-family="system-ui" font-size="7" fill="#6b7280">Churn</text>
+  <text x="156" y="72" font-family="system-ui" font-size="9" font-weight="600" fill="#f87171">2.1%</text>
+
+  <rect x="30" y="86" width="178" height="50" rx="4" fill="#1e2d45" stroke="#2d3a52" stroke-width="0.5"/>
+  <polyline points="40,126 58,118 76,122 94,108 112,112 130,100 148,104 166,92 184,96 198,86" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="40,126 58,118 76,122 94,108 112,112 130,100 148,104 166,92 184,96 198,86 198,136 40,136 Z" fill="#a78bfa" fill-opacity="0.07"/>
+
+  <ellipse cx="276" cy="48" rx="28" ry="16" fill="#1e2d45" stroke="#4a5568" stroke-width="0.75"/>
+  <ellipse cx="258" cy="52" rx="14" ry="10" fill="#1e2d45" stroke="#4a5568" stroke-width="0.75"/>
+  <ellipse cx="294" cy="52" rx="14" ry="10" fill="#1e2d45" stroke="#4a5568" stroke-width="0.75"/>
+  <rect x="258" y="52" width="36" height="10" fill="#1e2d45"/>
+  <text x="276" y="53" font-family="system-ui" font-size="8" fill="#a78bfa" text-anchor="middle" font-weight="600">API</text>
+
+  <line x1="276" y1="62" x2="256" y2="82" stroke="#4a5568" stroke-width="0.75" stroke-dasharray="3,2"/>
+  <line x1="276" y1="62" x2="276" y2="82" stroke="#4a5568" stroke-width="0.75" stroke-dasharray="3,2"/>
+  <line x1="276" y1="62" x2="296" y2="82" stroke="#4a5568" stroke-width="0.75" stroke-dasharray="3,2"/>
+
+  <rect x="242" y="82" width="30" height="18" rx="4" fill="#1e2d45" stroke="#a78bfa" stroke-width="0.75"/>
+  <text x="257" y="94" font-family="system-ui" font-size="7" fill="#a78bfa" text-anchor="middle">Auth</text>
+
+  <rect x="261" y="82" width="30" height="18" rx="4" fill="#1e2d45" stroke="#34d399" stroke-width="0.75"/>
+  <text x="276" y="94" font-family="system-ui" font-size="7" fill="#34d399" text-anchor="middle">DB</text>
+
+  <rect x="280" y="82" width="34" height="18" rx="4" fill="#1e2d45" stroke="#60a5fa" stroke-width="0.75"/>
+  <text x="297" y="94" font-family="system-ui" font-size="7" fill="#60a5fa" text-anchor="middle">CDN</text>
+
+  <circle cx="250" cy="114" r="4" fill="#34d399" opacity="0.9"/>
+  <rect x="258" y="111" width="40" height="6" rx="3" fill="#2d3748"/>
+  <circle cx="250" cy="126" r="4" fill="#34d399" opacity="0.9"/>
+  <rect x="258" y="123" width="30" height="6" rx="3" fill="#2d3748"/>
+  <circle cx="250" cy="138" r="4" fill="#fbbf24" opacity="0.9"/>
+  <rect x="258" y="135" width="50" height="6" rx="3" fill="#2d3748"/>
+</svg>
+    )
+  },{
+    name:"Healthcare",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160" 
+  className="w-full h-full object-cover"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Healthcare</title>
+  <desc>Illustration representing healthcare with patient chat, vitals and medical records</desc>
+
+  <rect x="18" y="18" width="150" height="130" rx="8" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+
+  <rect x="18" y="18" width="150" height="32" rx="8" fill="#1e2d45"/>
+  <rect x="18" y="38" width="150" height="12" fill="#1e2d45"/>
+  <circle cx="38" cy="34" r="10" fill="#2d3a52" stroke="#374151" stroke-width="0.5"/>
+  <line x1="34" y1="34" x2="42" y2="34" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="38" y1="30" x2="38" y2="38" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="54" y="31" font-family="system-ui" font-size="9" font-weight="600" fill="#e2e8f0">MedAssist</text>
+  <circle cx="154" cy="28" r="5" fill="#34d399" opacity="0.9"/>
+  <text x="54" y="42" font-family="system-ui" font-size="7" fill="#6b7280">Online · HIPAA compliant</text>
+
+  <rect x="26" y="58" width="110" height="28" rx="6" fill="#1e2d45" stroke="#2d3748" stroke-width="0.5"/>
+  <text x="32" y="69" font-family="system-ui" font-size="8" fill="#94a3b8">Hello! What symptoms</text>
+  <text x="32" y="80" font-family="system-ui" font-size="8" fill="#94a3b8">are you experiencing?</text>
+
+  <rect x="52" y="94" width="106" height="20" rx="6" fill="#0f6656"/>
+  <text x="58" y="108" font-family="system-ui" font-size="8" fill="#a7f3d0">Headache, mild fever</text>
+
+  <rect x="26" y="122" width="44" height="18" rx="9" fill="#1e2d45" stroke="#2d3748" stroke-width="0.5"/>
+  <circle cx="37" cy="131" r="2.5" fill="#6b7280"/>
+  <circle cx="46" cy="131" r="2.5" fill="#6b7280" opacity="0.7"/>
+  <circle cx="55" cy="131" r="2.5" fill="#6b7280" opacity="0.4"/>
+
+  <rect x="184" y="18" width="138" height="62" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <text x="196" y="33" font-family="system-ui" font-size="8" fill="#6b7280" letter-spacing="0.5">PATIENT VITALS</text>
+
+  <polyline points="196,52 202,52 205,44 208,58 212,44 216,52 222,52 226,52" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="230" y="55" font-family="system-ui" font-size="8" fill="#f87171">72 bpm</text>
+
+  <rect x="196" y="62" width="28" height="8" rx="4" fill="#2d3a52"/>
+  <rect x="196" y="62" width="20" height="8" rx="4" fill="#fbbf24" opacity="0.8"/>
+  <text x="230" y="69" font-family="system-ui" font-size="8" fill="#fbbf24">38.2°C</text>
+
+  <rect x="270" y="62" width="28" height="8" rx="4" fill="#2d3a52"/>
+  <rect x="270" y="62" width="26" height="8" rx="4" fill="#60a5fa" opacity="0.8"/>
+  <text x="302" y="69" font-family="system-ui" font-size="7" fill="#60a5fa">98%</text>
+
+  <rect x="184" y="90" width="138" height="58" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <text x="196" y="105" font-family="system-ui" font-size="8" fill="#6b7280" letter-spacing="0.5">NEXT APPOINTMENT</text>
+  <rect x="196" y="112" width="20" height="18" rx="2" fill="none" stroke="#34d399" stroke-width="1"/>
+  <line x1="200" y1="112" x2="200" y2="108" stroke="#34d399" stroke-width="1" stroke-linecap="round"/>
+  <line x1="212" y1="112" x2="212" y2="108" stroke="#34d399" stroke-width="1" stroke-linecap="round"/>
+  <line x1="196" y1="118" x2="216" y2="118" stroke="#34d399" stroke-width="0.5"/>
+  <text x="222" y="122" font-family="system-ui" font-size="8" fill="#e2e8f0">Dr. Mehra</text>
+  <text x="222" y="133" font-family="system-ui" font-size="7" fill="#6b7280">Tomorrow · 10:30 AM</text>
+
+  <rect x="276" y="136" width="44" height="10" rx="5" fill="none" stroke="#a78bfa" stroke-width="0.75"/>
+  <line x1="298" y1="136" x2="298" y2="146" stroke="#a78bfa" stroke-width="0.75"/>
+  <text x="285" y="144" font-family="system-ui" font-size="7" fill="#a78bfa">Rx · 2/day</text>
+</svg>
+    )
+  },{
+    name:"Restaurant",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160"
+  className="w-full h-full object-cover"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Restaurant</title>
+  <desc>Restaurant chatbot UI</desc>
+
+  <rect x="16" y="16" width="98" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="16" y="16" width="98" height="24" rx="7" fill="#2d1f0e"/>
+  <rect x="16" y="32" width="98" height="8" fill="#2d1f0e"/>
+  <text x="65" y="31" font-size="10" fill="#f59e0b" text-anchor="middle" font-weight="700">MENU</text>
+
+  <line x1="26" y1="52" x2="104" y2="52" stroke="#2d3748" stroke-width="0.5"/>
+  <text x="26" y="48" font-size="7" fill="#9ca3af">STARTERS</text>
+
+  <text x="26" y="63" font-size="8" fill="#e2e8f0">Bruschetta</text>
+  <text x="95" y="63" font-size="8" fill="#f59e0b" text-anchor="end">$8</text>
+  <text x="26" y="75" font-size="8" fill="#e2e8f0">Calamari</text>
+  <text x="95" y="75" font-size="8" fill="#f59e0b" text-anchor="end">$12</text>
+
+  <line x1="26" y1="84" x2="104" y2="84" stroke="#2d3748" stroke-width="0.5"/>
+  <text x="26" y="80" font-size="7" fill="#9ca3af">MAINS</text>
+
+  <text x="26" y="95" font-size="8" fill="#e2e8f0">Pasta</text>
+  <text x="95" y="95" font-size="8" fill="#f59e0b" text-anchor="end">$16</text>
+  <text x="26" y="107" font-size="8" fill="#e2e8f0">Risotto</text>
+  <text x="95" y="107" font-size="8" fill="#f59e0b" text-anchor="end">$18</text>
+  <text x="26" y="119" font-size="8" fill="#e2e8f0">Salmon</text>
+  <text x="95" y="119" font-size="8" fill="#f59e0b" text-anchor="end">$22</text>
+
+  <rect x="22" y="130" width="84" height="12" rx="6" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="0.5"/>
+  <text x="64" y="139" font-size="8" fill="#f59e0b" text-anchor="middle">Order</text>
+
+  <rect x="128" y="16" width="130" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="128" y="16" width="130" height="26" rx="7" fill="#2d1f0e"/>
+  <rect x="128" y="34" width="130" height="8" fill="#2d1f0e"/>
+
+  <line x1="144" y1="22" x2="144" y2="34" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="148" y1="22" x2="148" y2="34" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M144 28 Q146 26 148 28" fill="none" stroke="#f59e0b" stroke-width="1"/>
+  <text x="158" y="30" font-size="9" font-weight="600" fill="#fde68a">Bot</text>
+
+  <rect x="136" y="50" width="114" height="26" rx="5" fill="#1e2d45"/>
+  <text x="143" y="61" font-size="8" fill="#94a3b8">Book or order?</text>
+
+  <rect x="148" y="84" width="94" height="18" rx="5" fill="#92400e"/>
+  <text x="155" y="96" font-size="8" fill="#fde68a">Table for 2</text>
+
+  <rect x="136" y="110" width="114" height="28" rx="5" fill="#1e2d45"/>
+  <text x="143" y="121" font-size="8" fill="#94a3b8">7 PM confirmed</text>
+
+  <rect x="272" y="16" width="56" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+
+  <rect x="283" y="38" width="34" height="4" rx="2" fill="#f59e0b" opacity="0.7"/>
+  <line x1="289" y1="42" x2="285" y2="58" stroke="#4a5568" stroke-width="1.2"/>
+  <line x1="311" y1="42" x2="315" y2="58" stroke="#4a5568" stroke-width="1.2"/>
+
+  <rect x="280" y="88" width="40" height="12" rx="6" fill="#f59e0b"/>
+  <text x="300" y="97" font-size="7" fill="#1a0a00" text-anchor="middle">7 PM</text>
+</svg>
+    )
+  },{
+    name:"Real Estate",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160"
+  className="w-full h-full object-cover"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Real Estate</title>
+  <desc>Real estate listings and calculator</desc>
+
+  <rect x="16" y="16" width="96" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="24" y="24" width="80" height="50" rx="4" fill="#1e2d45"/>
+
+  <polygon points="64,36 88,52 88,74 40,74 40,52" fill="none" stroke="#60a5fa" stroke-width="1"/>
+  <polygon points="64,36 40,52 88,52" fill="none" stroke="#60a5fa" stroke-width="1"/>
+  <rect x="57" y="60" width="14" height="14" fill="none" stroke="#60a5fa" stroke-width="1"/>
+
+  <text x="24" y="90" font-size="9" font-weight="600" fill="#e2e8f0">$485K</text>
+  <text x="24" y="102" font-size="7" fill="#94a3b8">3BHK · 1450 sqft</text>
+
+  <path d="M24 120 Q24 114 29 114 Q34 114 34 120 Q34 126 29 130 Q24 126 24 120 Z" fill="none" stroke="#60a5fa"/>
+  <circle cx="29" cy="120" r="2" fill="#60a5fa"/>
+
+  <rect x="124" y="16" width="96" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="132" y="24" width="80" height="50" rx="4" fill="#1e2d45"/>
+
+  <rect x="148" y="38" width="48" height="36" fill="none" stroke="#a78bfa"/>
+  <rect x="153" y="44" width="8" height="8" fill="none" stroke="#a78bfa"/>
+  <rect x="166" y="44" width="8" height="8" fill="none" stroke="#a78bfa"/>
+  <rect x="179" y="44" width="8" height="8" fill="none" stroke="#a78bfa"/>
+
+  <text x="132" y="90" font-size="9" font-weight="600" fill="#e2e8f0">$1.24M</text>
+  <text x="132" y="102" font-size="7" fill="#94a3b8">2BHK · Sea View</text>
+
+  <rect x="232" y="16" width="96" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+
+  <text x="245" y="32" font-size="8" fill="#94a3b8">EMI</text>
+
+  <rect x="245" y="50" width="72" height="4" rx="2" fill="#2d3748"/>
+  <rect x="245" y="50" width="50" height="4" rx="2" fill="#60a5fa"/>
+  <circle cx="295" cy="52" r="4" fill="#60a5fa"/>
+
+  <rect x="245" y="82" width="72" height="4" rx="2" fill="#2d3748"/>
+  <rect x="245" y="82" width="38" height="4" rx="2" fill="#a78bfa"/>
+  <circle cx="283" cy="84" r="4" fill="#a78bfa"/>
+
+  <text x="245" y="125" font-size="12" font-weight="700" fill="#e2e8f0">₹37K</text>
+</svg>
+    )
+  },{
+    name:"Education",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160"
+  className="w-full h-full object-cover"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Education</title>
+  <desc>Education courses and AI tutor</desc>
+
+  <rect x="16" y="16" width="88" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="24" y="24" width="72" height="44" rx="4" fill="#1e2d45"/>
+  <text x="40" y="52" font-size="20" fill="#38bdf8">&lt;/&gt;</text>
+  <text x="24" y="80" font-size="8" fill="#e2e8f0">Web Dev</text>
+
+  <rect x="24" y="98" width="72" height="5" rx="2.5" fill="#2d3748"/>
+  <rect x="24" y="98" width="50" height="5" rx="2.5" fill="#38bdf8"/>
+
+  <circle cx="28" cy="124" r="3" fill="#38bdf8"/>
+  <circle cx="40" cy="124" r="3" fill="#38bdf8"/>
+  <circle cx="52" cy="124" r="3" fill="#38bdf8"/>
+
+  <rect x="116" y="16" width="88" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+  <rect x="124" y="24" width="72" height="44" rx="4" fill="#1e2d45"/>
+  <text x="140" y="54" font-size="22" fill="#a78bfa">Σ</text>
+  <text x="124" y="80" font-size="8" fill="#e2e8f0">Data Sci</text>
+
+  <rect x="124" y="98" width="72" height="5" rx="2.5" fill="#2d3748"/>
+  <rect x="124" y="98" width="28" height="5" rx="2.5" fill="#a78bfa"/>
+
+  <rect x="216" y="16" width="112" height="132" rx="7" fill="#1a2235" stroke="#2d3748" stroke-width="0.75"/>
+
+  <polygon points="272,24 258,30 272,36 286,30" fill="none" stroke="#38bdf8"/>
+  <text x="272" y="36" font-size="7" fill="#bae6fd" text-anchor="middle">AI</text>
+
+  <rect x="224" y="50" width="96" height="28" rx="5" fill="#1e2d45"/>
+  <text x="230" y="65" font-size="7" fill="#94a3b8">Practice quiz?</text>
+
+  <rect x="224" y="88" width="96" height="30" rx="5" fill="#0f2233" stroke="#38bdf8"/>
+  <text x="230" y="102" font-size="7" fill="#38bdf8">arr.map()?</text>
+
+  <rect x="224" y="120" width="40" height="10" rx="5" fill="#451a03"/>
+  <text x="244" y="127" font-size="6" fill="#fbbf24" text-anchor="middle">+XP</text>
+</svg>
+    )
+  },{
+    name:"Finance",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160"
+  className="w-full h-full object-cover"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Finance</title>
+  <desc>Finance dashboard and AI advisor</desc>
+
+  <rect x="16" y="16" width="148" height="132" rx="7" fill="#1a2235" stroke="#2d3748"/>
+  
+  <text x="26" y="36" font-size="14" font-weight="700" fill="#e2e8f0">$24K</text>
+  <text x="26" y="50" font-size="8" fill="#34d399">+3.4%</text>
+
+  <rect x="26" y="58" width="128" height="40" rx="4" fill="#111827"/>
+  <polyline 
+    points="30,92 50,86 70,80 90,70 110,74 130,64 148,68" 
+    fill="none" 
+    stroke="#34d399" 
+    stroke-width="1.5"
+  />
+
+  <circle cx="52" cy="120" r="14" stroke="#2d3748" stroke-width="6" fill="none"/>
+  <circle cx="52" cy="120" r="14" stroke="#38bdf8" stroke-width="6" stroke-dasharray="40 60" transform="rotate(-90 52 120)"/>
+  <circle cx="52" cy="120" r="14" stroke="#a78bfa" stroke-width="6" stroke-dasharray="25 75" transform="rotate(-90 52 120)"/>
+
+  <rect x="176" y="16" width="148" height="132" rx="7" fill="#1a2235" stroke="#2d3748"/>
+
+  <rect x="184" y="36" width="132" height="28" rx="5" fill="#1e2d45"/>
+  <text x="190" y="52" font-size="7" fill="#94a3b8">Rebalance portfolio?</text>
+
+  <rect x="196" y="70" width="112" height="16" rx="5" fill="#1e3a5f"/>
+  <text x="202" y="81" font-size="7" fill="#bae6fd">Show impact</text>
+
+  <rect x="184" y="94" width="132" height="32" rx="5" fill="#111827"/>
+
+  <rect x="190" y="104" width="90" height="6" rx="3" fill="#f87171"/>
+  <rect x="190" y="114" width="58" height="6" rx="3" fill="#34d399"/>
+
+  <rect x="184" y="130" width="60" height="10" rx="5" fill="#064e3b"/>
+  <text x="214" y="137" font-size="6" fill="#34d399" text-anchor="middle">Apply</text>
+</svg>
+    )
+  },{
+    name:"Agency",
+    svg:(
+      <svg 
+  viewBox="0 0 340 160"
+  className="w-full h-full object-cover"
+  preserveAspectRatio="xMidYMid slice"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+>
+  <title>Agency</title>
+  <desc>Lead capture and project pipeline</desc>
+
+  <rect x="16" y="16" width="118" height="132" rx="7" fill="#1a2235" stroke="#2d3748"/>
+
+  <rect x="16" y="16" width="118" height="26" rx="7" fill="#1a1040"/>
+  <path d="M76 22 L70 31 L76 31 L70 40 L80 29 L74 29 Z" fill="#a78bfa"/>
+  <text x="84" y="31" font-size="9" fill="#c4b5fd">LeadBot</text>
+
+  <rect x="24" y="50" width="102" height="22" rx="5" fill="#1e2d45"/>
+  
+  <rect x="24" y="78" width="46" height="12" rx="6" fill="#2d1a50"/>
+  <rect x="74" y="78" width="46" height="12" rx="6" fill="#2d3748"/>
+  <rect x="24" y="96" width="46" height="12" rx="6" fill="#2d3748"/>
+  <rect x="74" y="96" width="46" height="12" rx="6" fill="#2d3748"/>
+
+  <rect x="24" y="118" width="102" height="16" rx="5" fill="#111827"/>
+  <rect x="30" y="125" width="60" height="3" rx="2" fill="#a78bfa"/>
+  <circle cx="90" cy="126.5" r="4" fill="#a78bfa"/>
+
+  <rect x="146" y="16" width="178" height="132" rx="7" fill="#1a2235" stroke="#2d3748"/>
+
+  <rect x="156" y="38" width="46" height="10" rx="5" fill="#1e2d45"/>
+  <rect x="208" y="38" width="46" height="10" rx="5" fill="#1e2d45"/>
+  <rect x="260" y="38" width="50" height="10" rx="5" fill="#1e2d45"/>
+
+  <rect x="156" y="54" width="46" height="22" rx="4" fill="#1e2d45"/>
+  <rect x="156" y="82" width="46" height="20" rx="4" fill="#1e2d45"/>
+
+  <rect x="208" y="54" width="46" height="22" rx="4" fill="#1e2d45"/>
+  <rect x="208" y="82" width="46" height="20" rx="4" fill="#1e2d45"/>
+
+  <rect x="260" y="54" width="50" height="22" rx="4" fill="#1e2d45" stroke="#34d399"/>
+  <rect x="260" y="82" width="50" height="20" rx="4" fill="#064e3b"/>
+
+  <line x1="156" y1="118" x2="306" y2="118" stroke="#2d3748"/>
+  <rect x="160" y="125" width="20" height="6" rx="3" fill="#a78bfa"/>
+  <rect x="210" y="125" width="26" height="6" rx="3" fill="#f59e0b"/>
+  <rect x="260" y="125" width="30" height="6" rx="3" fill="#34d399"/>
+</svg>
+    )
+  }]
   return (
     <section className="py-24 bg-muted/30 border-y border-border">
       <div className="max-w-7xl mx-auto px-6">
          <div className="mb-12">
             <h2 className="text-3xl font-bold mb-4">Tailored for your industry</h2>
             <p className="text-muted-foreground text-lg">BotForge adapts its questions and conversational flows natively.</p>
-         </div>
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {types.map((type, i) => (
-              <motion.div 
-                key={i}
-                whileHover={{ scale: 1.02 }}
-                className="group relative h-32 bg-background border border-border rounded-xl p-4 flex flex-col justify-end overflow-hidden cursor-pointer"
-              >
-                 <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
-                 <span className="font-medium z-10">{type}</span>
-              </motion.div>
-            ))}
-         </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {types.map((type, i) => (
+                <div key={i} className="relative">
+                  
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="group h-32 bg-background border border-border rounded-xl p-4 flex items-center justify-center overflow-hidden cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
+              
+              <div className="z-10">
+                {type.svg}
+              </div>
+            </motion.div>
+            <div className="mt-2 text-center text-l">
+              {type.name}
+            </div>
+
+          </div>
+        ))}
+      </div>
       </div>
     </section>
   );
@@ -568,14 +1043,10 @@ function ThemeGallery() {
         <p className="text-muted-foreground text-lg">Choose from 6 stunning curated themes, or inject your exact custom brand colors.</p>
       </div>
       <div className="flex overflow-x-auto pb-8 gap-6 snap-x">
-         {/* Placeholder for themes */}
          {themes.map((theme, i) => (
-          //  <div key={i} className="flex-shrink-0 w-[280px] h-[360px] rounded-2xl border border-border bg-muted/50 snap-center flex items-center justify-center p-6 text-center">
             <div key={i} className="flex-shrink-0 w-[280px] h-[360px] rounded-2xl border border-border bg-muted/50 snap-center overflow-hidden ml-6">
               {theme.svg}
             </div>
-              // <span className="font-semibold">{theme.name}</span>
-          //  {/* </div> */}
          ))}
       </div>
     </section>
@@ -694,13 +1165,66 @@ function FAQ() {
 
 function CTABanner() {
   return (
-    <section className="py-24 bg-blue-500 text-primary-foreground text-center">
-      <div className="max-w-3xl mx-auto px-6">
-        <h2 className="text-4xl font-bold mb-6">Ready to build your chatbot?</h2>
-        <p className="text-primary-foreground/80 mb-8 text-lg">Join 5,000+ businesses delivering better customer experiences.</p>
-        <Link to="/build" className="inline-flex justify-center items-center gap-2 bg-background text-foreground h-14 px-8 rounded-full font-bold hover:scale-105 transition-transform">
+    <section
+      className="py-28 text-center relative overflow-hidden"
+      style={{
+        background: "radial-gradient(ellipse at 50% 50%, #3d5a9e 0%, #253a7a 40%, #1a2a5e 100%)",
+      }}
+    >
+      {/* Dot grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      {/* Soft edge vignette */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20" />
+
+      {/* Subtle background circles */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/[0.07]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[720px] rounded-full border border-white/[0.04]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[960px] h-[960px] rounded-full border border-white/[0.025]" />
+
+      {/* Corner glow blobs */}
+      <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-white/[0.06] blur-3xl" />
+      <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-white/[0.06] blur-3xl" />
+
+      <div className="relative z-10 max-w-3xl mx-auto px-6">
+
+        {/* Badges row */}
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
+          <span className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 text-xs font-medium px-4 py-1.5 rounded-full">
+            ⚡ No credit card required
+          </span>
+          <span className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 text-xs font-medium px-4 py-1.5 rounded-full">
+            🔒 GDPR compliant
+          </span>
+          <span className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 text-xs font-medium px-4 py-1.5 rounded-full">
+            🚀 Live in 5 minutes
+          </span>
+          <span className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 text-xs font-medium px-4 py-1.5 rounded-full">
+            ★ 4.9 / 5 rating
+          </span>
+        </div>
+
+        <h2 className="text-5xl font-bold mb-5 text-white tracking-tight">
+          Ready to build your 
+        </h2>
+        <h2 className="text-5xl font-bold mb-5 text-blue-300 tracking-tight">chatbot?</h2>
+        <p className="text-white/60 mb-10 text-lg">
+          Join 5,000+ businesses delivering better customer experiences.
+        </p>
+
+        <Link
+          to="/build"
+          className="inline-flex justify-center items-center gap-2 bg-white text-[#1a2a5e] h-14 px-8 rounded-full font-bold hover:scale-105 hover:bg-white/90 transition-all shadow-xl"
+        >
           Start building for free <ArrowRight size={18} />
         </Link>
+
       </div>
     </section>
   );
