@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -21,6 +19,7 @@ const analyticsRoutes  = require('./modules/analytics/analytics.routes');
 const billingRoutes    = require('./modules/billing/billing.routes');
 const knowledgeBase    = require('./modules/knowledge-base/knowledgeBase.routes');
 const platformAdmin    = require('./modules/platform-admin/platformAdmin.routes');
+const widgetRoutes     = require('./modules/widget/widget.routes');
 
 const app = express();
 app.set('trust proxy', 1); // ✅ ADD THIS
@@ -99,6 +98,7 @@ app.use('/api/v1/analytics', analyticsRoutes);
 app.use('/api/v1/billing', billingRoutes);
 app.use('/api/v1/knowledge-base', knowledgeBase);
 app.use('/api/v1/admin', platformAdmin);
+app.use('/api/v1/widget', widgetRoutes);
 
 /* ─── 404 Handler ────────────────────────────────────── */
 app.use((_req, res) => {

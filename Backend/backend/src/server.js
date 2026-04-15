@@ -1,3 +1,6 @@
+const { loadEnv } = require('./config/env');
+loadEnv();
+
 const app = require('./app');
 const db = require('./models');
 

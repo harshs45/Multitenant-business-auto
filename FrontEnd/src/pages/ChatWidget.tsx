@@ -35,7 +35,7 @@ export default function ChatWidget() {
     async function initChat() {
       try {
         // Fetch config
-        const confRes = await fetch(`${API_URL}/widget/config/${publicKey}`);
+       const confRes = await fetch(`${API_URL}/widget/config?key=${encodeURIComponent(publicKey!)}`);
         const confData = await confRes.json();
         if (confData.success) {
           setConfig(confData.data);

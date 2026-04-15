@@ -90,7 +90,7 @@
   async function loadConfig(retries = 3) {
     for (let i = 0; i < retries; i++) {
       try {
-        const res = await fetch(`${apiBase}/widget/config/${publicKey}`);
+        const res = await fetch(`${apiBase}/widget/config?key=${publicKey}`);
         if (res.ok) {
           const data = await res.json();
           if (data.success && data.data) {

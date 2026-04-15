@@ -51,17 +51,20 @@ export function Navbar() {
 
             {isAuthenticated ? (
               <>
-                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
-                  <User size={16} />
+                <Link
+                  to="/dashboard/profile"
+                  className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                >
+                  <User size={16} className="group-hover:text-primary transition-colors" />
                   <span className="font-medium text-foreground max-w-[120px] truncate">
                     {user?.name || user?.email}
                   </span>
-                </div>
+                </Link>
                 <Link
-                  to="/build"
-                  className="bg-blue-950 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-950-hover transition-colors"
+                  to="/dashboard"
+                  className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
-                  Dashboard
+                  My Bots
                 </Link>
                 <button
                   onClick={handleLogout}

@@ -12,18 +12,19 @@
  */
 const { Router } = require('express');
 const { authenticate } = require('../../common/middleware/auth');
-const AppError = require('../../common/errors/AppError');
+const ctrl = require('./knowledgeBase.controller');
 
 const router = Router();
 router.use(authenticate);
 
-const notImplemented = (_req, _res, next) => {
-  next(new AppError('Knowledge Base module is under development', 501));
-};
+// FAQs
+router.get('/:botId/faqs', ctrl.getFAQs);
+router.post('/:botId/faqs', ctrl.createFAQ);
+router.delete('/:botId/faqs/:faqId', ctrl.deleteFAQ);
 
-router.get('/:botId/documents',   notImplemented);
-router.post('/:botId/documents',  notImplemented);
-router.delete('/:botId/documents/:docId', notImplemented);
-router.post('/:botId/ingest-url', notImplemented);
+// Documents
+router.get('/:botId/documents', ctrl.getDocuments);
+router.post('/:botId/documents', ctrl.createDocument);
+router.delete('/:botId/documents/:documentId', ctrl.deleteDocument);
 
 module.exports = router;

@@ -26,6 +26,14 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    lastUsedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    revokedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   }, {
     tableName: 'embed_tokens',
     underscored: true,
