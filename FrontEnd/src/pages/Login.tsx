@@ -6,12 +6,11 @@ import { useTheme } from "../components/theme-provider";
 import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
-  const { login} = useAuthStore();
+  const { login, error, isLoading, clearError } = useAuthStore();
   const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const { theme, setTheme } = useTheme();
 
@@ -20,30 +19,23 @@ export default function LoginPage() {
     password: "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) clearError();
   }
-  const handleSubmit =async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await login(formData.email, formData.password);
-      navigate('/dashboard');
-    } catch {
-      // error already set in store
-    }
-
     if (!formData.email || !formData.password) {
       alert("Please fill all fields");
       return;
     }
 
-    setLoading(true);
-
-    setTimeout(() => {
-      console.log("Login Data:", formData);
-      setLoading(false);
-      alert("Logged in (demo)");
-    }, 1500);
+    try {
+      await login(formData.email, formData.password);
+      navigate('/dashboard');
+    } catch {
+      // error is handled by the store and displayed below
+    }
   };
 const handleKeyDown = (e: any, nextRef?: any) => {
   if (e.key === "Enter") {
@@ -51,7 +43,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
     if (nextRef) {
       nextRef.current?.focus();
     } else {
-      handleSubmit(e); // last field → submit
+      handleSubmit(e); 
     }
   }
 };
@@ -95,6 +87,12 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             </p>
           </div>
 
+          {error && (
+            <div className="mb-4 p-3 rounded bg-red-100 border border-red-400 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-3">
 
             {/* Email */}
@@ -132,10 +130,10 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             {/* Button */}
             <button
               type="submit"
-              disabled={loading}
-              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40"
+              disabled={isLoading}
+              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Logging in..." : "Login"}
+              {isLoading ? "Logging in..." : "Login"}
             </button>
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">

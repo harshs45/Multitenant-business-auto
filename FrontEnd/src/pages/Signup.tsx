@@ -15,9 +15,8 @@ export default function SignupPage() {
   const confirmRef = useRef<HTMLInputElement>(null);  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { register } = useAuthStore();
+  const { register, error, isLoading, clearError } = useAuthStore();
 
   const { theme, setTheme } = useTheme();
 
@@ -28,19 +27,14 @@ export default function SignupPage() {
     confirmPassword: "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    
+    if (error) clearError();
   };
 
-   const handleSubmit = async(e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await register(formData.name, formData.email, formData.password);
-      navigate('/dashboard');
-    } catch {
-      // error already set in store
-    }
+
     if (formData.password.length < 8) {
       alert("Password must be at least 8 characters");
       return;
@@ -51,13 +45,12 @@ export default function SignupPage() {
       return;
     }
 
-    setLoading(true);
-
-    setTimeout(() => {
-      console.log("User Data:", formData);
-      setLoading(false);
-      alert("Account created (demo)");
-    }, 1500);
+    try {
+      await register(formData.name, formData.email, formData.password);
+      navigate('/dashboard');
+    } catch {
+      // error already set in store and displayed below
+    }
   };
 const handleKeyDown = (e: any, nextRef?: any) => {
   if (e.key === "Enter") {
@@ -104,6 +97,12 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             <h1 className="text-2xl font-semibold">Create your account</h1>
             <p className="text-sm text-gray-500 dark:text-white/40 mt-1.5">Start building AI chatbots</p>
           </div>
+
+          {error && (
+            <div className="mb-4 p-3 rounded bg-red-100 border border-red-400 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-3">
 
@@ -172,10 +171,10 @@ const handleKeyDown = (e: any, nextRef?: any) => {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40"
+              disabled={isLoading}
+              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating..." : "Create account"}
+              {isLoading ? "Creating..." : "Create account"}
             </button>
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">or</div>
