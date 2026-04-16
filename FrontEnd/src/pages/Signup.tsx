@@ -122,6 +122,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               onKeyDown={(e) => handleKeyDown(e, emailRef)}
               placeholder="Full Name"
               className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 focus:ring-2 focus:ring-violet-500/40"
+              autoComplete="off"
             />
 
             <input
@@ -133,6 +134,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               type="email"
               placeholder="Email"
               className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 focus:ring-2 focus:ring-violet-500/40"
+              autoComplete="off"
             />
 
             {/* Password */}
@@ -146,6 +148,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 pr-10 focus:ring-2 focus:ring-violet-500/40"
+                autoComplete="off"
               />
               <button
                 type="button"
@@ -167,6 +170,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
                 type={showConfirm ? "text" : "password"}
                 placeholder="Confirm Password"
                 className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 pr-10 focus:ring-2 focus:ring-violet-500/40"
+                autoComplete="off"
               />
               <button
                 type="button"
