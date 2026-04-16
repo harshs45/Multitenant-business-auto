@@ -15,34 +15,27 @@ export default function SignupPage() {
   const confirmRef = useRef<HTMLInputElement>(null);  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { register } = useAuthStore();
+  // const [loading, setLoading] = useState(false);
 
+  const { register, isLoading, error, clearError } = useAuthStore();
   const { theme, setTheme } = useTheme();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    
   };
 
-   const handleSubmit = async(e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    try {
-      await register(formData.name, formData.email, formData.password);
-      navigate('/dashboard');
-    } catch {
-      // error already set in store
+    clearError();
+
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      return;
     }
+
     if (formData.password.length < 8) {
-      alert("Password must be at least 8 characters");
+      // error already set below by logic or backend, but let's be explicit
       return;
     }
 
@@ -51,14 +44,22 @@ export default function SignupPage() {
       return;
     }
 
-    setLoading(true);
+    // Complexity check (matches backend)
+    const hasNumber = /\d/.test(formData.password);
+    const hasLetter = /[a-zA-Z]/.test(formData.password);
+    if (!hasNumber || !hasLetter) {
+      alert("Password must contain at least one letter and one number");
+      return;
+    }
 
-    setTimeout(() => {
-      console.log("User Data:", formData);
-      setLoading(false);
-      alert("Account created (demo)");
-    }, 1500);
+    try {
+      await register(formData.name, formData.email, formData.password);
+      navigate('/dashboard');
+    } catch (err) {
+      console.error("Signup failed:", err);
+    }
   };
+
 const handleKeyDown = (e: any, nextRef?: any) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -104,6 +105,13 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             <h1 className="text-2xl font-semibold">Create your account</h1>
             <p className="text-sm text-gray-500 dark:text-white/40 mt-1.5">Start building AI chatbots</p>
           </div>
+
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
+              {error}
+            </div>
+          )}
+
 
           <form onSubmit={handleSubmit} className="space-y-3">
 
@@ -172,11 +180,12 @@ const handleKeyDown = (e: any, nextRef?: any) => {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40"
+              disabled={isLoading}
+              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating..." : "Create account"}
+              {isLoading ? "Creating..." : "Create account"}
             </button>
+
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">or</div>
 

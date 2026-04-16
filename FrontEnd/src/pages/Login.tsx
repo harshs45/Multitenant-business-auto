@@ -6,12 +6,14 @@ import { useTheme } from "../components/theme-provider";
 import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
-  const { login} = useAuthStore();
+  const { login, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false); // REMOVED local loading
+
+
 
   const { theme, setTheme } = useTheme();
 
@@ -23,28 +25,24 @@ export default function LoginPage() {
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
-  const handleSubmit =async (e: any) => {
+
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    try {
-      await login(formData.email, formData.password);
-      navigate('/dashboard');
-    } catch {
-      // error already set in store
-    }
+    clearError();
 
     if (!formData.email || !formData.password) {
-      alert("Please fill all fields");
       return;
     }
 
-    setLoading(true);
-
-    setTimeout(() => {
-      console.log("Login Data:", formData);
-      setLoading(false);
-      alert("Logged in (demo)");
-    }, 1500);
+    try {
+      await login(formData.email, formData.password);
+      navigate('/dashboard');
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
   };
+
 const handleKeyDown = (e: any, nextRef?: any) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -95,6 +93,13 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             </p>
           </div>
 
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
+              {error}
+            </div>
+          )}
+
+
           <form onSubmit={handleSubmit} className="space-y-3">
 
             {/* Email */}
@@ -132,11 +137,12 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             {/* Button */}
             <button
               type="submit"
-              disabled={loading}
-              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40"
+              disabled={isLoading}
+              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Logging in..." : "Login"}
+              {isLoading ? "Logging in..." : "Login"}
             </button>
+
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">
               or
