@@ -6,11 +6,14 @@ import { useTheme } from "../components/theme-provider";
 import { useAuthStore } from '../store/authStore';
 
 export default function LoginPage() {
-  const { login, error, isLoading, clearError } = useAuthStore();
+  const { login, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
+  // const [loading, setLoading] = useState(false); // REMOVED local loading
+
+
 
   const { theme, setTheme } = useTheme();
 
@@ -23,20 +26,24 @@ export default function LoginPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (error) clearError();
   }
-  const handleSubmit = async (e: React.FormEvent) => {
+
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    clearError();
+
     if (!formData.email || !formData.password) {
-      alert("Please fill all fields");
       return;
     }
 
     try {
       await login(formData.email, formData.password);
       navigate('/dashboard');
-    } catch {
-      // error is handled by the store and displayed below
+    } catch (err) {
+      console.error("Login failed:", err);
     }
   };
+
 const handleKeyDown = (e: any, nextRef?: any) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -88,7 +95,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
           </div>
 
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-100 border border-red-400 text-red-700 text-sm">
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
               {error}
             </div>
           )}
@@ -135,6 +142,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             >
               {isLoading ? "Logging in..." : "Login"}
             </button>
+
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">
               or

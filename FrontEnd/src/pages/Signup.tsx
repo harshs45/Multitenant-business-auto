@@ -15,28 +15,27 @@ export default function SignupPage() {
   const confirmRef = useRef<HTMLInputElement>(null);  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const navigate = useNavigate();
-  const { register, error, isLoading, clearError } = useAuthStore();
+  // const [loading, setLoading] = useState(false);
 
+  const { register, isLoading, error, clearError } = useAuthStore();
   const { theme, setTheme } = useTheme();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (error) clearError();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    clearError();
+
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      return;
+    }
 
     if (formData.password.length < 8) {
-      alert("Password must be at least 8 characters");
+      // error already set below by logic or backend, but let's be explicit
       return;
     }
 
@@ -45,13 +44,22 @@ export default function SignupPage() {
       return;
     }
 
+    // Complexity check (matches backend)
+    const hasNumber = /\d/.test(formData.password);
+    const hasLetter = /[a-zA-Z]/.test(formData.password);
+    if (!hasNumber || !hasLetter) {
+      alert("Password must contain at least one letter and one number");
+      return;
+    }
+
     try {
       await register(formData.name, formData.email, formData.password);
       navigate('/dashboard');
-    } catch {
-      // error already set in store and displayed below
+    } catch (err) {
+      console.error("Signup failed:", err);
     }
   };
+
 const handleKeyDown = (e: any, nextRef?: any) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -99,7 +107,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
           </div>
 
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-100 border border-red-400 text-red-700 text-sm">
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
               {error}
             </div>
           )}
@@ -176,6 +184,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             >
               {isLoading ? "Creating..." : "Create account"}
             </button>
+
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">or</div>
 
