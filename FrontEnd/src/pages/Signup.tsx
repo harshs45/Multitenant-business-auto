@@ -22,7 +22,7 @@ export default function SignupPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -111,7 +111,6 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               {error}
             </div>
           )}
-
 
           <form onSubmit={handleSubmit} className="space-y-3">
 

@@ -22,8 +22,9 @@ export default function LoginPage() {
     password: "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) clearError();
   }
 
 
@@ -49,7 +50,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
     if (nextRef) {
       nextRef.current?.focus();
     } else {
-      handleSubmit(e); // last field → submit
+      handleSubmit(e); 
     }
   }
 };
@@ -98,7 +99,6 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               {error}
             </div>
           )}
-
 
           <form onSubmit={handleSubmit} className="space-y-3">
 
