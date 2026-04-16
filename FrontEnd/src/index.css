@@ -12,6 +12,8 @@
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --border-color: #e2e8f0;
+    --input-bg: #ffffff;
+    --input-text:rgba(17, 24, 39, 1);
   }
   
   .dark {
@@ -20,9 +22,17 @@
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-color: #334155;
+    --input-bg: rgba(23, 21, 21, 0.04);
+    --input-text: #ffffff;
   }
 }
-
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
 body {
   @apply bg-background text-foreground font-sans antialiased;
 }

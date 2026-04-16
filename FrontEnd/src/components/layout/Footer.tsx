@@ -19,7 +19,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
             <Link to="/" className="flex items-center gap-2 group mb-4 inline-flex">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
+              <div className="w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-primary-foreground">
                 <MessageSquare size={18} />
               </div>
               <span className="font-semibold text-lg tracking-tight">BotForge</span>
