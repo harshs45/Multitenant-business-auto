@@ -459,7 +459,7 @@ function HeroSection() {
   <div className="flex flex-col sm:flex-row gap-4">
     <Link 
       to={isAuthenticated ? "/dashboard" : "/build"} 
-      className="inline-flex justify-center items-center gap-2 bg-primary text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-primary/90 transition-all hover:scale-105"
+      className="inline-flex justify-center items-center gap-2 bg-blue-600 text-primary-foreground h-12 px-8 rounded-full font-medium hover:bg-blue-400 transition-all hover:scale-105"
     >
       {isAuthenticated ? "Go to Dashboard" : "Start for free"} <ArrowRight size={18} />
     </Link>
