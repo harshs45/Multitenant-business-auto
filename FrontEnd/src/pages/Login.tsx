@@ -4,6 +4,7 @@ import { Eye, EyeOff, MessageSquare ,Moon, Sun} from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../components/theme-provider";
 import { useAuthStore } from '../store/authStore';
+import GoogleLogin from "../components/googleLogin";
 
 export default function LoginPage() {
   const { login, isLoading, error, clearError } = useAuthStore();
@@ -111,6 +112,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               onKeyDown={(e) => handleKeyDown(e, passwordRef)}
               placeholder="Email"
               className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 focus:ring-2 focus:ring-violet-500/40"
+              autoComplete="off"
             />
 
             {/* Password */}
@@ -124,6 +126,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="w-full h-11 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white dark:placeholder:text-white/20 rounded-xl px-4 pr-10 focus:ring-2 focus:ring-violet-500/40"
+                autoComplete="off"
               />
               <button
                 type="button"
@@ -148,13 +151,15 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               or
             </div>
 
-            {/* Google */}
+            {/* Google
             <button
               type="button"
               className="w-full h-11 bg-gray-100 border border-gray-300 text-gray-700 dark:bg-white/[0.05] dark:border-white/[0.08] dark:text-white/70 rounded-xl"
             >
               Continue with Google
-            </button>
+            </button> */}
+            <GoogleLogin />
+            
           </form>
 
           {/* Footer */}
