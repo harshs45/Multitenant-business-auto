@@ -13,6 +13,8 @@
     "reset-db": "npm run migrate:undo && npm run migrate && npm run seed"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -25,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.12.0",
+    "openai": "^6.34.0",
     "sequelize": "^6.37.5",
     "uuid": "^11.1.0",
     "zod": "^3.22.4"
