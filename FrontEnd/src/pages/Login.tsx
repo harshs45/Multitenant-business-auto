@@ -4,7 +4,6 @@ import { Eye, EyeOff, MessageSquare ,Moon, Sun} from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "../components/theme-provider";
 import { useAuthStore } from '../store/authStore';
-import GoogleLogin from "../components/googleLogin";
 
 export default function LoginPage() {
   const { login, isLoading, error, clearError } = useAuthStore();
@@ -158,7 +157,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             >
               Continue with Google
             </button> */}
-            <GoogleLogin />
+            
             
           </form>
 
