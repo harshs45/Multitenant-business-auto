@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Navbar } from '../components/layout/Navbar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-muted/20 pb-12 pt-24 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-8">
-        
+        <Navbar/>
         {/* Hub Header */}
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-1">
@@ -62,7 +63,7 @@ export default function Dashboard() {
           </div>
           <button 
             onClick={() => navigate('/build')}
-            className="h-11 px-6 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
+            className="h-11 px-6 bg-blue-700 text-primary-foreground rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2"
           >
             <Plus size={20} /> Create New Bot
           </button>

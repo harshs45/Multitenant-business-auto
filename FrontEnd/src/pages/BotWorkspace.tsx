@@ -193,7 +193,7 @@ export default function BotWorkspace() {
             </button>
             <button 
               onClick={() => navigate(`/dashboard/bots/${botId}/settings`)}
-              className="h-10 px-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium flex items-center gap-2 shadow-sm"
+              className="h-10 px-4 rounded-lg bg-blue-700 text-primary-foreground hover:bg-blue-600 transition-colors text-sm font-medium flex items-center gap-2 shadow-sm"
             >
               <Settings size={16} /> Settings
             </button>
@@ -210,7 +210,7 @@ export default function BotWorkspace() {
               transition={{ delay: i * 0.1 }}
               onClick={() => {
                 if (stat.label === 'Conversations') navigate(`/dashboard/bots/${botId}/conversations`);
-                if (stat.label === 'Leads Collected') navigate(`/dashboard/bots/${botId}/leads`);
+               // if (stat.label === 'Leads Collected') navigate(`/dashboard/bots/${botId}/leads`);
               }}
               className={cn(
                 "bg-background border border-border rounded-2xl p-6 shadow-sm group hover:border-primary/50 transition-colors relative overflow-hidden",
@@ -293,7 +293,7 @@ export default function BotWorkspace() {
                 </div>
               </div>
               <div 
-                onClick={() => navigate(`/dashboard/bots/${botId}/leads`)}
+                // onClick={() => navigate(`/dashboard/bots/${botId}/leads`)}
                 className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4 hover:bg-emerald-500/10 transition-colors cursor-pointer group"
               >
                 <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
