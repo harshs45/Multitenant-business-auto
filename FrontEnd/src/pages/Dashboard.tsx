@@ -63,7 +63,7 @@ export default function Dashboard() {
           </div>
           <button 
             onClick={() => navigate('/build')}
-            className="h-11 px-6 bg-blue-700 text-primary-foreground rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2"
+            className="h-11 px-6 bg-blue-600 text-primary-foreground rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg flex items-center gap-2"
           >
             <Plus size={20} /> Create New Bot
           </button>
