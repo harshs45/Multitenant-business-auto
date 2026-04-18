@@ -149,7 +149,7 @@ export default function BotSettings() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-muted/20">
-        <Loader2 className="animate-spin text-primary mb-4" size={40} />
+        <Loader2 className="animate-spin text-blue-500 mb-4" size={40} />
         <p className="text-muted-foreground font-medium">
           Loading configuration...
         </p>
@@ -168,7 +168,7 @@ export default function BotSettings() {
           <p className="text-muted-foreground mb-8">{error}</p>
           <button
             onClick={() => navigate("/dashboard")}
-            className="w-full h-11 bg-primary text-primary-foreground rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+            className="w-full h-11 bg-blue-500 text-blue-500-foreground rounded-lg font-bold hover:bg-blue-500/90 transition-all flex items-center justify-center gap-2"
           >
             <ArrowLeft size={18} /> Back to Hub
           </button>
@@ -203,7 +203,7 @@ export default function BotSettings() {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
-              <Settings className="text-primary" size={32} /> Bot Settings
+              <Settings className="text-blue-500" size={32} /> Bot Settings
             </h1>
             <p className="text-muted-foreground mt-1">
               Configure your AI assistant's personality and behavior.
@@ -253,7 +253,7 @@ export default function BotSettings() {
                 {/* Basic Identity */}
                 <section className="space-y-6">
                   <h3 className="text-lg font-bold flex items-center gap-2">
-                    <Zap size={20} className="text-primary" /> Identity
+                    <Zap size={20} className="text-blue-500" /> Identity
                   </h3>
 
                   <div className="space-y-2">
@@ -298,7 +298,7 @@ export default function BotSettings() {
                 {/* Persona & Flow */}
                 <section className="space-y-6">
                   <h3 className="text-lg font-bold flex items-center gap-2">
-                    <MessageSquare size={20} className="text-primary" />{" "}
+                    <MessageSquare size={20} className="text-blue-500" />{" "}
                     Personality
                   </h3>
 
@@ -386,7 +386,7 @@ export default function BotSettings() {
               <button
                 type="submit"
                 disabled={saving}
-                className="h-12 px-8 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2 disabled:opacity-70"
+                className="h-12 px-8 bg-blue-500 text-blue-500-foreground rounded-xl font-bold hover:bg-blue-500/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2 disabled:opacity-70"
               >
                 {saving ? (
                   <Loader2 className="animate-spin" size={20} />

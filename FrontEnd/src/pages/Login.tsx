@@ -55,11 +55,11 @@ const handleKeyDown = (e: any, nextRef?: any) => {
   }
 };
   return (
+    
     <div className="min-h-screen bg-white dark:bg-[#0d1117] flex items-center justify-center px-4 py-12 transition-colors">
-
       {/* Logo */}
-      <Link to="/" className="flex items-center gap-2 group absolute top-5 left-5">
-        <div className="w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+      <Link to="/" className="flex items-center gap-2 group absolute top-5 left-10">
+        <div className="w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-white group-hover:scale-105 transition-transform ">
           <MessageSquare size={18} />
         </div>
         <span className="font-semibold text-lg tracking-tight">BotForge</span>
@@ -145,10 +145,10 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               {isLoading ? "Logging in..." : "Login"}
             </button>
 
-
+{/* 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">
               or
-            </div>
+            </div> */}
 
             {/* Google
             <button

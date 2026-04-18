@@ -80,7 +80,7 @@ export function Step3Identity() {
                  className={cn(
                    "px-4 py-2 rounded-full text-sm font-medium transition-colors border",
                    toneOfVoice === tone 
-                     ? "bg-primary text-primary-foreground border-primary shadow-sm" 
+                     ? "bg-blue-700 text-primary-foreground border-primary shadow-sm" 
                      : "bg-background border-border text-foreground hover:bg-muted"
                  )}
                >
@@ -129,7 +129,7 @@ export function Step3Identity() {
         </button>
         <button 
           onClick={nextStep}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-primary-hover transition-colors"
+          className="inline-flex items-center gap-2 bg-blue-700 text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-blue-900 transition-colors"
         >
           Continue <ArrowRight size={16} />
         </button>

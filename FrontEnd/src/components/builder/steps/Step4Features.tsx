@@ -58,7 +58,7 @@ const Toggle = ({ checked, onChange }: { checked: boolean, onChange: () => void 
     onClick={onChange}
     className={cn(
       "w-11 h-6 rounded-full flex items-center transition-colors px-1",
-      checked ? "bg-primary" : "bg-muted-foreground/30"
+      checked ? "bg-blue-700" : "bg-gray-600"
     )}
   >
     <div className={cn(
@@ -114,7 +114,7 @@ export function Step4Features() {
         </button>
         <button 
           onClick={nextStep}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-primary-hover transition-colors"
+          className="inline-flex items-center gap-2 bg-blue-700 text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-blue-900 transition-colors"
         >
           Continue <ArrowRight size={16} />
         </button>

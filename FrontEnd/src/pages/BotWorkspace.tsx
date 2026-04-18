@@ -216,7 +216,7 @@ export default function BotWorkspace() {
                // if (stat.label === 'Leads Collected') navigate(`/dashboard/bots/${botId}/leads`);
               }}
               className={cn(
-                "bg-background border border-border rounded-2xl p-6 shadow-sm group hover:border-primary/50 transition-colors relative overflow-hidden",
+                "bg-background border border-border rounded-2xl p-6 shadow-sm group hover:border-blue-300 transition-colors relative overflow-hidden",
                 (stat.label === 'Conversations' || stat.label === 'Leads Collected') && "cursor-pointer"
               )}
             >
@@ -318,7 +318,7 @@ export default function BotWorkspace() {
             {/* Widget Key Section (REAL) */}
             <div className="bg-background border border-border rounded-2xl p-6 shadow-sm relative">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <ShieldCheck size={18} className="text-primary" /> Widget Key
+                <ShieldCheck size={18} className="text-blue-500" /> Widget Key
               </h3>
               <div className="space-y-4">
                 <div>
@@ -340,7 +340,7 @@ export default function BotWorkspace() {
                 <div className="pt-2">
                    <Link 
                     to={`/dashboard/bots/${botId}/deployment`}
-                    className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                    className="text-xs font-bold text-blue-500 hover:underline flex items-center gap-1"
                    >
                      Manage Deployment & Script <ArrowUpRight size={12} />
                    </Link>
@@ -352,13 +352,13 @@ export default function BotWorkspace() {
             <div className="bg-background border border-border rounded-2xl p-6 shadow-sm relative">
               <div className="absolute top-2 right-2 text-[8px] font-bold text-muted-foreground/30 uppercase">Mock Activity</div>
               <h3 className="font-bold mb-6 flex items-center gap-2">
-                <Clock size={18} className="text-primary" /> Bot Log
+                <Clock size={18} className="text-blue-500" /> Bot Log
               </h3>
               <div className="space-y-6">
                 {activities.map((item) => (
                   <div key={item.id} className="flex gap-4 group">
-                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
-                      <item.icon size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0 group-hover:bg-blue-100 transition-colors">
+                      <item.icon size={14} className="text-muted-foreground group-hover:text-blue-500 transition-colors" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">{item.text}</p>

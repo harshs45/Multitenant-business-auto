@@ -188,7 +188,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             >
               {isLoading ? "Creating..." : "Create account"}
             </button>
-
+{/* 
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">or</div>
 
@@ -197,7 +197,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               className="w-full h-11 bg-gray-100 border border-gray-300 text-gray-700 dark:bg-white/[0.05] dark:border-white/[0.08] dark:text-white/70 rounded-xl"
             >
               Continue with Google
-            </button>
+            </button> */}
           </form>
 
           <p className="text-center text-xs text-gray-500 dark:text-white/30 mt-6">
