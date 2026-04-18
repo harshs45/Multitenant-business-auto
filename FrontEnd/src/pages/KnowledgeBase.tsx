@@ -129,8 +129,8 @@ export default function KnowledgeBase() {
     return (
       <div className="min-h-screen bg-muted/20 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-background border border-border rounded-2xl p-8 text-center shadow-sm">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <AlertCircle className="text-primary" size={32} />
+          <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="text-blue-500" size={32} />
           </div>
           <h2 className="text-2xl font-bold mb-2">No Bot Detected</h2>
           <p className="text-muted-foreground mb-8">
@@ -138,7 +138,7 @@ export default function KnowledgeBase() {
           </p>
           <button 
             onClick={() => navigate('/build')}
-            className="w-full h-11 bg-primary text-primary-foreground rounded-lg font-bold hover:bg-primary/90 transition-all"
+            className="w-full h-11 bg-primary text-blue-500-foreground rounded-lg font-bold hover:bg-primary/90 transition-all"
           >
             Go to Builder
           </button>
@@ -164,7 +164,7 @@ export default function KnowledgeBase() {
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
-              <Database className="text-primary" size={32} /> Knowledge Base
+              <Database className="text-blue-500" size={32} /> Knowledge Base
             </h1>
             <p className="text-muted-foreground mt-2">
               Train your bot by providing FAQs and documentation.
@@ -172,7 +172,7 @@ export default function KnowledgeBase() {
           </div>
           <button 
             onClick={() => setShowAddModal(true)}
-            className="h-11 px-6 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
+            className="h-11 px-6 bg-blue-500 text-blue-500-foreground rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue/20 flex items-center gap-2"
           >
             <Plus size={20} /> {activeTab === 'faqs' ? 'Add FAQ' : 'Add Document'}
           </button>
@@ -184,7 +184,7 @@ export default function KnowledgeBase() {
             onClick={() => setActiveTab('faqs')}
             className={cn(
               "px-6 py-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2",
-              activeTab === 'faqs' ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
+              activeTab === 'faqs' ? "border-blue-500 text-blue-500" : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
             <MessageSquare size={18} /> FAQs
@@ -193,7 +193,7 @@ export default function KnowledgeBase() {
             onClick={() => setActiveTab('documents')}
             className={cn(
               "px-6 py-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2",
-              activeTab === 'documents' ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
+              activeTab === 'documents' ? "border-blue-500 text-blue-500" : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
             <FileText size={18} /> Documents
@@ -269,7 +269,7 @@ export default function KnowledgeBase() {
                           {docs.map((doc) => (
                             <tr key={doc.id} className="hover:bg-muted/30 transition-colors">
                               <td className="px-6 py-4 font-medium flex items-center gap-3">
-                                <FileText size={16} className="text-primary" /> {doc.fileName}
+                                <FileText size={16} className="text-blue-500" /> {doc.fileName}
                               </td>
                               <td className="px-6 py-4 text-sm text-muted-foreground">{doc.fileType}</td>
                               <td className="px-6 py-4 text-sm text-muted-foreground">
@@ -333,7 +333,7 @@ export default function KnowledgeBase() {
                       value={faqForm.question}
                       onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
                       placeholder="e.g. What are your opening hours?"
-                      className="w-full h-11 px-4 bg-muted/30 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                      className="w-full h-11 px-4 bg-transparent border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -344,12 +344,12 @@ export default function KnowledgeBase() {
                       value={faqForm.answer}
                       onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
                       placeholder="Provide a clear and concise answer..."
-                      className="w-full px-4 py-3 bg-muted/30 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
+                      className="w-full px-4 py-3 bg-transparent border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
                     />
                   </div>
                   <button 
                     disabled={isSubmitting}
-                    className="w-full h-12 bg-primary text-primary-foreground rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+                    className="w-full h-12 bg-blue-500 text-blue-500-foreground rounded-lg font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <Plus size={20} />}
                     Create FAQ
@@ -357,7 +357,7 @@ export default function KnowledgeBase() {
                 </form>
               ) : (
                 <form onSubmit={handleAddDoc} className="space-y-4">
-                  <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex gap-3 text-sm text-primary mb-2">
+                  <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex gap-3 text-sm text-blue-500 mb-2">
                     <Info className="shrink-0" size={18} />
                     <p>
                       <strong>Note:</strong> Document parsing is not yet available. 
@@ -401,7 +401,7 @@ export default function KnowledgeBase() {
                   </div>
                   <button 
                     disabled={isSubmitting}
-                    className="w-full h-12 bg-primary text-primary-foreground rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+                    className="w-full h-12 bg-primary text-blue-500-foreground rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <Plus size={20} />}
                     Add Metadata

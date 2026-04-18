@@ -60,10 +60,10 @@ export function Step1Business() {
                    onClick={() => setField('businessType', type.id)}
                    className={cn(
                      "border rounded-xl p-4 flex flex-col items-center gap-3 cursor-pointer transition-all hover:scale-[1.02]",
-                     isSelected ? "border-primary bg-primary/5 text-primary shadow-sm" : "border-border bg-background hover:bg-muted/50 text-foreground"
+                     isSelected ? "border-blue-500 bg-blue-700/5 text-blue-500 shadow-sm" : "border-border bg-background hover:bg-muted/50 text-foreground"
                    )}
                  >
-                   <Icon size={24} className={isSelected ? "text-primary" : "text-muted-foreground"} />
+                   <Icon size={24} className={isSelected ? "text-blue-500" : "text-muted-foreground"} />
                    <span className="text-sm font-medium text-center">{type.label}</span>
                  </div>
                );
@@ -86,7 +86,7 @@ export function Step1Business() {
         <button 
           onClick={nextStep}
           disabled={!isValid}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 bg-blue-700 text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Continue <ArrowRight size={16} />
         </button>

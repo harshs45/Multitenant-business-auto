@@ -30,8 +30,8 @@ export function WizardProgress() {
               <div 
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-10 bg-background",
-                  isActive ? "border-primary text-primary shadow-sm" : 
-                  isCompleted ? "border-primary bg-primary text-primary-foreground" : 
+                  isActive ? "border-blue-700 text-blue-700 shadow-sm" : 
+                  isCompleted ? "border-blue-700 bg-blue-700 text-blue-700-foreground" : 
                   "border-border text-muted-foreground"
                 )}
               >
@@ -52,7 +52,7 @@ export function WizardProgress() {
       {/* Background lines */}
       <div className="absolute top-4 left-0 w-full h-[2px] bg-border -z-0 translate-y-[-50%] px-4">
         <div 
-          className="h-full bg-primary transition-all duration-500 ease-in-out" 
+          className="h-full bg-blue-700 transition-all duration-500 ease-in-out" 
           style={{ width: `${(Math.min(activeStep, 4) / 4) * 100}%` }}
         />
       </div>

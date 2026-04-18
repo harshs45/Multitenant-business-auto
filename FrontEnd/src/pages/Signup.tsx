@@ -184,11 +184,11 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-800 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Creating..." : "Create account"}
             </button>
-
+{/* 
 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">or</div>
 
@@ -197,11 +197,11 @@ const handleKeyDown = (e: any, nextRef?: any) => {
               className="w-full h-11 bg-gray-100 border border-gray-300 text-gray-700 dark:bg-white/[0.05] dark:border-white/[0.08] dark:text-white/70 rounded-xl"
             >
               Continue with Google
-            </button>
+            </button> */}
           </form>
 
           <p className="text-center text-xs text-gray-500 dark:text-white/30 mt-6">
-            Already have an account? <Link to="/login" className="text-violet-500">Login</Link>
+            Already have an account? <Link to="/login" className="text-blue-500 hover:underline hover:decoration-blue-500 ">Login</Link>
           </p>
         </div>
       </motion.div>

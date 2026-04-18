@@ -252,7 +252,7 @@ export function Step2Audience() {
         </button>
         <button 
           onClick={nextStep}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-primary-hover transition-colors"
+          className="inline-flex items-center gap-2 bg-blue-700  text-primary-foreground h-11 px-6 rounded-lg font-medium hover:bg-blue-900 transition-colors"
         >
           Continue <ArrowRight size={16} />
         </button>

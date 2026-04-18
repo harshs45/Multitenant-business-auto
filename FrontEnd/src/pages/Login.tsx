@@ -55,11 +55,11 @@ const handleKeyDown = (e: any, nextRef?: any) => {
   }
 };
   return (
+    
     <div className="min-h-screen bg-white dark:bg-[#0d1117] flex items-center justify-center px-4 py-12 transition-colors">
-
       {/* Logo */}
-      <Link to="/" className="flex items-center gap-2 group absolute top-5 left-5">
-        <div className="w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+      <Link to="/" className="flex items-center gap-2 group absolute top-5 left-10">
+        <div className="w-8 h-8 rounded-lg bg-blue-950 flex items-center justify-center text-white group-hover:scale-105 transition-transform ">
           <MessageSquare size={18} />
         </div>
         <span className="font-semibold text-lg tracking-tight">BotForge</span>
@@ -140,15 +140,15 @@ const handleKeyDown = (e: any, nextRef?: any) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-800 text-white rounded-xl transition hover:shadow-violet-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Logging in..." : "Login"}
             </button>
 
-
+{/* 
             <div className="text-center text-sm text-gray-400 dark:text-white/30">
               or
-            </div>
+            </div> */}
 
             {/* Google
             <button
@@ -164,7 +164,7 @@ const handleKeyDown = (e: any, nextRef?: any) => {
           {/* Footer */}
           <p className="text-center text-xs text-gray-500 dark:text-white/30 mt-6">
             Don’t have an account?{" "}
-            <Link to="/signup" className="text-violet-500">
+            <Link to="/signup" className="text-blue-500 hover:underline hover:decoration-blue-500">
               Sign up
             </Link>
           </p>

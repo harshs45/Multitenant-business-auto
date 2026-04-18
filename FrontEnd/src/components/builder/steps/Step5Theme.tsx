@@ -390,7 +390,7 @@ export function Step5Theme() {
                   )}
                 >
                   {isSelected && (
-                    <div className="absolute top-2 right-2 w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center z-10 shadow-sm">
+                    <div className="absolute top-2 right-2 w-5 h-5 bg-blue-950 text-primary-foreground rounded-full flex items-center justify-center z-10 shadow-sm">
                       <Check size={12} />
                     </div>
                   )}
@@ -471,7 +471,7 @@ export function Step5Theme() {
                 max="24"
                 value={borderRadius}
                 onChange={(e) => setField('borderRadius', parseInt(e.target.value))}
-                className="w-full h-11 accent-primary"
+                className="w-full h-11 accent-blue-600"
               />
             </div>
 
@@ -510,7 +510,7 @@ export function Step5Theme() {
            <button 
              onClick={handleGenerateBot}
              disabled={isGenerating}
-             className="w-full max-w-sm mx-auto h-14 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:bg-primary-hover hover:scale-105 transition-all outline-none focus:ring-4 focus:ring-primary/30 flex items-center justify-center gap-2 disabled:opacity-80 disabled:hover:scale-100 disabled:cursor-not-allowed shadow-[0_4px_14px_0_rgba(139,92,246,0.39)]"
+             className="w-full max-w-sm mx-auto h-14 bg-blue-950 text-primary-foreground rounded-full font-bold text-lg hover:bg-blue-950-hover hover:scale-105 transition-all outline-none focus:ring-4 focus:ring-primary/30 flex items-center justify-center gap-2 disabled:opacity-80 disabled:hover:scale-100 disabled:cursor-not-allowed shadow-[0_4px_14px_0_rgba(139,92,246,0.39)]"
            >
              {isGenerating ? (
                <><Loader2 size={20} className="animate-spin" /> Building your bot...</>

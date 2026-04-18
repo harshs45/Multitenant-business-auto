@@ -75,7 +75,7 @@ export default function Conversations() {
   if (loading && currentPage === 1) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-muted/20">
-        <Loader2 className="animate-spin text-primary mb-4" size={40} />
+        <Loader2 className="animate-spin text-blue-500 mb-4" size={40} />
         <p className="text-muted-foreground font-medium">
           Loading conversation history...
         </p>
@@ -144,7 +144,7 @@ export default function Conversations() {
               <p className="text-muted-foreground mb-6">{error}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="text-primary font-bold underline"
+                className="text-blue-500 font-bold underline"
               >
                 Retry
               </button>
@@ -210,7 +210,7 @@ export default function Conversations() {
                   <div className="flex items-center gap-4">
                     <button
                       type="button"
-                      className="text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1"
+                      className="text-xs font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1"
                     >
                       View Transcript <ChevronRightIcon size={14} />
                     </button>
