@@ -13,6 +13,9 @@ export interface Bot {
   updatedAt: string;
   createdAt: string;
 
+  // Embed tokens (public widget keys)
+  embedTokens?: Array<{ id: string; publicKey: string; isActive: boolean }>;
+
   // Identity / Core Personality fields
   welcomeMessage?: string;
   toneOfVoice?: string;

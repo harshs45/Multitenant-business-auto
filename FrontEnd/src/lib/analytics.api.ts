@@ -56,9 +56,9 @@ export async function listConversations(botId: string, page = 1, limit = 10): Pr
 }
 
 /**
- * Fetches transcript history using a bot's API Key.
+ * Fetches transcript history using a bot's Widget Key.
  * NOTE: This uses the widget history endpoint for stability.
  */
-export async function getConversationHistory(apiKey: string, sessionId: string): Promise<{ success: boolean; data: Message[] }> {
-  return request<{ success: boolean; data: Message[] }>(`/chat/${apiKey}/history/${sessionId}`);
+export async function getConversationHistory(widgetKey: string, sessionId: string): Promise<{ success: boolean; data: Message[] }> {
+  return request<{ success: boolean; data: Message[] }>(`/chat/${widgetKey}/history/${sessionId}`);
 }

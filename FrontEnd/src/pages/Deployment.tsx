@@ -111,11 +111,11 @@ export default function Deployment() {
     }
   };
 
+  // Extract public widget key from embedTokens (safe null handling)
+  const publicKey = bot?.embedTokens?.[0]?.publicKey || '';
+
   const handleCopySnippet = () => {
-    if (!bot) return;
-    
-    // Use public key from embedTokens if available, fallback to apiKey (internal backfill)
-    const publicKey = (bot as any).embedTokens?.[0]?.publicKey || bot.apiKey;
+    if (!bot || !publicKey) return;
     
     const snippet = `<!-- BotForge Widget -->
 <script>
@@ -252,7 +252,7 @@ export default function Deployment() {
                   <code>{`<!-- BotForge Widget -->
 <script>
   window.BotForgeConfig = {
-    publicKey: "${bot?.apiKey}",
+    publicKey: "${publicKey || 'loading...'}",
     botId: "${bot?.id}",
     apiBase: "${API_BASE_URL}"
   };
@@ -260,8 +260,10 @@ export default function Deployment() {
     var j=d.createElement(s);
     j.src="${WIDGET_LOADER_URL}";
     j.async=true;
+    j.setAttribute('data-botforge-key', k);
+    j.setAttribute('data-botforge-api', a);
     d.head.appendChild(j);
-  })(document,'script','${bot?.apiKey}','${API_BASE_URL}');
+  })(document,'script','${publicKey || 'loading...'}','${API_BASE_URL}');
 </script>`}</code>
                 </pre>
               </div>

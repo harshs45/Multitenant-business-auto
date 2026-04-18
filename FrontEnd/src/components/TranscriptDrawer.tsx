@@ -15,28 +15,28 @@ import { cn } from '../lib/utils';
 interface TranscriptDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  apiKey: string;
+  widgetKey: string;
   sessionId: string | null;
   botName: string;
 }
 
-export function TranscriptDrawer({ isOpen, onClose, apiKey, sessionId, botName }: TranscriptDrawerProps) {
+export function TranscriptDrawer({ isOpen, onClose, widgetKey, sessionId, botName }: TranscriptDrawerProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen && sessionId && apiKey) {
+    if (isOpen && sessionId && widgetKey) {
       fetchHistory();
     }
-  }, [isOpen, sessionId, apiKey]);
+  }, [isOpen, sessionId, widgetKey]);
 
   const fetchHistory = async () => {
-    if (!sessionId || !apiKey) return;
+    if (!sessionId || !widgetKey) return;
     setLoading(true);
     setError(null);
     try {
-      const res = await getConversationHistory(apiKey, sessionId);
+      const res = await getConversationHistory(widgetKey, sessionId);
       if (res.success) {
         setMessages(res.data);
       }

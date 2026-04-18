@@ -65,9 +65,12 @@ export default function BotWorkspace() {
     fetchBotData();
   }, [botId]);
 
+  // Extract public widget key from embedTokens (safe null handling)
+  const widgetKey = bot?.embedTokens?.[0]?.publicKey || '';
+
   const handleCopyKey = () => {
-    if (bot?.apiKey) {
-      navigator.clipboard.writeText(bot.apiKey);
+    if (widgetKey) {
+      navigator.clipboard.writeText(widgetKey);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -312,23 +315,23 @@ export default function BotWorkspace() {
           {/* Sidebar Section */}
           <aside className="space-y-8">
             
-            {/* API Key Section (REAL) */}
+            {/* Widget Key Section (REAL) */}
             <div className="bg-background border border-border rounded-2xl p-6 shadow-sm relative">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <ShieldCheck size={18} className="text-primary" /> API Settings
+                <ShieldCheck size={18} className="text-primary" /> Widget Key
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5 block">Your API Key</label>
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5 block">Public Widget Key</label>
                   <div className="relative group">
                     <div className="w-full h-11 px-4 bg-muted/30 border border-border rounded-lg flex items-center font-mono text-sm overflow-hidden pr-12">
-                      {bot.apiKey ? `bf_${bot.apiKey.slice(0, 4)}••••••••${bot.apiKey.slice(-4)}` : 'Key Restricted'}
+                      {widgetKey ? `${widgetKey.slice(0, 12)}••••••••${widgetKey.slice(-6)}` : 'No embed token found'}
                     </div>
                     <button 
                       onClick={handleCopyKey}
-                      disabled={!bot.apiKey}
+                      disabled={!widgetKey}
                       className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-50"
-                      title="Copy API Key"
+                      title="Copy Widget Key"
                     >
                       {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
                     </button>

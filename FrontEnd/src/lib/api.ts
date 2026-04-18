@@ -149,8 +149,9 @@ export interface GenerateBotResponse {
   data: {
     botId: string;
     botName: string;
-    apiKey: string;        // ← was publicKey
-    embedScript: string;   // ← add this too
+    apiKey: string;             // internal key (bf_) — never expose to widget
+    publicWidgetKey: string;    // public embed key (bf_pub_) — used for widget
+    embedScript: string;
     businessId: string;
     businessName: string;
     themeKey: string;
@@ -158,7 +159,7 @@ export interface GenerateBotResponse {
     accentColor: string | null;
     isPublished: boolean;
     publishedAt: string;
-    status: string;        // ← add this too
+    status: string;
   };
 }
 

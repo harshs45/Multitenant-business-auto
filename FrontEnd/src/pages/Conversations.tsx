@@ -258,7 +258,7 @@ export default function Conversations() {
       <TranscriptDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        apiKey={bot?.apiKey || ''}
+        widgetKey={bot?.embedTokens?.[0]?.publicKey || ''}
         sessionId={selectedSessionId}
         botName={bot?.botName || bot?.name || 'Bot'}
       />
