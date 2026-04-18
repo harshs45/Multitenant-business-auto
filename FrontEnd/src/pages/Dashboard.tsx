@@ -82,7 +82,7 @@ export default function Dashboard() {
             />
           </div>
           <div className="flex bg-background border border-border rounded-xl p-1 shrink-0">
-             <button className="p-2 bg-muted text-primary rounded-lg transition-all"><LayoutGrid size={18} /></button>
+             <button className="p-2 bg-muted text-blue-600 rounded-lg transition-all"><LayoutGrid size={18} /></button>
              <button className="p-2 text-muted-foreground hover:bg-muted/50 rounded-lg transition-all hover:text-foreground"><ListIcon size={18} /></button>
           </div>
         </div>
@@ -128,11 +128,11 @@ export default function Dashboard() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.05 }}
                     onClick={() => navigate(`/dashboard/bots/${bot.id}`)}
-                    className="bg-background border border-border rounded-2xl p-6 shadow-sm hover:border-primary/50 transition-all cursor-pointer group flex flex-col justify-between"
+                    className="bg-background border border-border rounded-2xl p-6 shadow-sm hover:border-blue-300 transition-all cursor-pointer group flex flex-col justify-between"
                    >
                      <div>
                         <div className="flex items-start justify-between mb-4">
-                           <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                           <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                              <MessageSquare size={24} />
                            </div>
                            <span className={cn(
@@ -142,7 +142,7 @@ export default function Dashboard() {
                              {bot.status}
                            </span>
                         </div>
-                        <h3 className="text-xl font-bold mb-1 group-hover:text-primary transition-colors">{bot.botName || bot.name}</h3>
+                        <h3 className="text-xl font-bold mb-1 group-hover:text-blue-600 transition-colors">{bot.botName || bot.name}</h3>
                         <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
                           {bot.businessDescription || "No description provided."}
                         </p>
@@ -152,7 +152,7 @@ export default function Dashboard() {
                         <div className="flex items-center gap-1.5">
                            <Database size={14} /> Knowledge Base Ready
                         </div>
-                        <div className="flex items-center gap-1 group-hover:text-primary transition-colors">
+                        <div className="flex items-center gap-1 group-hover:text-blue-600 transition-colors">
                            Open Workspace <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                      </div>

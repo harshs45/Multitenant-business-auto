@@ -186,7 +186,7 @@ export default function Deployment() {
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold tracking-tight text-foreground flex items-center gap-4">
-              <Code className="text-primary" size={36} /> Deployment Hub
+              <Code className="text-blue-500" size={36} /> Deployment Hub
             </h1>
             <p className="text-muted-foreground text-lg">
               Install the bot on your site and customize branding in real-time.
@@ -214,7 +214,7 @@ export default function Deployment() {
              <button 
                onClick={handleSave}
                disabled={saving || !isDirty}
-               className="h-12 px-8 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center gap-2"
+               className="h-12 px-8 bg-blue-500 text-primary-foreground rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center gap-2"
              >
                {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                Save Changes
@@ -230,7 +230,7 @@ export default function Deployment() {
             {/* Installation Section */}
             <section className="bg-background border border-border rounded-3xl p-8 shadow-sm space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                <div className="w-10 h-10 bg-transparent rounded-xl flex items-center justify-center text-blue-500 border border-blue-200">
                   <Monitor size={20} />
                 </div>
                 <div>

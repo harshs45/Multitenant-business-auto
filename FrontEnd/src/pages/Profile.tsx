@@ -70,7 +70,7 @@ export default function Profile() {
         {/* Header */}
         <header>
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
-            <UserIcon className="text-primary" size={32} /> My Account
+            <UserIcon className="text-blue-600" size={32} /> My Account
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage your personal identity and platform settings.
@@ -110,7 +110,7 @@ export default function Profile() {
                               setName(e.target.value);
                               setSaveSuccess(false);
                             }}
-                            className="w-full h-12 pl-10 pr-4 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                            className="w-full h-12 pl-10 pr-4 bg-transparent border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
                             placeholder="Your display name"
                           />
                         </div>
@@ -143,7 +143,7 @@ export default function Profile() {
                         <button 
                           type="submit"
                           disabled={saving || !name || name === user.name}
-                          className="ml-auto h-12 px-8 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2 disabled:opacity-50"
+                          className="ml-auto h-12 px-8 bg-blue-600 text-blue-600-foreground rounded-xl font-bold hover:bg-blue-600/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2 disabled:opacity-50"
                         >
                           {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                           Save Profile
@@ -158,7 +158,7 @@ export default function Profile() {
           <aside className="space-y-6">
              <section className="bg-background border border-border rounded-2xl p-6 shadow-sm">
                 <h3 className="font-bold mb-6 flex items-center gap-2">
-                   <Shield size={18} className="text-primary" /> Account Meta
+                   <Shield size={18} className="text-blue-600" /> Account Meta
                 </h3>
                 
                 <div className="space-y-6">
@@ -177,7 +177,7 @@ export default function Profile() {
                    </div>
 
                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-600">
                          <BotIcon size={20} />
                       </div>
                       <div>
@@ -191,10 +191,10 @@ export default function Profile() {
                    <div className="pt-4 border-t border-border">
                       <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
                          <span>Account Tier</span>
-                         <span className="text-primary">Creator Powe</span>
+                         <span className="text-blue-600">Creator Powe</span>
                       </div>
                       <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-                         <div className="bg-primary h-full w-[85%] rounded-full" />
+                         <div className="bg-blue-600 h-full w-[85%] rounded-full" />
                       </div>
                    </div>
                 </div>

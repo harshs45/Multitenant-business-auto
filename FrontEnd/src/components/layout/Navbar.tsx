@@ -167,7 +167,7 @@ export function Navbar() {
 
                 <Link
                   to="/dashboard"
-                  className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm"
+                  className="bg-blue-950 text-primary-foreground px-4 py-2 rounded-full text-sm"
                 >
                   My Bots
                 </Link>
