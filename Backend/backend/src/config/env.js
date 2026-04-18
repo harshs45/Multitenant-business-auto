@@ -40,6 +40,11 @@ const validateEnv = () => {
 
   const missing = required.filter((key) => !process.env[key]);
 
+  // In production, LLM_PROVIDER is mandatory — no silent mock fallback
+  if (process.env.NODE_ENV === 'production' && !process.env.LLM_PROVIDER) {
+    missing.push('LLM_PROVIDER');
+  }
+
   // Conditional validation for LLM providers
   const provider = process.env.LLM_PROVIDER;
   if (provider === 'gemini' && !process.env.GEMINI_API_KEY) missing.push('GEMINI_API_KEY');
@@ -57,9 +62,12 @@ const validateEnv = () => {
  */
 const logConnectionInfo = () => {
   console.log('─── Connection Info ───');
-  console.log(`DB_HOST:    ${process.env.DB_HOST}`);
-  console.log(`DB_NAME:    ${process.env.DB_NAME}`);
-  console.log(`REDIS_HOST: ${process.env.REDIS_HOST}`);
+  console.log(`DB_HOST:      ${process.env.DB_HOST}`);
+  console.log(`DB_NAME:      ${process.env.DB_NAME}`);
+  console.log(`REDIS_HOST:   ${process.env.REDIS_HOST}`);
+  console.log(`LLM_PROVIDER: ${process.env.LLM_PROVIDER || '⚠️  NOT SET (will default to mock)'}`);
+  console.log(`GEMINI_MODEL: ${process.env.GEMINI_MODEL || 'not set'}`);
+  console.log(`GEMINI_KEY:   ${process.env.GEMINI_API_KEY ? '✅ present' : '❌ MISSING'}`);
   console.log('───────────────────────');
 };
 

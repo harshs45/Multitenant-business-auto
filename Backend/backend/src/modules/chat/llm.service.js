@@ -7,6 +7,32 @@
  */
 const secrets = require('../../config/secrets');
 
+/* ─── Helpers ───────────────────────────────────────────── */
+
+/**
+ * Merges consecutive messages with the same role and ensures role alternating (for Gemini/Anthropic).
+ * Maps 'assistant' role to 'model' if specified.
+ */
+const prepareMessages = (messages, modelRole = 'assistant') => {
+  if (!messages || messages.length === 0) return [];
+
+  const merged = [];
+  for (const msg of messages) {
+    const role = msg.role === 'assistant' ? modelRole : 'user';
+    const last = merged[merged.length - 1];
+
+    if (last && last.role === role) {
+      last.parts[0].text += `\n\n${msg.content}`;
+    } else {
+      merged.push({
+        role,
+        parts: [{ text: msg.content }],
+      });
+    }
+  }
+  return merged;
+};
+
 /* ─── Mock Provider ─────────────────────────────────────── */
 const mockComplete = async (systemPrompt, messages) => {
   const lastMsg = messages[messages.length - 1]?.content || '';
@@ -112,6 +138,7 @@ const geminiComplete = async (systemPrompt, messages) => {
   if (!apiKey) throw new Error('GEMINI_API_KEY is not configured');
 
   const modelString = secrets.geminiModel();
+  console.log(`[LLM:Gemini] Calling model="${modelString}", apiKey=${apiKey ? apiKey.slice(0, 10) + '...' : 'MISSING'}, messages=${messages.length}`);
   
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelString}:generateContent?key=${apiKey}`, {
     method: 'POST',
@@ -122,10 +149,7 @@ const geminiComplete = async (systemPrompt, messages) => {
       systemInstruction: {
         parts: [{ text: systemPrompt }]
       },
-      contents: messages.map((m) => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      })),
+      contents: prepareMessages(messages, 'model'),
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 1024,
@@ -135,11 +159,24 @@ const geminiComplete = async (systemPrompt, messages) => {
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
+    console.error(`[LLM:Gemini] ❌ API error: ${response.status} - ${JSON.stringify(err.error || err)}`);
     throw new Error(`Gemini API error: ${response.status} - ${err.error?.message || 'Unknown'}`);
   }
 
   const data = await response.json();
-  const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  console.log(`[LLM:Gemini] ✅ Response received, candidates=${data.candidates?.length || 0}`);
+  
+  // Handle blocked responses or empty candidates
+  if (!data.candidates || data.candidates.length === 0) {
+    const reason = data.promptFeedback?.blockReason || 'Unknown (possibly safety filters)';
+    console.warn(`[LLM:Gemini] ⚠️  Response blocked: ${reason}`);
+    return {
+      content: `[Response blocked by AI safety filters. Reason: ${reason}]`,
+      metadata: { provider: 'gemini', blocked: true, reason },
+    };
+  }
+
+  const content = data.candidates[0].content?.parts?.[0]?.text || '[Empty response from AI]';
   
   return {
     content,
@@ -147,6 +184,7 @@ const geminiComplete = async (systemPrompt, messages) => {
       provider: 'gemini',
       model: modelString,
       usage: data.usageMetadata || {},
+      finishReason: data.candidates[0].finishReason,
     },
   };
 };
@@ -154,16 +192,21 @@ const geminiComplete = async (systemPrompt, messages) => {
 /* ─── Provider Router ───────────────────────────────────── */
 const complete = async (systemPrompt, messages) => {
   const provider = secrets.llmProvider();
+  console.log(`[LLM] Provider selected: "${provider}" (env LLM_PROVIDER=${process.env.LLM_PROVIDER})`);
 
   switch (provider) {
     case 'openai':
+      console.log('[LLM] Routing to OpenAI...');
       return openaiComplete(systemPrompt, messages);
     case 'anthropic':
+      console.log('[LLM] Routing to Anthropic...');
       return anthropicComplete(systemPrompt, messages);
     case 'gemini':
+      console.log('[LLM] Routing to Gemini...');
       return geminiComplete(systemPrompt, messages);
     case 'mock':
     default:
+      console.warn(`[LLM] ⚠️  Using MOCK provider (provider="${provider}"). Set LLM_PROVIDER env var to use a real provider.`);
       return mockComplete(systemPrompt, messages);
   }
 };
