@@ -8,6 +8,7 @@ const generalLimiter = rateLimit({
   max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path.includes('/health'), // ← add this
   message: { success: false, error: { message: 'Too many requests, please try again later' } },
 });
 
@@ -30,6 +31,7 @@ const chatLimiter = rateLimit({
   max: parseInt(process.env.CHAT_RATE_LIMIT_MAX, 10) || 60,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path.includes('/health'), // ← safety net
   message: { success: false, error: { message: 'Chat rate limit exceeded' } },
 });
 
