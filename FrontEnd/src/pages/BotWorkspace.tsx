@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { getAnalyticsOverview, type AnalyticsOverview } from '../lib/api';
 import { getBotById, type Bot } from '../lib/bots.api';
-import { 
-  
-  MessageSquare, 
-  FileText, 
-  Plus, 
+import {
+  MessageSquare,
+  FileText,
+  Plus,
   ArrowUpRight,
   TrendingUp,
   Clock,
@@ -40,7 +39,6 @@ export default function BotWorkspace() {
       setLoading(true);
       setError(null);
       try {
-        // Fetch bot details and analytics in parallel
         const [botRes, analyticsRes] = await Promise.all([
           getBotById(botId),
           getAnalyticsOverview(botId)
@@ -65,7 +63,6 @@ export default function BotWorkspace() {
     fetchBotData();
   }, [botId]);
 
-  // Extract public widget key from embedTokens (safe null handling)
   const widgetKey = bot?.embedTokens?.[0]?.publicKey || '';
 
   const handleCopyKey = () => {
@@ -96,7 +93,7 @@ export default function BotWorkspace() {
           <p className="text-muted-foreground mb-8">
             The bot you are looking for does not exist or you don't have access to it.
           </p>
-          <button 
+          <button
             onClick={() => navigate('/dashboard')}
             className="w-full h-11 bg-primary text-primary-foreground rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
           >
@@ -107,51 +104,51 @@ export default function BotWorkspace() {
     );
   }
 
-  // Real Data vs Mock distinction
   const stats = [
-    { 
-      label: 'Conversations', 
-      value: analytics?.totalConversations?.toLocaleString() || '0', 
-      change: 'Lifetime', 
-      icon: MessageSquare, 
+    {
+      label: 'Conversations',
+      value: analytics?.totalConversations?.toLocaleString() || '0',
+      change: 'Lifetime',
+      icon: MessageSquare,
       color: 'text-blue-500',
     },
-    { 
-      label: 'Messages', 
-      value: analytics?.totalMessages?.toLocaleString() || '0', 
-      change: 'Total', 
-      icon: TrendingUp, 
+    {
+      label: 'Messages',
+      value: analytics?.totalMessages?.toLocaleString() || '0',
+      change: 'Total',
+      icon: TrendingUp,
       color: 'text-purple-500',
     },
-    { 
-      label: 'Leads Collected', 
-      value: analytics?.totalLeads?.toLocaleString() || '0', 
-      change: 'New', 
-      icon: UserIcon, 
+    {
+      label: 'Leads Collected',
+      value: analytics?.totalLeads?.toLocaleString() || '0',
+      change: 'New',
+      icon: UserIcon,
       color: 'text-emerald-500',
     },
-    { 
-      label: 'Handoffs', 
-      value: analytics?.totalHandoffs?.toLocaleString() || '0', 
-      change: 'Active', 
-      icon: ShieldCheck, 
+    {
+      label: 'Handoffs',
+      value: analytics?.totalHandoffs?.toLocaleString() || '0',
+      change: 'Active',
+      icon: ShieldCheck,
       color: 'text-amber-500',
     },
   ];
 
-  // Map daily usage to chart: we sum all event types per date
-  const chartData = (analytics?.dailyUsage || []).reduce((acc: any[], curr) => {
-    const existing = acc.find(a => a.date === curr.eventDate);
-    if (existing) {
-      existing.total += parseInt(curr.total as any, 10);
-    } else {
-      acc.push({ date: curr.eventDate, total: parseInt(curr.total as any, 10) });
-    }
-    return acc;
-  }, [])
-  .slice(-7); // Last 7 days
+  // Map daily usage to chart: sum all event types per date
+  const chartData = (analytics?.dailyUsage || [])
+    .reduce((acc: any[], curr) => {
+      const existing = acc.find(a => a.date === curr.eventDate);
+      if (existing) {
+        existing.total += parseInt(curr.total as any, 10);
+      } else {
+        acc.push({ date: curr.eventDate, total: parseInt(curr.total as any, 10) });
+      }
+      return acc;
+    }, [])
+    .slice(-7);
 
-  const maxVal = Math.max(...chartData.map(d => d.total), 1);
+  const maxVal = Math.max(...chartData.map((d: any) => d.total), 1);
 
   const activities = [
     { id: 1, type: 'bot', text: 'Bot configuration updated', time: '2 hours ago', icon: ShieldCheck },
@@ -163,7 +160,7 @@ export default function BotWorkspace() {
   return (
     <div className="min-h-screen bg-muted/20 pb-12 pt-24 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-8">
-        
+
         {/* Navigation Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-muted-foreground">
           <Link to="/dashboard" className="hover:text-foreground transition-colors flex items-center gap-1">
@@ -192,19 +189,19 @@ export default function BotWorkspace() {
             </p>
           </div>
           <div className="flex gap-3">
-            <button 
+            <button
               onClick={() => navigate(`/dashboard/bots/${botId}/knowledge`)}
               className="h-10 px-4 rounded-lg bg-background border border-border hover:bg-muted transition-colors text-sm font-medium flex items-center gap-2"
             >
               <Database size={16} /> Knowledge Base
             </button>
-            <button 
+            <button
               onClick={() => navigate(`/dashboard/bots/${botId}/deployment`)}
               className="h-10 px-4 rounded-lg bg-background border border-border hover:bg-muted transition-colors text-sm font-medium flex items-center gap-2"
             >
               <Layout size={16} /> Widget Deployment
             </button>
-            <button 
+            <button
               onClick={() => navigate(`/dashboard/bots/${botId}/settings`)}
               className="h-10 px-4 rounded-lg bg-blue-700 text-primary-foreground hover:bg-blue-600 transition-colors text-sm font-medium flex items-center gap-2 shadow-sm"
             >
@@ -226,7 +223,7 @@ export default function BotWorkspace() {
               }}
               className={cn(
                 "bg-background border border-border rounded-2xl p-6 shadow-sm group hover:border-blue-300 transition-colors relative overflow-hidden",
-                (stat.label === 'Conversations') && "cursor-pointer"
+                stat.label === 'Conversations' && "cursor-pointer"
               )}
             >
               <div className="flex items-center justify-between mb-4">
@@ -234,14 +231,12 @@ export default function BotWorkspace() {
                   <stat.icon size={20} />
                 </div>
                 <div className="flex flex-col items-end">
-                   <span className={cn(
-                    "text-xs font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
-                   )}>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                     {stat.change}
-                   </span>
-                   {(stat.label === 'Conversations') && (
-                     <span className="text-[9px] font-bold text-primary mt-1 opacity-0 group-hover:opacity-100 transition-opacity">View All →</span>
-                   )}
+                  </span>
+                  {stat.label === 'Conversations' && (
+                    <span className="text-[9px] font-bold text-primary mt-1 opacity-0 group-hover:opacity-100 transition-opacity">View All →</span>
+                  )}
                 </div>
               </div>
               <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
@@ -251,10 +246,10 @@ export default function BotWorkspace() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Main Chart Section (REAL Visualization) */}
+
+          {/* Main Chart Section */}
           <section className="lg:col-span-2 space-y-6">
-            <div className="bg-background border border-border rounded-2xl p-6 shadow-sm overflow-hidden relative min-h-[400px] flex flex-col">
+            <div className="bg-background border border-border rounded-2xl p-6 shadow-sm overflow-hidden relative flex flex-col">
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="font-bold text-lg">Conversation Trends</h3>
@@ -262,36 +257,39 @@ export default function BotWorkspace() {
                 </div>
               </div>
 
-              {/* Chart Implementation */}
-              <div className="flex-1 flex items-end gap-2 px-2 pb-6 pt-4">
+              {/* Chart Implementation — fixed pixel height so bars render correctly */}
+              <div className="flex items-end gap-2 px-2 pb-6 pt-4" style={{ height: '200px' }}>
                 {chartData.length === 0 ? (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm italic">
                     No activity recorded in the last 7 days
                   </div>
                 ) : (
-                  chartData.map((d, i) => {
-                    const heightPercent = (d.total / maxVal) * 100;
+                  chartData.map((d: any, i: number) => {
+                    const heightPx = Math.max((d.total / maxVal) * 160, 4);
                     return (
                       <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                        <div className="w-full relative">
-                          <motion.div 
+                        <div className="w-full relative flex flex-col justify-end" style={{ height: '160px' }}>
+                          {/* Background bar */}
+                          <motion.div
                             initial={{ height: 0 }}
-                            animate={{ height: `${heightPercent}%` }}
+                            animate={{ height: heightPx }}
                             transition={{ duration: 1, delay: i * 0.1 }}
-                            className="w-full bg-primary/20 rounded-t-lg"
+                            className="w-full bg-primary/20 rounded-t-lg absolute bottom-0"
                           />
-                          <motion.div 
+                          {/* Foreground bar */}
+                          <motion.div
                             initial={{ height: 0 }}
-                            animate={{ height: `${heightPercent * 0.7}%` }}
+                            animate={{ height: heightPx * 0.7 }}
                             transition={{ duration: 1.2, delay: i * 0.1 }}
                             className="w-full absolute bottom-0 bg-primary rounded-t-lg shadow-[0_0_15px_rgba(139,92,246,0.3)]"
                           />
-                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                          {/* Tooltip */}
+                          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                             {d.total}
                           </div>
                         </div>
                         <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-tighter">
-                          {new Date(d.date).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                          {new Date(d.date + 'T00:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })}
                         </span>
                       </div>
                     );
@@ -300,8 +298,7 @@ export default function BotWorkspace() {
               </div>
             </div>
 
-
-            {/* Quick Actions Placeholder */}
+            {/* Quick Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5 flex items-center gap-4 hover:bg-primary/10 transition-colors cursor-pointer group">
                 <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -314,10 +311,7 @@ export default function BotWorkspace() {
                   </p>
                 </div>
               </div>
-              <div 
-                // onClick={() => navigate(`/dashboard/bots/${botId}/leads`)}
-                className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4 hover:bg-emerald-500/10 transition-colors cursor-pointer group"
-              >
+              <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-5 flex items-center gap-4 hover:bg-emerald-500/10 transition-colors cursor-pointer group">
                 <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                   <UserIcon size={22} />
                 </div>
@@ -333,8 +327,8 @@ export default function BotWorkspace() {
 
           {/* Sidebar Section */}
           <aside className="space-y-8">
-            
-            {/* Widget Key Section (REAL) */}
+
+            {/* Widget Key Section */}
             <div className="bg-background border border-border rounded-2xl p-6 shadow-sm relative">
               <h3 className="font-bold mb-4 flex items-center gap-2">
                 <ShieldCheck size={18} className="text-blue-500" /> Widget Key
@@ -346,7 +340,7 @@ export default function BotWorkspace() {
                     <div className="w-full h-11 px-4 bg-muted/30 border border-border rounded-lg flex items-center font-mono text-sm overflow-hidden pr-12">
                       {widgetKey ? `${widgetKey.slice(0, 12)}••••••••${widgetKey.slice(-6)}` : 'No embed token found'}
                     </div>
-                    <button 
+                    <button
                       onClick={handleCopyKey}
                       disabled={!widgetKey}
                       className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-50"
@@ -357,19 +351,18 @@ export default function BotWorkspace() {
                   </div>
                 </div>
                 <div className="pt-2">
-                   <Link 
+                  <Link
                     to={`/dashboard/bots/${botId}/deployment`}
                     className="text-xs font-bold text-blue-500 hover:underline flex items-center gap-1"
-                   >
-                     Manage Deployment & Script <ArrowUpRight size={12} />
-                   </Link>
+                  >
+                    Manage Deployment & Script <ArrowUpRight size={12} />
+                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Recent Activity (MOCK) */}
+            {/* Recent Activity */}
             <div className="bg-background border border-border rounded-2xl p-6 shadow-sm relative">
-              <div className="absolute top-2 right-2 text-[8px] font-bold text-muted-foreground/30 uppercase">Mock Activity</div>
               <h3 className="font-bold mb-6 flex items-center gap-2">
                 <Clock size={18} className="text-blue-500" /> Bot Log
               </h3>
@@ -398,7 +391,7 @@ export default function BotWorkspace() {
 function ChevronRight() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
