@@ -31,10 +31,8 @@ export interface Business {
 
 export interface ListResponse<T> {
   success: boolean;
-  data: {
-    items: T[];
-    total: number;
-  };
+  data: T[] | { items: T[]; total: number };
+  meta?: { total: number; page: number; limit: number; totalPages: number };
 }
 
 export interface SingleResponse<T> {
@@ -102,32 +100,34 @@ export async function deleteBot(botId: string): Promise<{ success: boolean }> {
 }
 
 /**
+ * Helper to extract array from either old or new response structure.
+ */
+function extractItems<T>(data: T[] | { items: T[]; total: number }): T[] {
+  if (Array.isArray(data)) return data;
+  return data.items || [];
+}
+
+/**
  * Aggregates all bots across all user businesses.
  */
 export async function listAllBots(): Promise<Bot[]> {
   try {
     const bizRes = await listBusinesses();
-    console.log('DEBUG: listBusinesses response:', bizRes);
-    if (!bizRes.success || !bizRes.data) {
-      console.log('DEBUG: bizRes.success is false or bizRes.data is missing');
-      return [];
-    }
+    if (!bizRes.success || !bizRes.data) return [];
 
-    // Fetch bots for all businesses in parallel
-    const botPromises = (bizRes.data.items || []).map(biz => listBusinessBots(biz.id));
+    const businesses = extractItems<Business>(bizRes.data);
+    if (businesses.length === 0) return [];
+
+    const botPromises = businesses.map(biz => listBusinessBots(biz.id));
     const botResults = await Promise.all(botPromises);
-    console.log('DEBUG: botResults:', botResults);
 
-    // Flatten and return all bots
-    const allBots = botResults.flatMap(res => {
-      if (!res.success) return [];
-      return res.data.items || [];
+    return botResults.flatMap(res => {
+      if (!res.success || !res.data) return [];
+      return extractItems<Bot>(res.data);
     });
-    console.log('DEBUG: Final allBots:', allBots);
-    return allBots;
 
   } catch (error) {
-    console.error('DEBUG: Failed to list all bots:', error);
+    console.error('Failed to list all bots:', error);
     return [];
   }
 }
