@@ -365,7 +365,7 @@ export function Step5Theme() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full ">
       <div className="mb-6">
         <h2 className="text-2xl font-bold mb-2">Theme & Customization</h2>
         <p className="text-muted-foreground">Select a starting theme and fine-tune to match your brand perfectly.</p>
@@ -386,7 +386,7 @@ export function Step5Theme() {
                   }}
                   className={cn(
                     "relative border rounded-xl p-3 cursor-pointer transition-all hover:scale-[1.02] flex flex-col gap-3 overflow-hidden",
-                    isSelected ? "border-primary shadow-sm" : "border-border hover:border-primary/50"
+                    isSelected ? "border-blue-500 shadow-sm" : "border-border hover:border-blue-500"
                   )}
                 >
                   {isSelected && (
@@ -451,7 +451,7 @@ export function Step5Theme() {
                 title="Widget Position"
                 value={widgetPosition}
                 onChange={(e) => setField('widgetPosition', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300 transition-all"
               >
                 <option value="bottom-right">Bottom right</option>
                 <option value="bottom-left">Bottom left</option>
@@ -481,7 +481,7 @@ export function Step5Theme() {
                 title="Font Style"
                 value={fontStyle}
                 onChange={(e) => setField('fontStyle', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300 transition-all"
               >
                 <option>System default</option>
                 <option>Rounded (Nunito)</option>

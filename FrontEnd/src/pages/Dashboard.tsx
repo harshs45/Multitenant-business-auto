@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [view, setView] = useState<"grid" | "list">("grid");
 
   useEffect(() => {
     async function fetchAllBots() {
@@ -82,9 +83,32 @@ export default function Dashboard() {
             />
           </div>
           <div className="flex bg-background border border-border rounded-xl p-1 shrink-0">
-             <button className="p-2 bg-muted text-blue-600 rounded-lg transition-all"><LayoutGrid size={18} /></button>
-             <button className="p-2 text-muted-foreground hover:bg-muted/50 rounded-lg transition-all hover:text-foreground"><ListIcon size={18} /></button>
-          </div>
+          {/* Grid Button */}
+          <button
+            onClick={() => setView("grid")}
+            className={`p-2 rounded-lg transition-all ${
+              view === "grid"
+                ? "bg-muted text-blue-600"
+                : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+            }`}
+          >
+            <LayoutGrid size={18} />
+          </button>
+
+          {/* List Button */}
+          <button
+            onClick={() => setView("list")}
+            className={`p-2 rounded-lg transition-all ${
+              view === "list"
+                ? "bg-muted text-blue-600"
+                : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+            }`}
+          >
+            <ListIcon size={18} />
+          </button>
+
+        </div>
+        
         </div>
 
         {/* Bot Grid / List */}
@@ -119,7 +143,13 @@ export default function Dashboard() {
                )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              className={
+                view === "grid"
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  : "flex flex-col gap-4"
+              }
+            >
                <AnimatePresence>
                  {filteredBots.map((bot, i) => (
                    <motion.div
@@ -128,7 +158,12 @@ export default function Dashboard() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.05 }}
                     onClick={() => navigate(`/dashboard/bots/${bot.id}`)}
-                    className="bg-background border border-border rounded-2xl p-6 shadow-sm hover:border-blue-300 transition-all cursor-pointer group flex flex-col justify-between"
+                    className={cn(
+                  "bg-background border border-border rounded-2xl p-6 shadow-sm hover:border-blue-300 transition-all cursor-pointer group",
+                  view === "grid"
+                    ? "flex flex-col justify-between"
+                    : "flex flex-row items-center gap-4"
+                )}
                    >
                      <div>
                         <div className="flex items-start justify-between mb-4">
@@ -148,7 +183,14 @@ export default function Dashboard() {
                         </p>
                      </div>
 
-                     <div className="mt-8 pt-6 border-t border-border flex items-center justify-between text-xs font-semibold text-muted-foreground">
+                     <div
+                      className={cn(
+                        "text-xs font-semibold text-muted-foreground flex items-center gap-4",
+                        view === "grid"
+                          ? "mt-8 pt-6 border-t border-border justify-between"
+                          : "ml-auto items-center gap-6"
+                      )}
+                    >
                         <div className="flex items-center gap-1.5">
                            <Database size={14} /> Knowledge Base Ready
                         </div>
