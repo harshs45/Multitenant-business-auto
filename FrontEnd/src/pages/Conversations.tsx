@@ -57,8 +57,7 @@ export default function Conversations() {
         }
 
       } catch (err: unknown) {
-        const message =
-          err instanceof Error ? err.message : 'Failed to load data';
+        const message = err instanceof Error ? err.message : 'Failed to load data';
         setError(message);
       } finally {
         setLoading(false);
@@ -168,7 +167,7 @@ export default function Conversations() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  onClick={() => openTranscript(conv.id)}
+                  onClick={() => openTranscript(conv.sessionId || conv.id)}
                   className="p-6 hover:bg-muted/30 transition-all cursor-pointer group flex items-center justify-between"
                 >
                   <div className="flex items-center gap-6">
@@ -178,7 +177,7 @@ export default function Conversations() {
 
                     <div className="space-y-1">
                       <h4 className="font-bold text-foreground flex items-center gap-2">
-                        Session: {conv.id.slice(0, 13)}...
+                        Session: {(conv.sessionId || conv.id).slice(0, 13)}...
                         <span
                           className={cn(
                             'flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded',
