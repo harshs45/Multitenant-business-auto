@@ -1,11 +1,8 @@
-const Redis = require('ioredis');
-
-let redis = null;
-
 const getRedis = () => {
   if (redis) return redis;
 
   const redisUrl = process.env.REDIS_URL;
+  console.log('Redis URL present:', !!redisUrl); // ← add this
 
   redis = redisUrl
     ? new Redis(redisUrl, {
@@ -14,8 +11,7 @@ const getRedis = () => {
           if (times > 5) return null;
           return Math.min(times * 200, 2000);
         },
-        lazyConnect: true,
-        tls: redisUrl.startsWith('rediss://') ? {} : undefined, // Upstash requires TLS
+        tls: redisUrl.startsWith('rediss://') ? {} : undefined,
       })
     : new Redis({
         host: process.env.REDIS_HOST || '127.0.0.1',
@@ -26,13 +22,13 @@ const getRedis = () => {
           if (times > 5) return null;
           return Math.min(times * 200, 2000);
         },
-        lazyConnect: true,
       });
 
   redis.on('connect', () => console.log('✅  Redis connected'));
   redis.on('error', (err) => console.error('❌  Redis error:', err.message));
+  redis.on('ready', () => console.log('✅  Redis ready'));
+
+  redis.connect().catch(err => console.error('❌ Redis connect failed:', err.message));
 
   return redis;
 };
-
-module.exports = { getRedis };
