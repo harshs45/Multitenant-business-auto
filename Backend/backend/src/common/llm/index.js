@@ -4,8 +4,9 @@ const openai = require('./openai');
 const anthropic = require('./anthropic');
 const ollama = require('./ollama');
 const mock = require('./mock');
+const groq = require('./groq');
 
-const PROVIDERS = { gemini, openai, anthropic, ollama, mock };
+const PROVIDERS = { gemini, openai, anthropic, ollama, mock, groq };
 
 const getProvider = () => {
   const provider = secrets.llmProvider();
@@ -42,7 +43,9 @@ const chatWithFallback = async (systemPrompt, userMessage) => {
       gemini: process.env.GEMINI_KEY || process.env.GEMINI_API_KEY,
       openai: process.env.OPENAI_KEY,
       anthropic: process.env.ANTHROPIC_KEY,
+      groq: process.env.GROQ_KEY,
     };
+
     if (!keyless.includes(providerName) && !keyMap[providerName]) {
       console.warn(`[LLM] Skipping "${providerName}" — no API key configured.`);
       continue;
