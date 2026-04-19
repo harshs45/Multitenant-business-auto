@@ -35,31 +35,69 @@ export default function ChatWidget() {
     async function initChat() {
       try {
         // Fetch config
-       const confRes = await fetch(`${API_URL}/widget/config?key=${encodeURIComponent(publicKey!)}`);
+        const confRes = await fetch(`${API_URL}/widget/config?key=${encodeURIComponent(publicKey!)}`);
         const confData = await confRes.json();
-        if (confData.success) {
-          setConfig(confData.data);
-          
-          // Optionally add welcome message first
-          if (confData.data.welcomeMessage) {
-            setMessages([{ role: "assistant", content: confData.data.welcomeMessage }]);
+
+        if (!confData.success) {
+          setLoading(false);
+          return;
+        }
+
+        setConfig(confData.data);
+
+        // Check for existing session in localStorage
+        const storedSessionId = localStorage.getItem(`botforge_session_${publicKey}`);
+
+        if (storedSessionId) {
+          // Try to restore existing session and its history
+          try {
+            const histRes = await fetch(`${API_URL}/chat/${publicKey}/history/${storedSessionId}`);
+            const histData = await histRes.json();
+
+            if (histData.success && histData.data?.messages?.length > 0) {
+              // Restore messages from history
+              setSessionId(storedSessionId);
+              setMessages(
+                histData.data.messages.map((m: any) => ({
+                  role: m.role,
+                  content: m.content,
+                }))
+              );
+              setLoading(false);
+              return;
+            }
+          } catch {
+            // History fetch failed — fall through to create new session
           }
 
-          // Start session
-          const sessRes = await fetch(`${API_URL}/chat/${publicKey}/session`, {
-            method: "POST"
-          });
-          const sessData = await sessRes.json();
-          if (sessData.success) {
-            setSessionId(sessData.data.sessionId);
-          }
+          // Session not found or empty — clear stored session
+          localStorage.removeItem(`botforge_session_${publicKey}`);
         }
+
+        // No stored session or session expired — create new one
+        if (confData.data.welcomeMessage) {
+          setMessages([{ role: "assistant", content: confData.data.welcomeMessage }]);
+        }
+
+        const sessRes = await fetch(`${API_URL}/chat/${publicKey}/session`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({}),
+        });
+        const sessData = await sessRes.json();
+
+        if (sessData.success) {
+          setSessionId(sessData.data.sessionId);
+          localStorage.setItem(`botforge_session_${publicKey}`, sessData.data.sessionId);
+        }
+
       } catch (err) {
         console.error("Error initializing chat:", err);
       } finally {
         setLoading(false);
       }
     }
+
     initChat();
   }, [publicKey]);
 
@@ -76,18 +114,24 @@ export default function ChatWidget() {
       const res = await fetch(`${API_URL}/chat/${publicKey}/message`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, message: userMsg })
+        body: JSON.stringify({ sessionId, message: userMsg }),
       });
       const data = await res.json();
-      
+
       if (data.success) {
         setMessages((prev) => [...prev, { role: "assistant", content: data.data.reply }]);
       } else {
-        setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I had trouble processing that request." }]);
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "Sorry, I had trouble processing that request." },
+        ]);
       }
     } catch (err) {
       console.error("Chat error:", err);
-      setMessages((prev) => [...prev, { role: "assistant", content: "Connection error encountered." }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Connection error encountered." },
+      ]);
     } finally {
       setSending(false);
     }
@@ -115,8 +159,8 @@ export default function ChatWidget() {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-white dark:bg-[#1a1a1a] font-sans">
       {/* Header */}
-      <div 
-        className="flex items-center gap-3 p-4 shadow-md z-10 text-white" 
+      <div
+        className="flex items-center gap-3 p-4 shadow-md z-10 text-white"
         style={{ backgroundColor: primaryColor }}
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
@@ -124,7 +168,9 @@ export default function ChatWidget() {
         </div>
         <div>
           <h2 className="font-semibold text-lg leading-tight">{config.botName || "Virtual Assistant"}</h2>
-          <p className="text-xs text-white/90">{config.language === 'en' ? 'Online and ready to help' : 'Online'}</p>
+          <p className="text-xs text-white/90">
+            {config.language === "en" ? "Online and ready to help" : "Online"}
+          </p>
         </div>
       </div>
 
@@ -132,11 +178,11 @@ export default function ChatWidget() {
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-zinc-900">
         {messages.map((msg, i) => (
           <div key={i} className={cn("flex w-full", msg.role === "user" ? "justify-end" : "justify-start")}>
-            <div 
+            <div
               className={cn(
                 "relative max-w-[85%] rounded-2xl px-4 py-2.5 text-sm shadow-sm",
-                msg.role === "user" 
-                  ? "text-white" 
+                msg.role === "user"
+                  ? "text-white"
                   : "bg-white text-gray-800 dark:bg-zinc-800 dark:text-zinc-200 border border-gray-100 dark:border-zinc-700/50"
               )}
               style={msg.role === "user" ? { backgroundColor: primaryColor } : {}}
@@ -147,9 +193,9 @@ export default function ChatWidget() {
         ))}
         {sending && (
           <div className="flex w-full justify-start">
-             <div className="max-w-[85%] rounded-2xl bg-white px-4 py-2.5 text-sm text-gray-500 shadow-sm dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700/50">
-                <Loader2 className="h-4 w-4 animate-spin" />
-             </div>
+            <div className="max-w-[85%] rounded-2xl bg-white px-4 py-2.5 text-sm text-gray-500 shadow-sm dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700/50">
+              <Loader2 className="h-4 w-4 animate-spin" />
+            </div>
           </div>
         )}
         <div ref={messagesEndRef} />

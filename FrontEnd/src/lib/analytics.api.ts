@@ -41,6 +41,17 @@ export interface PaginatedResponse<T> {
   };
 }
 
+// Raw response from backend getHistory endpoint
+interface ConversationHistoryResponse {
+  success: boolean;
+  data: {
+    id: string;
+    sessionId: string;
+    status: string;
+    messages: Message[];
+  };
+}
+
 /**
  * Fetches paginated leads for a specific bot.
  */
@@ -57,8 +68,12 @@ export async function listConversations(botId: string, page = 1, limit = 10): Pr
 
 /**
  * Fetches transcript history using a bot's Widget Key.
- * NOTE: This uses the widget history endpoint for stability.
+ * Backend returns a conversation object with nested messages array.
  */
 export async function getConversationHistory(widgetKey: string, sessionId: string): Promise<{ success: boolean; data: Message[] }> {
-  return request<{ success: boolean; data: Message[] }>(`/chat/${widgetKey}/history/${sessionId}`);
+  const res = await request<ConversationHistoryResponse>(`/chat/${widgetKey}/history/${sessionId}`);
+  return {
+    success: res.success,
+    data: res.data?.messages || [],
+  };
 }
