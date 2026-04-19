@@ -1,7 +1,7 @@
 const { Op, fn, col, literal } = require('sequelize');
 const { Bot, Business, Conversation, Message, Lead, HandoffRequest, UsageLog } = require('../../models');
 const AppError = require('../../common/errors/AppError');
-const { paginate, paginatedResponse } = require('../../common/utils/pagination');
+const { paginate, paginatedResponseV2 } = require('../../common/utils/pagination');
 
 const verifyBotOwnership = async (botId, userId) => {
   const bot = await Bot.findByPk(botId, {
@@ -74,7 +74,7 @@ const getConversations = async (botId, userId, query) => {
     order: [['createdAt', 'DESC']],
   });
 
-  return paginatedResponse(rows, count, { page, limit });
+  return paginatedResponseV2(rows, count, { page, limit });
 };
 
 /**
@@ -91,7 +91,8 @@ const getLeads = async (botId, userId, query) => {
     order: [['createdAt', 'DESC']],
   });
 
-  return paginatedResponse(rows, count, { page, limit });
+  return paginatedResponseV2(rows, count, { page, limit });
 };
 
 module.exports = { getOverview, getConversations, getLeads };
+

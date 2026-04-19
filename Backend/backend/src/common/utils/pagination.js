@@ -24,4 +24,23 @@ const paginatedResponse = (rows, count, { page, limit }) => {
   return payload;
 };
 
-module.exports = { paginate, paginatedResponse };
+/**
+ * Newer version for Analytics & Bots API.
+ * Matches Frontend ListResponse/PaginatedResponse interfaces.
+ */
+const paginatedResponseV2 = (rows, count, { page, limit }) => {
+  return {
+    data: {
+      items: rows,
+      total: count,
+    },
+    pagination: {
+      page,
+      limit,
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+    },
+  };
+};
+
+module.exports = { paginate, paginatedResponse, paginatedResponseV2 };
