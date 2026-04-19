@@ -90,7 +90,7 @@ export function CompletionScreen() {
                {copied ? <><Check size={14} className="text-green-500" /> Copied</> : <><Copy size={14} /> Copy fragment</>}
              </button>
           </div>
-          <pre className="bg-[#1a1a2e] text-[#a9b1d6] p-4 rounded-b-xl overflow-x-auto text-sm border border-border">
+          <pre className="bg-[#1a1a2e] text-[#a9b1d6] p-4 rounded-b-xl overflow-x-auto text-sm border border-border whitespace-pre-wrap break-words">
             <code>{embedCode}</code>
           </pre>
         </div>
@@ -111,11 +111,12 @@ export function CompletionScreen() {
            </Link>
         </div>
       </div>
-
       {/* Right Column: Mini Preview */}
-      <div className="hidden lg:block w-[400px]">
-        <ChatPreview />
+          <div className="pl-20 hidden lg:flex w-[460px] flex-shrink-0 ">
+            <div className="sticky top-0 ">
+            <ChatPreview />
+            </div>
+          </div>
       </div>
-    </div>
   );
 }
