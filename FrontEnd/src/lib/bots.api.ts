@@ -113,27 +113,19 @@ export async function listAllBots(): Promise<Bot[]> {
       return [];
     }
 
-    // Checking if items exists to avoid the expected crash
-    const items = (bizRes.data as any).items || bizRes.data;
-    console.log('DEBUG: Extracted items:', items);
-
-    if (!Array.isArray(items) || items.length === 0) {
-      console.log('DEBUG: No businesses found (items is empty or not an array)');
-      return [];
-    }
-
     // Fetch bots for all businesses in parallel
-    const botPromises = items.map(biz => listBusinessBots(biz.id));
+    const botPromises = (bizRes.data.items || []).map(biz => listBusinessBots(biz.id));
     const botResults = await Promise.all(botPromises);
     console.log('DEBUG: botResults:', botResults);
 
     // Flatten and return all bots
     const allBots = botResults.flatMap(res => {
       if (!res.success) return [];
-      return (res.data as any).items || res.data || [];
+      return res.data.items || [];
     });
     console.log('DEBUG: Final allBots:', allBots);
     return allBots;
+
   } catch (error) {
     console.error('DEBUG: Failed to list all bots:', error);
     return [];

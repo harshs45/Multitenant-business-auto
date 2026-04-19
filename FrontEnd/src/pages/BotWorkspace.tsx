@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { getAnalyticsOverview, type AnalyticsOverview } from '../lib/api';
 import { getBotById, type Bot } from '../lib/bots.api';
 import { 
-  BarChart3, 
+  
   MessageSquare, 
   FileText, 
   Plus, 
@@ -112,36 +112,46 @@ export default function BotWorkspace() {
     { 
       label: 'Conversations', 
       value: analytics?.totalConversations?.toLocaleString() || '0', 
-      change: '+12.5%', 
+      change: 'Lifetime', 
       icon: MessageSquare, 
       color: 'text-blue-500',
-      source: 'REAL'
     },
     { 
       label: 'Messages', 
       value: analytics?.totalMessages?.toLocaleString() || '0', 
-      change: 'Recent', 
+      change: 'Total', 
       icon: TrendingUp, 
       color: 'text-purple-500',
-      source: 'REAL'
     },
     { 
       label: 'Leads Collected', 
       value: analytics?.totalLeads?.toLocaleString() || '0', 
-      change: '+2', 
+      change: 'New', 
       icon: UserIcon, 
       color: 'text-emerald-500',
-      source: 'REAL'
     },
     { 
-      label: 'API Usage', 
-      value: '82%', 
-      change: 'Normal', 
-      icon: BarChart3, 
+      label: 'Handoffs', 
+      value: analytics?.totalHandoffs?.toLocaleString() || '0', 
+      change: 'Active', 
+      icon: ShieldCheck, 
       color: 'text-amber-500',
-      source: 'MOCK'
     },
   ];
+
+  // Map daily usage to chart: we sum all event types per date
+  const chartData = (analytics?.dailyUsage || []).reduce((acc: any[], curr) => {
+    const existing = acc.find(a => a.date === curr.eventDate);
+    if (existing) {
+      existing.total += parseInt(curr.total as any, 10);
+    } else {
+      acc.push({ date: curr.eventDate, total: parseInt(curr.total as any, 10) });
+    }
+    return acc;
+  }, [])
+  .slice(-7); // Last 7 days
+
+  const maxVal = Math.max(...chartData.map(d => d.total), 1);
 
   const activities = [
     { id: 1, type: 'bot', text: 'Bot configuration updated', time: '2 hours ago', icon: ShieldCheck },
@@ -213,28 +223,23 @@ export default function BotWorkspace() {
               transition={{ delay: i * 0.1 }}
               onClick={() => {
                 if (stat.label === 'Conversations') navigate(`/dashboard/bots/${botId}/conversations`);
-               // if (stat.label === 'Leads Collected') navigate(`/dashboard/bots/${botId}/leads`);
               }}
               className={cn(
                 "bg-background border border-border rounded-2xl p-6 shadow-sm group hover:border-blue-300 transition-colors relative overflow-hidden",
-                (stat.label === 'Conversations' || stat.label === 'Leads Collected') && "cursor-pointer"
+                (stat.label === 'Conversations') && "cursor-pointer"
               )}
             >
-              {stat.source === 'MOCK' && (
-                <div className="absolute top-0 right-0 px-2 py-0.5 bg-muted text-[8px] font-bold text-muted-foreground uppercase rounded-bl-lg">Mock</div>
-              )}
               <div className="flex items-center justify-between mb-4">
                 <div className={cn("p-2 rounded-xl bg-muted/50 group-hover:bg-primary/10 transition-colors", stat.color)}>
                   <stat.icon size={20} />
                 </div>
                 <div className="flex flex-col items-end">
                    <span className={cn(
-                    "text-xs font-semibold px-2 py-0.5 rounded-full",
-                    stat.change.startsWith('+') ? "bg-emerald-500/10 text-emerald-500" : "bg-muted text-muted-foreground"
+                    "text-xs font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
                    )}>
                     {stat.change}
                    </span>
-                   {(stat.label === 'Conversations' || stat.label === 'Leads Collected') && (
+                   {(stat.label === 'Conversations') && (
                      <span className="text-[9px] font-bold text-primary mt-1 opacity-0 group-hover:opacity-100 transition-opacity">View All →</span>
                    )}
                 </div>
@@ -247,10 +252,9 @@ export default function BotWorkspace() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Main Chart Section (MOCK Visualization) */}
+          {/* Main Chart Section (REAL Visualization) */}
           <section className="lg:col-span-2 space-y-6">
             <div className="bg-background border border-border rounded-2xl p-6 shadow-sm overflow-hidden relative min-h-[400px] flex flex-col">
-              <div className="absolute top-2 right-2 px-2 py-0.5 bg-muted text-[8px] font-bold text-muted-foreground uppercase rounded-md">Mock Metrics</div>
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="font-bold text-lg">Conversation Trends</h3>
@@ -258,29 +262,44 @@ export default function BotWorkspace() {
                 </div>
               </div>
 
-              {/* Chart Placeholder */}
+              {/* Chart Implementation */}
               <div className="flex-1 flex items-end gap-2 px-2 pb-6 pt-4">
-                {[45, 60, 40, 85, 65, 90, 75].map((val, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                    <div className="w-full relative">
-                      <motion.div 
-                        initial={{ height: 0 }}
-                        animate={{ height: `${val}%` }}
-                        transition={{ duration: 1, delay: i * 0.1 }}
-                        className="w-full bg-primary/20 rounded-t-lg"
-                      />
-                      <motion.div 
-                        initial={{ height: 0 }}
-                        animate={{ height: `${val * 0.7}%` }}
-                        transition={{ duration: 1.2, delay: i * 0.1 }}
-                        className="w-full absolute bottom-0 bg-primary rounded-t-lg shadow-[0_0_15px_rgba(139,92,246,0.3)]"
-                      />
-                    </div>
-                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-tighter">Day {i+1}</span>
+                {chartData.length === 0 ? (
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm italic">
+                    No activity recorded in the last 7 days
                   </div>
-                ))}
+                ) : (
+                  chartData.map((d, i) => {
+                    const heightPercent = (d.total / maxVal) * 100;
+                    return (
+                      <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                        <div className="w-full relative">
+                          <motion.div 
+                            initial={{ height: 0 }}
+                            animate={{ height: `${heightPercent}%` }}
+                            transition={{ duration: 1, delay: i * 0.1 }}
+                            className="w-full bg-primary/20 rounded-t-lg"
+                          />
+                          <motion.div 
+                            initial={{ height: 0 }}
+                            animate={{ height: `${heightPercent * 0.7}%` }}
+                            transition={{ duration: 1.2, delay: i * 0.1 }}
+                            className="w-full absolute bottom-0 bg-primary rounded-t-lg shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+                          />
+                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                            {d.total}
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-tighter">
+                          {new Date(d.date).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
+
 
             {/* Quick Actions Placeholder */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
