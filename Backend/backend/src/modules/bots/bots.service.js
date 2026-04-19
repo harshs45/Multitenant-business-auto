@@ -190,6 +190,8 @@ const updateTheme = async (botId, userId, data) => {
   if (data.customPrimaryColor !== undefined) theme.customPrimaryColor = data.customPrimaryColor;
   if (data.widgetPosition !== undefined) theme.widgetPosition = data.widgetPosition;
   if (data.customCss !== undefined) theme.customCss = data.customCss;
+  if (data.borderRadius !== undefined) theme.borderRadius = data.borderRadius;
+  if (data.fontStyle !== undefined) theme.fontStyle = data.fontStyle;
   await theme.save();
 
   bot.setupComplete = true;

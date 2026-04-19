@@ -62,6 +62,36 @@ const THEMES = {
     bgColor: '#fffbeb',
     fontFamily: 'Source Sans Pro, sans-serif',
   },
+  azure_mist: {
+    key: 'azure_mist',
+    label: 'Azure Mist',
+    primaryColor: '#0645d9',
+    secondaryColor: '#3b82f6',
+    accentColor: '#93c5fd',
+    textColor: '#0f2d4a',
+    bgColor: '#f4f8fd',
+    fontFamily: 'Inter, sans-serif',
+  },
+  pearl_linen: {
+    key: 'pearl_linen',
+    label: 'Pearl Linen',
+    primaryColor: '#6d28d9',
+    secondaryColor: '#7c3aed',
+    accentColor: '#dbeafe',
+    textColor: '#1f2937',
+    bgColor: '#fbfbfa',
+    fontFamily: 'Outfit, sans-serif',
+  },
+  standard: {
+    key: 'standard',
+    label: 'Standard Glass',
+    primaryColor: '#ffffff',
+    secondaryColor: '#f3f4f6',
+    accentColor: '#3b82f6',
+    textColor: '#1f2937',
+    bgColor: '#ffffff',
+    fontFamily: 'Inter, sans-serif',
+  },
 };
 
 const THEME_KEYS = Object.keys(THEMES);

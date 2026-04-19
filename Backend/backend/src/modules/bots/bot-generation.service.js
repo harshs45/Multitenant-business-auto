@@ -22,12 +22,15 @@ const BUSINESS_TYPE_MAP = {
 
 /* ─── Theme-key mapping (frontend → backend) ────────────── */
 const THEME_KEY_MAP = {
-  midnight: 'midnight_pro',
-  emerald: 'emerald_fresh',
+  midnight_pro: 'midnight_pro',
+  emerald_fresh: 'emerald_fresh',
   sakura: 'sakura',
-  ocean: 'ocean_breeze',
-  slate: 'slate_classic',
-  amber: 'warm_amber',
+  ocean_breeze: 'ocean_breeze',
+  slate_classic: 'slate_classic',
+  warm_amber: 'warm_amber',
+  azure_mist: 'azure_mist',
+  pearl_linen: 'pearl_linen',
+  standard: 'standard',
 };
 
 /* ─── Tone mapping (frontend label → backend key) ───────── */
@@ -200,6 +203,8 @@ const generateBotTx = async (userId, payload) => {
       themeKey,
       customPrimaryColor: payload.accentColor || null,
       widgetPosition,
+      borderRadius: payload.borderRadius !== undefined ? payload.borderRadius : 12,
+      fontStyle: payload.fontStyle || 'Modern',
     }, { transaction: t });
 
     // ─── 8. Build System Prompt & Publish ─────────────────

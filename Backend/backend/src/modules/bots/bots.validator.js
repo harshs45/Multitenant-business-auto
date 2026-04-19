@@ -32,6 +32,8 @@ const themeRules = [
   body('customPrimaryColor').optional().matches(/^#[0-9A-Fa-f]{6}$/).withMessage('Must be a valid hex color'),
   body('widgetPosition').optional().isIn(['bottom-right', 'bottom-left', 'center']),
   body('customCss').optional().isString(),
+  body('borderRadius').optional().isInt({ min: 0, max: 50 }).withMessage('Border radius must be between 0 and 50'),
+  body('fontStyle').optional().isString().isLength({ max: 50 }),
 ];
 
 module.exports = { createRules, idParam, identityRules, featuresRules, themeRules };

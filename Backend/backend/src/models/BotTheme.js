@@ -32,6 +32,18 @@ module.exports = (sequelize) => {
       allowNull: true,
       field: 'custom_css',    // ✅ explicit mapping
     },
+    borderRadius: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 12,
+      field: 'border_radius', // ✅ explicit mapping
+    },
+    fontStyle: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+      defaultValue: 'Modern',
+      field: 'font_style',    // ✅ explicit mapping
+    },
   }, {
     tableName: 'bot_themes',
     timestamps: true,         // ✅ removed underscored: true
