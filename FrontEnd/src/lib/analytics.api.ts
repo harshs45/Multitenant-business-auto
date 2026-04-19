@@ -12,6 +12,7 @@ export interface Lead {
 
 export interface Conversation {
   id: string;
+  sessionId: string;  // ← this line must be present
   botId: string;
   status: 'active' | 'resolved' | 'handoff';
   userId?: string;
