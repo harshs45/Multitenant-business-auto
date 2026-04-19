@@ -138,6 +138,7 @@ export interface GenerateBotPayload {
   fallbackEmail: string;
   features: Record<string, boolean>;
   themeId: string;
+  themeKey?: string;
   accentColor: string;
   widgetPosition: string;
   borderRadius: number;

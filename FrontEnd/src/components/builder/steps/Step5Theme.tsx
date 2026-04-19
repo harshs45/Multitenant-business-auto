@@ -5,7 +5,7 @@ import { cn } from "../../../lib/utils";
 import { generateBot } from "../../../lib/api";
 
 const THEMES = [
-  { id: 'midnight',  name: 'Midnight Pro',    sub: 'Dark & sleek',       chatBg: '#0f0f23', botBg: '#16213e', userBg: '#7F77DD' ,
+  { id: 'midnight_pro',  name: 'Midnight Pro',    sub: 'Dark & sleek',       chatBg: '#0f0f23', botBg: '#16213e', userBg: '#7F77DD' ,
     svg:(
       <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
   <title>Midnight Pro Theme</title>
@@ -56,7 +56,7 @@ const THEMES = [
   <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#a78bfa">⬡ Midnight Pro</text>
 </svg>
     )},
-  { id: 'emerald',   name: 'Emerald Fresh',   sub: 'Clean & natural',    chatBg: '#f0fdf4', botBg: '#d1fae5', userBg: '#059669',svg:(
+  { id: 'emerald_fresh',   name: 'Emerald Fresh',   sub: 'Clean & natural',    chatBg: '#f0fdf4', botBg: '#d1fae5', userBg: '#059669',svg:(
       <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
   <title>Emerald Fresh Theme</title>
   <desc>BotForge chatbot theme preview – Emerald Fresh</desc>
@@ -155,7 +155,7 @@ const THEMES = [
   <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#f9a8d4">⬡ Sakura</text>
 </svg>
     ) },
-  { id: 'ocean',     name: 'Ocean Breeze',    sub: 'Calm & clear',       chatBg: '#eff6ff', botBg: '#dbeafe', userBg: '#2563eb',svg:(
+  { id: 'ocean_breeze',     name: 'Ocean Breeze',    sub: 'Calm & clear',       chatBg: '#eff6ff', botBg: '#dbeafe', userBg: '#2563eb',svg:(
       <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
   <title>Ocean Breeze Theme</title>
   <desc>BotForge chatbot theme preview – Ocean Breeze</desc>
@@ -205,7 +205,7 @@ const THEMES = [
   <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd">⬡ Ocean Breeze</text>
 </svg>
     ) },
-  { id: 'slate',     name: 'Slate Classic',   sub: 'Professional',       chatBg: '#f8fafc', botBg: '#f1f5f9', userBg: '#475569',svg:(
+  { id: 'slate_classic',     name: 'Slate Classic',   sub: 'Professional',       chatBg: '#f8fafc', botBg: '#f1f5f9', userBg: '#475569',svg:(
       <svg viewBox="0 0 280 360" className="w-full h-fulltransition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
   <title>Slate Classic Theme</title>
   <desc>BotForge chatbot theme preview – Slate Classic</desc>
@@ -255,7 +255,7 @@ const THEMES = [
   <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#94a3b8">⬡ Slate Classic</text>
 </svg>
     ) },
-  { id: 'azure',     name: 'Azure Mist',      sub: 'Friendly & bold',    chatBg: '#ddf5f9', botBg: '#fcffff', userBg: '#0645d9', svg:(
+  { id: 'azure_mist',     name: 'Azure Mist',      sub: 'Friendly & bold',    chatBg: '#ddf5f9', botBg: '#fcffff', userBg: '#0645d9', svg:(
      <svg viewBox="0 0 280 360" className="w-full h-full transition-transform duration-300 hover:scale-105" xmlns="http://www.w3.org/2000/svg" role="img">
   <title>Azure Mist Theme</title>
   <desc>BotForge chatbot theme preview – Azure Mist</desc>
@@ -305,7 +305,7 @@ const THEMES = [
   <rect x="24" y="310" width="110" height="16" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.5"/>
   <text x="30" y="322" font-family="system-ui, sans-serif" font-size="9" fill="#1d4ed8">⬡ Azure Mist</text>
 </svg>
-    ) },{ id: 'pearl',     name: 'Pearl Linen Theme',      sub: 'Friendly & bold',    chatBg: '#fbfbfa', botBg: '#eeeeee', userBg: '#6d28d9',}
+    ) },{ id: 'pearl_linen',  name: 'Pearl Linen Theme',      sub: 'Friendly & bold',    chatBg: '#fbfbfa', botBg: '#eeeeee', userBg: '#6d28d9',}
 ];
 
 export function Step5Theme() {
@@ -348,6 +348,7 @@ export function Step5Theme() {
         fallbackEmail: store.fallbackEmail,
         features: store.features,
         themeId: store.themeId,
+        themeKey: store.themeId, // Ensure both are sent for compatibility
         accentColor: store.accentColor,
         widgetPosition: store.widgetPosition,
         borderRadius: store.borderRadius,
@@ -483,10 +484,10 @@ export function Step5Theme() {
                 onChange={(e) => setField('fontStyle', e.target.value)}
                 className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
               >
-                <option>System default</option>
-                <option>Rounded (Nunito)</option>
-                <option>Elegant (Playfair)</option>
-                <option>Mono (JetBrains Mono)</option>
+                <option>Modern</option>
+                <option>Rounded</option>
+                <option>Elegant</option>
+                <option>Mono</option>
               </select>
             </div>
           </div>

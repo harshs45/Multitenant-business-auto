@@ -68,6 +68,8 @@ export interface BotTheme {
   customPrimaryColor: string | null;
   widgetPosition: 'bottom-right' | 'bottom-left' | 'center';
   customCss?: string | null;
+  borderRadius?: number;
+  fontStyle?: string;
 }
 
 /**

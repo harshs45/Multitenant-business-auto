@@ -80,11 +80,11 @@ export const useWizardStore = create<BuilderState>((set) => ({
     'offline-message': true,
   },
   
-  themeId: 'midnight',
+  themeId: 'midnight_pro',
   accentColor: '#8B5CF6',
   widgetPosition: 'bottom-right',
   borderRadius: 12,
-  fontStyle: 'system',
+  fontStyle: 'Modern',
 
   botId: null,
   publicKey: null,

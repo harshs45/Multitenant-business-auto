@@ -33,10 +33,15 @@ const PRESETS = [
 ];
 
 const THEMES = [
-  { key: 'emerald', name: 'Zest', bg: 'bg-emerald-500', desc: 'Modern & Vibrant' },
-  { key: 'midnight', name: 'Dark Ops', bg: 'bg-slate-900', desc: 'Deep & Focused' },
-  { key: 'ocean', name: 'Arctic', bg: 'bg-blue-500', desc: 'Fresh & Clean' },
+  { key: 'emerald_fresh', name: 'Zest', bg: 'bg-emerald-500', desc: 'Modern & Vibrant' },
+  { key: 'midnight_pro', name: 'Dark Ops', bg: 'bg-slate-900', desc: 'Deep & Focused' },
+  { key: 'ocean_breeze', name: 'Arctic', bg: 'bg-blue-500', desc: 'Fresh & Clean' },
   { key: 'standard', name: 'Glass', bg: 'bg-white', desc: 'Minimal & Light' },
+  { key: 'sakura', name: 'Sakura', bg: 'bg-pink-400', desc: 'Soft & Warm' },
+  { key: 'azure_mist', name: 'Azure', bg: 'bg-blue-400', desc: 'Clean & Airy' },
+  { key: 'slate_classic', name: 'Slate', bg: 'bg-slate-500', desc: 'Professional' },
+  { key: 'warm_amber', name: 'Amber', bg: 'bg-amber-500', desc: 'Warm & Cozy' },
+  { key: 'pearl_linen', name: 'Pearl', bg: 'bg-stone-200', desc: 'Soft & Linen' },
 ];
 
 export default function Deployment() {
@@ -55,7 +60,9 @@ export default function Deployment() {
   const [theme, setTheme] = useState<Partial<BotTheme>>({
     themeKey: 'standard',
     customPrimaryColor: '#8b5cf6',
-    widgetPosition: 'bottom-right'
+    widgetPosition: 'bottom-right',
+    borderRadius: 12,
+    fontStyle: 'Modern'
   });
   const [isDirty, setIsDirty] = useState(false);
 
@@ -72,7 +79,9 @@ export default function Deployment() {
           const currentTheme = {
             themeKey: t.themeKey || 'standard',
             customPrimaryColor: t.customPrimaryColor || '#8b5cf6',
-            widgetPosition: t.widgetPosition || 'bottom-right'
+            widgetPosition: t.widgetPosition || 'bottom-right',
+            borderRadius: t.borderRadius ?? 12,
+            fontStyle: t.fontStyle || 'Modern'
           };
           setTheme(currentTheme);
         } else {
@@ -346,28 +355,66 @@ export default function Deployment() {
                 </div>
               </div>
 
-              {/* Position Selector */}
+               {/* Position Selector */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Widget Alignment</label>
+                  <div className="flex gap-4 p-1.5 bg-muted rounded-2xl w-fit">
+                    <button 
+                      onClick={() => handleUpdate({ widgetPosition: 'bottom-left' })}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all",
+                        theme.widgetPosition === 'bottom-left' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-background/50"
+                      )}
+                    >
+                      Left
+                    </button>
+                    <button 
+                      onClick={() => handleUpdate({ widgetPosition: 'bottom-right' })}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all",
+                        theme.widgetPosition === 'bottom-right' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-background/50"
+                      )}
+                    >
+                      Right
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Border Radius ({theme.borderRadius}px)</label>
+                  <input 
+                    type="range" min="0" max="32" step="4"
+                    value={theme.borderRadius || 12}
+                    onChange={(e) => handleUpdate({ borderRadius: parseInt(e.target.value) })}
+                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                  <div className="flex justify-between text-[10px] text-muted-foreground font-bold px-1">
+                    <span>SHARP</span>
+                    <span>ROUNDED</span>
+                    <span>PILL</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Font Selector */}
               <div className="space-y-4">
-                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Widget Alignment</label>
-                <div className="flex gap-4 p-1.5 bg-muted rounded-2xl w-fit">
-                   <button 
-                    onClick={() => handleUpdate({ widgetPosition: 'bottom-left' })}
-                    className={cn(
-                      "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all",
-                      theme.widgetPosition === 'bottom-left' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-background/50"
-                    )}
-                   >
-                     Left
-                   </button>
-                   <button 
-                    onClick={() => handleUpdate({ widgetPosition: 'bottom-right' })}
-                    className={cn(
-                      "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all",
-                      theme.widgetPosition === 'bottom-right' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-background/50"
-                    )}
-                   >
-                     Right
-                   </button>
+                <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Typography Style</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {['Modern', 'Elegant', 'Rounded', 'Mono'].map((f) => (
+                    <button
+                      key={f}
+                      onClick={() => handleUpdate({ fontStyle: f })}
+                      className={cn(
+                        "px-4 py-3 rounded-xl border-2 font-bold text-sm transition-all text-center",
+                        theme.fontStyle === f 
+                          ? "border-primary bg-primary/5 text-primary" 
+                          : "border-border hover:border-border-hover text-muted-foreground"
+                      )}
+                    >
+                      {f}
+                    </button>
+                  ))}
                 </div>
               </div>
             </section>
