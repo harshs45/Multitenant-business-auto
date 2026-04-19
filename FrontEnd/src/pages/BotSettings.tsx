@@ -409,7 +409,7 @@ export default function BotSettings() {
 
             <div className="p-6 bg-destructive/5 border border-destructive/10 rounded-xl space-y-4">
               <div>
-                <h4 className="font-bold text-foreground">Delete this bot</h4>
+                <h4 className="font-bold text-foreground ">Delete this bot</h4>
                 <p className="text-sm text-muted-foreground mt-1">
                   Once you delete a bot, there is no going back. All
                   conversation history and knowledge base data will be
@@ -420,7 +420,7 @@ export default function BotSettings() {
               {!showDeleteConfirm ? (
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="h-10 px-4 bg-destructive text-destructive-foreground rounded-lg font-bold hover:bg-destructive/90 transition-all text-sm flex items-center gap-2"
+                  className="h-10 px-4 bg-destructive text-destructive-foreground rounded-lg font-bold hover:bg-destructive/90 transition-all text-sm flex items-center gap-2 border border-transparent hover:border-red-500 text-red-500"
                 >
                   <Trash2 size={16} /> Delete Assistant
                 </button>

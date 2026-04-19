@@ -29,7 +29,7 @@ export function Step2Audience() {
                 title="Patient Age Range"
                 value={adaptiveFields['ageRange'] as string || ''}
                 onChange={(e) => setAdaptiveField('ageRange', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               >
                 <option value="">Select range...</option>
                 <option value="pediatrics">Pediatrics (0-18)</option>
@@ -44,7 +44,7 @@ export function Step2Audience() {
                 title="Clinic Type"
                 value={adaptiveFields['clinicType'] as string || ''}
                 onChange={(e) => setAdaptiveField('clinicType', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               >
                 <option value="">Select type...</option>
                 <option value="general">General Practice</option>
@@ -63,7 +63,7 @@ export function Step2Audience() {
                 title="Avg Order Value"
                 value={adaptiveFields['aov'] as string || ''}
                 onChange={(e) => setAdaptiveField('aov', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               >
                 <option value="">Select AOV...</option>
                 <option value="low">&lt;$50</option>
@@ -77,7 +77,7 @@ export function Step2Audience() {
                 title="Return Policy"
                 value={adaptiveFields['returnPolicy'] as string || ''}
                 onChange={(e) => setAdaptiveField('returnPolicy', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               >
                 <option value="">Select policy...</option>
                 <option value="14days">14 Days</option>
@@ -97,7 +97,7 @@ export function Step2Audience() {
                 placeholder="e.g. Italian, Vegan" 
                 value={adaptiveFields['cuisine'] as string || ''}
                 onChange={(e) => setAdaptiveField('cuisine', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               />
             </div>
             <div>
@@ -107,7 +107,7 @@ export function Step2Audience() {
                 placeholder="e.g. 50" 
                 value={adaptiveFields['capacity'] as string || ''}
                 onChange={(e) => setAdaptiveField('capacity', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               />
             </div>
           </div>
@@ -153,7 +153,7 @@ export function Step2Audience() {
                 placeholder={businessType === 'Real Estate' ? "e.g. Downtown" : "e.g. Tech"} 
                 value={adaptiveFields['area'] as string || ''}
                 onChange={(e) => setAdaptiveField('area', e.target.value)}
-                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
               />
             </div>
           </div>
@@ -195,7 +195,7 @@ export function Step2Audience() {
                  placeholder="support@acme.com" 
                  value={supportEmail}
                  onChange={(e) => setField('supportEmail', e.target.value)}
-                 className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                 className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
                />
              </div>
              <div>
@@ -204,7 +204,7 @@ export function Step2Audience() {
                  title="Business Hours"
                  value={businessHours}
                  onChange={(e) => setField('businessHours', e.target.value)}
-                 className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary"
+                 className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300"
                >
                  <option>9am - 5pm, Mon-Fri</option>
                  <option>24/7 Support</option>

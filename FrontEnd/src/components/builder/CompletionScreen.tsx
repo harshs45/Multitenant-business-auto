@@ -45,7 +45,7 @@ export function CompletionScreen() {
       <div className="flex-1 flex flex-col items-start justify-center">
         {/* Animated Checkmark */}
         <div className="mb-6">
-          <svg className="w-16 h-16 text-primary" viewBox="0 0 52 52">
+          <svg className="w-16 h-16 text-blue-500" viewBox="0 0 52 52">
              <circle className="stroke-current opacity-20" cx="26" cy="26" r="25" fill="none" strokeWidth="2" />
              <motion.circle 
                className="stroke-current" 
@@ -104,8 +104,8 @@ export function CompletionScreen() {
              <ArrowLeft size={16} /> Edit configuration
            </button>
            <Link 
-             to="/"
-             className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover font-medium transition-all shadow-md"
+             to="/dashboard"
+             className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full border border-border hover:bg-muted font-medium transition-colors"
            >
              Go to Dashboard <LayoutDashboard size={16} />
            </Link>

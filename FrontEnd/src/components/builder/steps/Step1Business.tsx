@@ -33,7 +33,7 @@ export function Step1Business() {
             placeholder="e.g. Acme Corp" 
             value={businessName}
             onChange={(e) => setField('businessName', e.target.value)}
-            className="w-full h-11 px-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+            className="w-full h-11 px-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-blue-100/30 focus:border-blue-300 outline-none transition-all"
           />
         </div>
 
@@ -44,7 +44,7 @@ export function Step1Business() {
              placeholder="https://acme.com" 
              value={websiteUrl}
              onChange={(e) => setField('websiteUrl', e.target.value)}
-             className="w-full h-11 px-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+             className="w-full h-11 px-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-blue-100/30 focus:border-blue-200 outline-none transition-all"
            />
         </div>
 
@@ -77,7 +77,7 @@ export function Step1Business() {
             placeholder="Briefly describe what you do..." 
             value={businessDescription}
             onChange={(e) => setField('businessDescription', e.target.value)}
-            className="w-full h-24 p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+            className="w-full h-24 p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-blue-100/30 focus:border-blue-200 outline-none transition-all resize-none"
           />
         </div>
       </div>
