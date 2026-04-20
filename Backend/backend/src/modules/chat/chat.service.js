@@ -141,8 +141,8 @@ const sendMessage = async (publicKey, data) => {
     limit: 20,
   });
 
-  const llmResponse = await llm.complete(
-    console.log('--- BOT DEBUG ---');
+  const llmResponse = await llm.complete
+  console.log('--- BOT DEBUG ---');
 console.log('Bot ID:', bot?.id);
 console.log('Bot Name:', bot?.name);
 console.log('systemPrompt type:', typeof bot?.systemPrompt);
@@ -150,10 +150,15 @@ console.log('systemPrompt exists:', !!bot?.systemPrompt);
 console.log('systemPrompt preview:', bot?.systemPrompt?.slice(0, 200));
 
 const finalSystemPrompt = bot?.systemPrompt || 'You are a helpful assistant.';
-console.log('FINAL PROMPT USED:', finalSystemPrompt.slice(0, 200));
+console.log('FINAL PROMPT USED:', finalSystemPrompt.slice(0, 200)); 
+  
+  (
+    
     bot.systemPrompt || 'You are a helpful assistant.',
+    
 
     history.map((m) => ({ role: m.role, content: m.content }))
+    
   );
 
   const assistantMsg = await Message.create({
