@@ -18,6 +18,15 @@ const createFAQ = async (req, res, next) => {
   }
 };
 
+const updateFAQ = async (req, res, next) => {
+  try {
+    const data = await service.updateFAQ(req.params.botId, req.user.id, req.params.faqId, req.body);
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteFAQ = async (req, res, next) => {
   try {
     await service.deleteFAQ(req.params.botId, req.user.id, req.params.faqId);
@@ -57,6 +66,7 @@ const deleteDocument = async (req, res, next) => {
 module.exports = {
   getFAQs,
   createFAQ,
+  updateFAQ,
   deleteFAQ,
   getDocuments,
   createDocument,

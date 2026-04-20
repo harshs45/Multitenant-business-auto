@@ -20,6 +20,7 @@ router.use(authenticate);
 // FAQs
 router.get('/:botId/faqs', ctrl.getFAQs);
 router.post('/:botId/faqs', ctrl.createFAQ);
+router.put('/:botId/faqs/:faqId', ctrl.updateFAQ);
 router.delete('/:botId/faqs/:faqId', ctrl.deleteFAQ);
 
 // Documents
