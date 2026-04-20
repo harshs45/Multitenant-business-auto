@@ -137,6 +137,7 @@ const createSession = async (publicKey, data = {}) => {
 };
 
 const sendMessage = async (publicKey, data = {}) => {
+  console.log('FULL SYSTEM PROMPT:\n', finalSystemPrompt);
   const bot = await resolveBot(publicKey);
 
   const conversation = await Conversation.findOne({
