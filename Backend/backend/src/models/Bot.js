@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       tone: { type: DataTypes.STRING, allowNull: true },
       responseLanguage: { type: DataTypes.STRING, allowNull: true },
       fallbackEmail: { type: DataTypes.STRING, allowNull: true },
-      systemPrompt: { type: DataTypes.TEXT('long'), allowNull: true },
+      systemPrompt: {
+        type: DataTypes.TEXT('long'),
+        allowNull: true,
+        field: 'system_prompt', // 🔥 ADD THIS LINE
+      },
       setupStep: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
       setupComplete: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       status: {
