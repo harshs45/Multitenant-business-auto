@@ -1,11 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
-const { Bot, Business, BotAudienceConfig, BotFeature, BotTheme, Subscription, AuditLog, EmbedToken } = require('../../models');
+const { Bot, Business, BotAudienceConfig, BotFeature, BotTheme, Subscription, AuditLog, EmbedToken, KnowledgeBaseFAQ, KnowledgeBaseDocument } = require('../../models');
 const AppError = require('../../common/errors/AppError');
 const { validateFeatures } = require('../../common/constants/features');
 const { THEME_KEYS, WIDGET_POSITIONS } = require('../../common/constants/themes');
 const { TONES, LANGUAGES, AVATAR_STYLES } = require('../../common/constants/tones');
 const { PLANS } = require('../../common/constants/plans');
-const { buildSystemPrompt } = require('./prompt.service');
+const { buildSystemPrompt, regeneratePrompt } = require('./prompt.service');
 const { paginate, paginatedResponse } = require('../../common/utils/pagination');
 
 /* ─────────────────────── Helpers ──────────────────────── */
@@ -215,8 +215,12 @@ const publish = async (botId, userId) => {
   if (!bot.theme) errors.push('Theme must be selected (step 5)');
   if (errors.length > 0) throw AppError.badRequest('Cannot publish: incomplete setup', errors);
 
-  // Regenerate system prompt
-  bot.systemPrompt = buildSystemPrompt(bot, bot.business, bot.audienceConfig, bot.features);
+  // Regenerate system prompt using the centralized service
+  await regeneratePrompt(bot.id);
+
+  // Reload bot to ensure we have the newly generated prompt and other fields
+  await bot.reload();
+
   bot.isPublished = true;
   bot.publishedAt = new Date();
   await bot.save();
@@ -237,8 +241,18 @@ const preview = async (botId, userId) => {
   if (!bot) throw AppError.notFound('Bot not found');
   if (bot.business.userId !== userId) throw AppError.forbidden('Access denied');
 
+  // Fetch Knowledge Base items for a full prompt preview
+  const faqs = await KnowledgeBaseFAQ.findAll({ where: { botId: bot.id } });
+  const documents = await KnowledgeBaseDocument.findAll({ where: { botId: bot.id } });
+
   // Generate prompt preview without persisting
-  const prompt = buildSystemPrompt(bot, bot.business, bot.audienceConfig, bot.features || []);
+  const prompt = buildSystemPrompt(
+    bot, 
+    bot.business, 
+    bot.audienceConfig, 
+    bot.features || [], 
+    { faqs, documents }
+  );
 
   return {
     botId: bot.id,
