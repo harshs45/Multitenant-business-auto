@@ -36,7 +36,7 @@ export function Step3Identity() {
               placeholder={botNamePlaceholder}
               value={botName}
               onChange={(e) => setField('botName', e.target.value)}
-              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
+              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300 transition-all"
             />
           </div>
           <div>
@@ -45,7 +45,7 @@ export function Step3Identity() {
               title="Avatar Style"
               value={avatarStyle}
               onChange={(e) => setField('avatarStyle', e.target.value)}
-              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
+              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300 transition-all"
             >
               <option>Robot</option>
               <option>Person</option>
@@ -66,7 +66,7 @@ export function Step3Identity() {
             value={welcomeMessage}
             onChange={(e) => setField('welcomeMessage', e.target.value)}
             maxLength={200}
-            className="w-full h-24 p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+            className="w-full h-24 p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-blue-300 outline-none transition-all resize-none"
           />
         </div>
 
@@ -97,7 +97,7 @@ export function Step3Identity() {
               title="Language"
               value={responseLanguage}
               onChange={(e) => setField('responseLanguage', e.target.value)}
-              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
+              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300 transition-all"
             >
               <option>English</option>
               <option>Hindi</option>
@@ -114,7 +114,7 @@ export function Step3Identity() {
               placeholder="help@business.com" 
               value={fallbackEmail}
               onChange={(e) => setField('fallbackEmail', e.target.value)}
-              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-primary transition-all"
+              className="w-full h-11 px-4 rounded-lg bg-background border border-border outline-none focus:border-blue-300 transition-all"
             />
           </div>
         </div>

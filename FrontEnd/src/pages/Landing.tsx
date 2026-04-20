@@ -405,14 +405,17 @@ const themes =[{
   }]
   
 function HeroSection() {
-  const text = "Build your business chatbot in minutes";
+  const before = "Build your business ";
+  const gradientColored = "chatbot";
+  const after = " in minutes";
+  const fullText = before+gradientColored+after;
   const [displayed, setDisplayed] = useState("");
  useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
-      setDisplayed(text.slice(0, i + 1));
+      setDisplayed(fullText.slice(0, i + 1));
       i++;
-      if (i === text.length) clearInterval(interval);
+      if (i === fullText.length) clearInterval(interval);
     }, 80);
 
     return () => clearInterval(interval);
@@ -439,18 +442,31 @@ function HeroSection() {
     <span>BotForge 2.0 is now live</span>
   </div>
 
-  <h1 className="text-5xl font-bold">
+  <h1 className="text-5xl lg:text-7xl font-bold tracking-
+  tight mb-6 leading-[1.1]">
+    {displayed.startsWith(before + gradientColored) ? (<>
+    {before}
+    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">{gradientColored}</span>
+    {displayed.slice((before + gradientColored).length)}
+    </>):displayed.length>before.length?(<>
+    { before}
+    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">
+      {displayed.slice(before.length)}
+    </span>
+    </>
+    ):<>
     {displayed}
+    </>}
     <span className="animate-pulse">|</span>
   </h1>
 
-  <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
+  {/* <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
     Build and manage your 
     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">
       AI fleet
     </span> 
     in minutes
-  </h1>
+  </h1> */}
 
   <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
     No code. No complexity. Generate fully configured, branded AI assistants and manage them all from a single hub.

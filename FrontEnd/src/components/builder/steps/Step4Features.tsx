@@ -91,7 +91,7 @@ export function Step4Features() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.06 }}
-            className="flex items-center justify-between p-4 rounded-xl border border-border bg-background hover:border-primary/30 transition-colors shadow-sm"
+            className="flex items-center justify-between p-4 rounded-xl border border-border bg-background hover:border-blue-200 transition-colors shadow-sm"
           >
             <div>
               <h4 className="font-semibold text-sm mb-1">{feat.label}</h4>
