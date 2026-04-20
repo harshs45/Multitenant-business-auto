@@ -137,88 +137,97 @@ const createSession = async (publicKey, data = {}) => {
 };
 
 const sendMessage = async (publicKey, data = {}) => {
-  console.log('FULL SYSTEM PROMPT:\n', finalSystemPrompt);
-  const bot = await resolveBot(publicKey);
+  try {
+    const bot = await resolveBot(publicKey);
 
-  const conversation = await Conversation.findOne({
-    where: { sessionId: data.sessionId, botId: bot.id },
-  });
+    const conversation = await Conversation.findOne({
+      where: { sessionId: data.sessionId, botId: bot.id },
+    });
 
-  if (!conversation) throw AppError.notFound('Chat session not found');
-  if (conversation.status !== 'active') {
-    throw AppError.badRequest('This conversation has ended');
+    if (!conversation) throw AppError.notFound('Chat session not found');
+    if (conversation.status !== 'active') {
+      throw AppError.badRequest('This conversation has ended');
+    }
+
+    const userContent = data.message || data.content || null;
+
+    if (!userContent) {
+      throw AppError.badRequest('Message is required');
+    }
+
+    await Message.create({
+      id: uuidv4(),
+      conversationId: conversation.id,
+      role: 'user',
+      content: userContent,
+    });
+
+    const history = await Message.findAll({
+      where: { conversationId: conversation.id },
+      order: [['createdAt', 'ASC']],
+      limit: 20,
+    });
+
+    console.log('--- BOT DEBUG ---');
+    console.log('Bot ID:', bot?.id);
+    console.log('Bot Name:', bot?.name);
+    console.log('systemPrompt exists:', !!bot?.systemPrompt);
+
+    const finalSystemPrompt =
+      bot?.systemPrompt || 'You are a helpful assistant.';
+
+    console.log('==========================');
+    console.log('FULL SYSTEM PROMPT:\n', finalSystemPrompt);
+    console.log('==========================');
+
+    console.log('CALLING LLM...');
+
+    const llmResponse = await llm.complete(
+      finalSystemPrompt,
+      history.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }))
+    );
+
+    console.log('RAW LLM RESPONSE:', llmResponse);
+
+    const assistantContent =
+      typeof llmResponse === 'string'
+        ? llmResponse
+        : llmResponse?.content || llmResponse?.text || null;
+
+    if (!assistantContent) {
+      console.error('Bad LLM response:', llmResponse);
+      throw new Error('LLM returned empty response');
+    }
+
+    const assistantMsg = await Message.create({
+      id: uuidv4(),
+      conversationId: conversation.id,
+      role: 'assistant',
+      content: assistantContent,
+      metadata:
+        typeof llmResponse === 'object' && llmResponse?.metadata
+          ? llmResponse.metadata
+          : null,
+    });
+
+    conversation.messageCount = (conversation.messageCount || 0) + 2;
+    await conversation.save();
+
+    await logUsage(bot.businessId, bot.id, 'message_sent');
+
+    return {
+      sessionId: conversation.sessionId,
+      reply: assistantMsg.content,
+      metadata: assistantMsg.metadata,
+    };
+  } catch (err) {
+    console.error('SEND MESSAGE ERROR:', err);
+    console.error('SEND MESSAGE STACK:', err.stack);
+    throw err;
   }
-
-  const userContent = data.message || data.content || null;
-
-  if (!userContent) {
-    throw AppError.badRequest('Message is required');
-  }
-
-  await Message.create({
-    id: uuidv4(),
-    conversationId: conversation.id,
-    role: 'user',
-    content: userContent,
-  });
-
-  const history = await Message.findAll({
-    where: { conversationId: conversation.id },
-    order: [['createdAt', 'ASC']],
-    limit: 20,
-  });
-
-  console.log('--- BOT DEBUG ---');
-  console.log('Bot ID:', bot?.id);
-  console.log('Bot Name:', bot?.name);
-  console.log('systemPrompt exists:', !!bot?.systemPrompt);
-
-  const finalSystemPrompt =
-    bot?.systemPrompt || 'You are a helpful assistant.';
-
-  console.log('FINAL PROMPT:', finalSystemPrompt.slice(0, 150));
-
-  const llmResponse = await llm.complete(
-    finalSystemPrompt,
-    history.map((m) => ({
-      role: m.role,
-      content: m.content,
-    }))
-  );
-
-  console.log('RAW LLM RESPONSE:', llmResponse);
-
-  const assistantContent =
-    typeof llmResponse === 'string'
-      ? llmResponse
-      : llmResponse?.content || llmResponse?.text || null;
-
-  if (!assistantContent) {
-    console.error('Bad LLM response:', llmResponse);
-    throw new Error('LLM returned empty response');
-  }
-
-  const assistantMsg = await Message.create({
-    id: uuidv4(),
-    conversationId: conversation.id,
-    role: 'assistant',
-    content: assistantContent,
-    metadata:
-      typeof llmResponse === 'object' && llmResponse?.metadata
-        ? llmResponse.metadata
-        : null,
-  });
-
-  conversation.messageCount = (conversation.messageCount || 0) + 2;
-  await conversation.save();
-
-  await logUsage(bot.businessId, bot.id, 'message_sent');
-
-  return {
-    sessionId: conversation.sessionId,
-    reply: assistantMsg.content,
-    metadata: assistantMsg.metadata,
-  };
 };
 
 const getHistory = async (publicKey, sessionId) => {
@@ -239,7 +248,7 @@ const getHistory = async (publicKey, sessionId) => {
   return conversation;
 };
 
-const requestHandoff = async (publicKey, data) => {
+const requestHandoff = async (publicKey, data = {}) => {
   const bot = await resolveBot(publicKey);
 
   const conversation = await Conversation.findOne({
@@ -263,7 +272,7 @@ const requestHandoff = async (publicKey, data) => {
   return handoff;
 };
 
-const captureLead = async (publicKey, data) => {
+const captureLead = async (publicKey, data = {}) => {
   const bot = await resolveBot(publicKey);
 
   const conversation = await Conversation.findOne({
