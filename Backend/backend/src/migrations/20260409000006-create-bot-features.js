@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('bot_features', {
+    await queryInterface.createTable("bot_features", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -11,9 +11,9 @@ module.exports = {
       bot_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        references: { model: 'bots', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        references: { model: "bots", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       feature_key: {
         type: Sequelize.STRING(100),
@@ -30,22 +30,22 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
 
-    await queryInterface.addIndex('bot_features', ['bot_id', 'feature_key'], {
+    await queryInterface.addIndex("bot_features", ["bot_id", "feature_key"], {
       unique: true,
-      name: 'bot_features_bot_id_feature_key_unique',
+      name: "bot_features_bot_id_feature_key_unique",
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('bot_features');
+    await queryInterface.dropTable("bot_features");
   },
 };

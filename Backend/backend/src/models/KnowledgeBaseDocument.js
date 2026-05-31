@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
   const KnowledgeBaseDocument = sequelize.define(
-    'KnowledgeBaseDocument',
+    "KnowledgeBaseDocument",
     {
       id: {
         type: DataTypes.UUID,
@@ -26,19 +26,22 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       content: {
-        type: DataTypes.TEXT('long'),
+        type: DataTypes.TEXT,
         allowNull: true,
       },
     },
     {
-      tableName: 'kb_documents',
+      tableName: "kb_documents",
       timestamps: true,
       underscored: true,
-    }
+    },
   );
 
   KnowledgeBaseDocument.associate = (models) => {
-    KnowledgeBaseDocument.belongsTo(models.Bot, { foreignKey: 'botId', as: 'bot' });
+    KnowledgeBaseDocument.belongsTo(models.Bot, {
+      foreignKey: "botId",
+      as: "bot",
+    });
   };
 
   return KnowledgeBaseDocument;

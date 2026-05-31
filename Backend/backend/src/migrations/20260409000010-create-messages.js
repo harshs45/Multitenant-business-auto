@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('messages', {
+    await queryInterface.createTable("messages", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -11,16 +11,16 @@ module.exports = {
       conversation_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        references: { model: 'conversations', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        references: { model: "conversations", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       role: {
-        type: Sequelize.ENUM('user', 'assistant', 'system'),
+        type: Sequelize.ENUM("user", "assistant", "system"),
         allowNull: false,
       },
       content: {
-        type: Sequelize.TEXT('long'),
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       metadata: {
@@ -30,17 +30,17 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('messages');
+    await queryInterface.dropTable("messages");
   },
 };
